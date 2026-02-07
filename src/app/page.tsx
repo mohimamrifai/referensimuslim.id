@@ -1,4 +1,3 @@
-import CategorySidebar from "@/components/CategorySidebar";
 import HeroCarousel from "@/components/HeroCarousel";
 import MobileCategoryGrid from "@/components/MobileCategoryGrid";
 import ContentCard, { type ContentItem } from "@/components/ContentCard";
@@ -126,14 +125,8 @@ export default function Home() {
     },
   ];
   return (
-    <>
-      <div className="hidden md:block fixed left-0 top-16 h-[calc(100vh-4rem)] w-(--sidebar-width) bg-white overflow-hidden border-r border-gray-200 z-40">
-        <CategorySidebar />
-      </div>
-
-      <div className="md:pl-(--sidebar-width) transition-all duration-300">
-        <div className="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 pt-6 pb-0">
-          <div className="space-y-6">
+    <div className="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 pt-6 pb-0">
+      <div className="space-y-6">
             <HeroCarousel />
             <MobileCategoryGrid />
             <div className="space-y-6">
@@ -169,7 +162,5 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
-    </>
   );
 }

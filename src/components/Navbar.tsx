@@ -3,17 +3,26 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Home, FileText, Video, Mic, Info, Search, SearchIcon } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 const Navbar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   const menuItems = [
     { name: 'Beranda', icon: Home, href: '/' },
     { name: 'Artikel', icon: FileText, href: '/artikel' },
     { name: 'Video', icon: Video, href: '/video' },
     { name: 'Podcast', icon: Mic, href: '/podcast' },
-    { name: 'Tentang', icon: Info, href: '/about' },
+    { name: 'Tentang Kami', icon: Info, href: '/about' },
   ];
 
   return (
@@ -59,7 +68,10 @@ const Navbar = () => {
             <div className="relative group">
               <input
                 type="text"
-                placeholder="Cari artikel..."
+                placeholder="Cari artikel, video atau podcast.."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
                 className="pl-10 pr-4 py-2 w-64 bg-gray-50 border border-gray-200 rounded-full text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all placeholder:text-gray-400"
               />
               <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2 group-focus-within:text-orange-500 transition-colors" />
