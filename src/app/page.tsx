@@ -3,6 +3,8 @@ import HeroCarousel from "@/components/HeroCarousel";
 import MobileCategoryGrid from "@/components/MobileCategoryGrid";
 import ContentCard, { type ContentItem } from "@/components/ContentCard";
 import ContentCarousel from "@/components/ContentCarousel";
+import StatsSection from "@/components/StatsSection";
+import TrustBadgeSection from "@/components/TrustBadgeSection";
 
 export default function Home() {
   const articles: ContentItem[] = [
@@ -125,40 +127,46 @@ export default function Home() {
   ];
   return (
     <>
-      <div className="hidden md:block fixed left-0 top-16 h-[calc(100vh-4rem)] w-var(--sidebar-width) bg-white overflow-hidden border border-gray-200">
+      <div className="hidden md:block fixed left-0 top-16 h-[calc(100vh-4rem)] w-(--sidebar-width) bg-white overflow-hidden border-r border-gray-200 z-40">
         <CategorySidebar />
       </div>
-      <div className="content-wrap max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-6 md:ml-var(--sidebar-width)">
-        <div className="space-y-6">
-          <HeroCarousel />
-          <MobileCategoryGrid />
-          <div className="md:max-w-6xl md:ml-auto space-y-12 pb-12">
-            {/* Artikel Terbaru */}
-            <ContentCarousel title="Artikel Terbaru" linkHref="/artikel">
+
+      <div className="md:pl-(--sidebar-width) transition-all duration-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 pt-6 pb-0">
+          <div className="space-y-6">
+            <HeroCarousel />
+            <MobileCategoryGrid />
+            <div className="space-y-6">
+              {/* Artikel Terbaru */}
+              <ContentCarousel title="Artikel Terbaru" linkHref="/artikel">
                 {articles.map((a) => (
                   <div key={a.id} className="min-w-0 flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_32%]">
                     <ContentCard item={a} type="artikel" />
                   </div>
                 ))}
-            </ContentCarousel>
+              </ContentCarousel>
 
-            {/* Video Pilihan */}
-            <ContentCarousel title="Video Pilihan" linkHref="/video">
+              {/* Video Pilihan */}
+              <ContentCarousel title="Video Pilihan" linkHref="/video">
                 {videos.map((v) => (
                   <div key={v.id} className="min-w-0 flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_32%]">
                     <ContentCard item={v} type="video" />
                   </div>
                 ))}
-            </ContentCarousel>
+              </ContentCarousel>
 
-             {/* Podcast */}
-             <ContentCarousel title="Dengarkan Podcast" linkHref="/podcast">
+              {/* Podcast */}
+              <ContentCarousel title="Dengarkan Podcast" linkHref="/podcast">
                 {podcasts.map((p) => (
                   <div key={p.id} className="min-w-0 flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_32%]">
                     <ContentCard item={p} type="podcast" />
                   </div>
                 ))}
-             </ContentCarousel>
+              </ContentCarousel>
+
+              <StatsSection />
+              <TrustBadgeSection />
+            </div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
  'use client';
  
- import { useEffect, useState } from 'react';
+ import { useEffect, useState, type ElementType } from 'react';
  import { ChevronDown, ChevronRight, Search, BookOpen, ListChecks, Heart, GraduationCap, ChevronLeft } from 'lucide-react';
  import Link from 'next/link';
  
@@ -54,7 +54,7 @@
      setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
    };
  
-  const iconMap: Record<string, React.ElementType> = {
+  const iconMap: Record<string, ElementType> = {
     'Pengetahuan Islam': BookOpen,
     'Praktik Ibadah': ListChecks,
     'Kehidupan Islami': Heart,

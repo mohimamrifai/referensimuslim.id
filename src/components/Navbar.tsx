@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, Grid, Video, Mic, Info, Search, HelpCircle } from 'lucide-react';
+import { Home, FileText, Video, Mic, Info, Search, SearchIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const menuItems = [
     { name: 'Beranda', icon: Home, href: '/' },
-    { name: 'Kategori', icon: Grid, href: '/kategori' },
+    { name: 'Artikel', icon: FileText, href: '/artikel' },
     { name: 'Video', icon: Video, href: '/video' },
     { name: 'Podcast', icon: Mic, href: '/podcast' },
     { name: 'Tentang', icon: Info, href: '/about' },
@@ -69,7 +69,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden gap-4">
             <Link href="/search" className="p-2 text-gray-600 hover:text-orange-600 focus:outline-none">
-              <HelpCircle className="w-6 h-6" />
+              <SearchIcon className="w-6 h-6" />
             </Link>
           </div>
         </div>

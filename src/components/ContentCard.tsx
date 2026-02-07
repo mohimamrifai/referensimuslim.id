@@ -38,18 +38,18 @@ export default function ContentCard({ item, type }: { item: ContentItem; type: C
   const linkHref = `/${type}/${item.slug}`;
 
   return (
-    <article className="group rounded-xl border border-gray-200 overflow-hidden bg-white hover:shadow-md transition-shadow h-full flex flex-col">
+    <article className="group/card rounded-xl border border-gray-200 overflow-hidden bg-white hover:shadow-md transition-shadow h-full flex flex-col">
       <div className="relative h-48 w-full overflow-hidden bg-gray-100">
         <Image
           src={item.image || '/window.svg'}
           alt={item.title}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-500 group-hover/card:scale-105"
         />
         {/* Overlay Icon for Media */}
         {(type === 'video' || type === 'podcast') && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-                <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full border border-white/30 shadow-lg transform transition-transform group-hover:scale-110">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover/card:bg-black/30 transition-colors">
+                <div className="bg-white/20 backdrop-blur-sm p-3 rounded-full border border-white/30 shadow-lg transform transition-transform group-hover/card:scale-110">
                     {getIcon()}
                 </div>
             </div>
@@ -66,7 +66,7 @@ export default function ContentCard({ item, type }: { item: ContentItem; type: C
           <span className="font-medium text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full">{item.category}</span>
           <span>{item.date}</span>
         </div>
-        <h3 className="font-bold text-gray-900 line-clamp-2 mb-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="font-bold text-gray-900 line-clamp-2 mb-2 group-hover/card:text-orange-600 transition-colors">
             <Link href={linkHref}>
                 {item.title}
             </Link>
