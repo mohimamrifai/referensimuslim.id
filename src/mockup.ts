@@ -6,6 +6,9 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'artikel',
     title: 'Memahami Makna Ikhlas dalam Beribadah',
     category: 'Akhlak & Tasawuf',
+    subcategory: 'Tazkiyatun Nafs',
+    image: '/window.svg',
+    excerpt: 'Hakikat ikhlas dan aplikasinya dalam keseharian.',
     author: { name: 'Ustadz Dr. Ahmad Zainuddin', role: 'Pembina Pesantren', image: '/window.svg' },
     publishedAt: '18 Januari 2026',
     readTime: '7 menit baca',
@@ -22,6 +25,9 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'artikel',
     title: 'Menata Kehidupan Islami di Era Digital',
     category: 'Kehidupan Islami',
+    subcategory: 'Akhlak',
+    image: '/globe.svg',
+    excerpt: 'Strategi menjaga komitmen keislaman di era digital.',
     author: { name: 'Ustadzah Fulanah', role: 'Pembina Majelis Taklim', image: '/globe.svg' },
     publishedAt: '12 Januari 2026',
     readTime: '6 menit baca',
@@ -37,6 +43,9 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'artikel',
     title: 'Fiqh Ibadah Harian: Ringkas dan Praktis',
     category: 'Fiqh & Yurisprudensi',
+    subcategory: 'Fiqh Ibadah',
+    image: '/file.svg',
+    excerpt: 'Rangkuman fiqh ibadah harian yang praktis.',
     author: { name: 'Ustadz Abu Salim', role: 'Pengajar Fiqh', image: '/file.svg' },
     publishedAt: '05 Januari 2026',
     readTime: '8 menit baca',
@@ -52,6 +61,9 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'artikel',
     title: 'Adab Menuntut Ilmu: Klasik dan Kontemporer',
     category: 'Sumber Belajar',
+    subcategory: 'Adab',
+    image: '/next.svg',
+    excerpt: 'Adab penuntut ilmu di era digital.',
     author: { name: 'Ahmad Fulan', role: 'Redaktur Senior', image: '/next.svg' },
     publishedAt: '17 Januari 2026',
     readTime: '5 menit baca',
@@ -66,7 +78,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'tadabbur-ayat-keteguhan-hati': {
     type: 'artikel',
     title: 'Tadabbur Ayat: Keteguhan Hati dalam Kesulitan',
-    category: 'Studi Al-Quran',
+    category: 'Pengetahuan Islam',
+    subcategory: 'Studi Al-Quran',
+    image: '/globe.svg',
+    excerpt: 'Ayat-ayat tentang keteguhan hati menguatkan jiwa untuk menghadapi ujian kehidupan.',
     author: { name: 'Tim Redaksi', role: 'Tim Penulis', image: '/globe.svg' },
     publishedAt: '16 Januari 2026',
     readTime: '6 menit baca',
@@ -82,6 +97,9 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'artikel',
     title: 'Panduan Shalat Khusyuk: Langkah Praktis',
     category: 'Praktik Ibadah',
+    subcategory: 'Shalat',
+    image: '/file.svg',
+    excerpt: 'Khusyuk dalam shalat adalah tujuan utama ibadah harian.',
     author: { name: 'Tim Redaksi', role: 'Tim Penulis', image: '/file.svg' },
     publishedAt: '15 Januari 2026',
     readTime: '7 menit baca',
@@ -97,7 +115,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'kajian-tafsir-al-fatihah': {
     type: 'video',
     title: 'Kajian Rutin: Tafsir Surat Al-Fatihah',
-    category: 'Kajian Kitab',
+    category: 'Pengetahuan Islam',
+    subcategory: 'Studi Al-Quran',
+    image: '/window.svg',
+    excerpt: 'Kajian mendalam mengenai tafsir Al-Fatihah.',
     author: { name: 'Ustadz Dr. Abdullah', role: 'Dosen Tafsir', image: '/window.svg' },
     publishedAt: '10 Januari 2026',
     duration: '45:20',
@@ -111,7 +132,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'hukum-jual-beli-online': {
     type: 'video',
     title: 'Tanya Jawab: Hukum Jual Beli Online',
-    category: 'Muamalah',
+    category: 'Fiqh & Yurisprudensi',
+    subcategory: 'Muamalah',
+    image: '/globe.svg',
+    excerpt: 'Hukum jual beli online menurut syariat.',
     author: { name: 'Ustadz Muhammad', role: 'Praktisi Fiqh Muamalah', image: '/globe.svg' },
     publishedAt: '12 Januari 2026',
     duration: '15:30',
@@ -126,6 +150,8 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'video',
     title: 'Sejarah Peradaban Islam: Masa Keemasan',
     category: 'Sejarah',
+    image: '/file.svg',
+    excerpt: 'Jejak kejayaan peradaban Islam.',
     author: { name: 'Ustadz Salim A. Fillah', role: 'Sejarawan Islam', image: '/file.svg' },
     publishedAt: '08 Januari 2026',
     duration: '58:10',
@@ -140,6 +166,9 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'video',
     title: 'Fikih Zakat: Prinsip dan Praktik',
     category: 'Fiqh & Yurisprudensi',
+    subcategory: 'Fiqh Ibadah',
+    image: '/window.svg',
+    excerpt: 'Zakat sebagai pilar sosial dalam Islam.',
     author: { name: 'Ustadz Abu Anas', role: 'Pengajar Fiqh', image: '/next.svg' },
     publishedAt: '06 Januari 2026',
     duration: '33:45',
@@ -153,7 +182,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'akhlak-rasul': {
     type: 'video',
     title: 'Akhlak Rasulullah: Teladan Sehari-hari',
-    category: 'Akhlak',
+    category: 'Akhlak & Tasawuf',
+    subcategory: 'Akhlak',
+    image: '/globe.svg',
+    excerpt: 'Meneladani akhlak Rasulullah dalam setiap aspek kehidupan.',
     author: { name: 'Ustadz Fulan', role: 'Pembina Akhlak', image: '/globe.svg' },
     publishedAt: '04 Januari 2026',
     duration: '40:12',
@@ -168,6 +200,9 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     type: 'video',
     title: 'Manajemen Waktu bagi Muslim Produktif',
     category: 'Kehidupan Islami',
+    subcategory: 'Produktivitas',
+    image: '/window.svg',
+    excerpt: 'Pengaturan waktu yang efektif menambah keberkahan.',
     author: { name: 'Coach Fulan', role: 'Pelatih Produktivitas', image: '/window.svg' },
     publishedAt: '03 Januari 2026',
     duration: '27:18',
@@ -182,7 +217,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'menjaga-hati': {
     type: 'podcast',
     title: 'Ep 1: Menjaga Hati di Zaman Fitnah',
-    category: 'Tazkiyatun Nafs',
+    category: 'Akhlak & Tasawuf',
+    subcategory: 'Tazkiyatun Nafs',
+    image: '/file.svg',
+    excerpt: 'Cara menjaga hati tetap bersih.',
     author: { name: 'Podcast Muslim', role: 'Host', image: '/file.svg' },
     publishedAt: '14 Januari 2026',
     duration: '25:00',
@@ -196,7 +234,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'kiat-sukses-pengusaha': {
     type: 'podcast',
     title: 'Ep 2: Kiat Sukses Pengusaha Muslim',
-    category: 'Bisnis Islami',
+    category: 'Kehidupan Islami',
+    subcategory: 'Bisnis Islami',
+    image: '/window.svg',
+    excerpt: 'Tips menjadi pengusaha muslim sukses.',
     author: { name: 'Podcast Muslim', role: 'Host', image: '/window.svg' },
     publishedAt: '11 Januari 2026',
     duration: '32:15',
@@ -210,7 +251,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'mendidik-anak': {
     type: 'podcast',
     title: 'Ep 3: Mendidik Anak Cinta Al-Quran',
-    category: 'Parenting',
+    category: 'Kehidupan Islami',
+    subcategory: 'Parenting',
+    image: '/globe.svg',
+    excerpt: 'Metode menanamkan cinta Al-Quran.',
     author: { name: 'Podcast Muslim', role: 'Host', image: '/globe.svg' },
     publishedAt: '09 Januari 2026',
     duration: '28:45',
@@ -224,7 +268,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'tafsir-ayat-kursi-podcast': {
     type: 'podcast',
     title: 'Ep 4: Tafsir Ayat Kursi',
-    category: 'Studi Al-Quran',
+    category: 'Pengetahuan Islam',
+    subcategory: 'Studi Al-Quran',
+    image: '/window.svg',
+    excerpt: 'Ayat Kursi sebagai perlindungan dan penguat iman.',
     author: { name: 'Podcast Muslim', role: 'Host', image: '/window.svg' },
     publishedAt: '07 Januari 2026',
     duration: '22:11',
@@ -238,7 +285,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'keluarga-sakinah-podcast': {
     type: 'podcast',
     title: 'Ep 5: Membangun Keluarga Sakinah',
-    category: 'Keluarga',
+    category: 'Kehidupan Islami',
+    subcategory: 'Keluarga',
+    image: '/file.svg',
+    excerpt: 'Keluarga sakinah dibangun di atas takwa dan komunikasi.',
     author: { name: 'Podcast Muslim', role: 'Host', image: '/file.svg' },
     publishedAt: '06 Januari 2026',
     duration: '26:40',
@@ -252,7 +302,10 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'pemuda-muslim-podcast': {
     type: 'podcast',
     title: 'Ep 6: Pemuda Muslim dan Tantangan Zaman',
-    category: 'Pemuda',
+    category: 'Kehidupan Islami',
+    subcategory: 'Pemuda',
+    image: '/globe.svg',
+    excerpt: 'Pemuda muslim harus kuat iman dan beradab.',
     author: { name: 'Podcast Muslim', role: 'Host', image: '/globe.svg' },
     publishedAt: '04 Januari 2026',
     duration: '24:05',
@@ -265,37 +318,29 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   }
 };
 
-export const HOME_ARTICLES: ContentItem[] = [
-  { id: 'a1', title: 'Memahami Makna Ikhlas dalam Beribadah', slug: 'memahami-makna-ikhlas', excerpt: 'Hakikat ikhlas dan aplikasinya dalam keseharian.', category: 'Akhlak & Tasawuf', author: 'Ustadz Dr. Ahmad Zainuddin', date: '18/01/2026', image: '/window.svg' },
-  { id: 'a2', title: 'Menata Kehidupan Islami di Era Digital', slug: 'menata-kehidupan-islami', excerpt: 'Strategi menjaga komitmen keislaman di era digital.', category: 'Kehidupan Islami', author: 'Ustadzah Fulanah', date: '12/01/2026', image: '/globe.svg' },
-  { id: 'a3', title: 'Fiqh Ibadah Harian: Ringkas dan Praktis', slug: 'fiqh-ibadah-harian', excerpt: 'Rangkuman fiqh ibadah harian yang praktis.', category: 'Fiqh & Yurisprudensi', author: 'Ustadz Abu Salim', date: '05/01/2026', image: '/file.svg' },
-  { id: 'a4', title: 'Adab Menuntut Ilmu: Klasik dan Kontemporer', slug: 'adab-menuntut-ilmu', excerpt: 'Adab penuntut ilmu di era digital.', category: 'Sumber Belajar', author: 'Ahmad Fulan', date: '17/01/2026', image: '/next.svg' }
-];
+const generateContentItems = (filterFn?: (item: ContentData & { type: ContentType }) => boolean): ContentItem[] => {
+  return Object.entries(MOCK_DB)
+    .filter(([_, data]) => filterFn ? filterFn(data) : true)
+    .map(([slug, data]) => ({
+      id: slug,
+      slug: slug,
+      title: data.title,
+      excerpt: data.excerpt || data.content.substring(0, 100).replace(/<[^>]*>/g, '') + '...',
+      category: data.category,
+      subcategory: data.subcategory?.trim(),
+      author: data.author.name,
+      date: data.publishedAt,
+      image: data.image || data.author.image,
+      type: data.type,
+      duration: data.duration,
+    }));
+};
 
-export const HOME_VIDEOS: ContentItem[] = [
-  { id: 'v1', title: 'Kajian Rutin: Tafsir Surat Al-Fatihah', slug: 'kajian-tafsir-al-fatihah', duration: '45:20', category: 'Kajian Kitab', author: 'Ustadz Dr. Abdullah', date: '10/01/2026', image: '/window.svg', excerpt: 'Kajian mendalam mengenai tafsir Al-Fatihah.' },
-  { id: 'v2', title: 'Tanya Jawab: Hukum Jual Beli Online', slug: 'hukum-jual-beli-online', duration: '15:30', category: 'Muamalah', author: 'Ustadz Muhammad', date: '12/01/2026', image: '/globe.svg', excerpt: 'Hukum jual beli online menurut syariat.' },
-  { id: 'v3', title: 'Sejarah Peradaban Islam: Masa Keemasan', slug: 'sejarah-peradaban-islam', duration: '58:10', category: 'Sejarah', author: 'Ustadz Salim A. Fillah', date: '08/01/2026', image: '/file.svg', excerpt: 'Jejak kejayaan peradaban Islam.' }
-];
+export const HOME_ARTICLES: ContentItem[] = generateContentItems(item => item.type === 'artikel').slice(0, 4);
+export const HOME_VIDEOS: ContentItem[] = generateContentItems(item => item.type === 'video').slice(0, 3);
+export const HOME_PODCASTS: ContentItem[] = generateContentItems(item => item.type === 'podcast').slice(0, 3);
 
-export const HOME_PODCASTS: ContentItem[] = [
-  { id: 'p1', title: 'Ep 1: Menjaga Hati di Zaman Fitnah', slug: 'menjaga-hati', duration: '25:00', category: 'Tazkiyatun Nafs', author: 'Podcast Muslim', date: '14/01/2026', image: '/file.svg', excerpt: 'Cara menjaga hati tetap bersih.' },
-  { id: 'p2', title: 'Ep 2: Kiat Sukses Pengusaha Muslim', slug: 'kiat-sukses-pengusaha', duration: '32:15', category: 'Bisnis Islami', author: 'Podcast Muslim', date: '11/01/2026', image: '/window.svg', excerpt: 'Tips menjadi pengusaha muslim sukses.' },
-  { id: 'p3', title: 'Ep 3: Mendidik Anak Cinta Al-Quran', slug: 'mendidik-anak', duration: '28:45', category: 'Parenting', author: 'Podcast Muslim', date: '09/01/2026', image: '/globe.svg', excerpt: 'Metode menanamkan cinta Al-Quran.' }
-];
-
-export const SEARCH_DATA: (ContentItem & { type: ContentType })[] = [
-  { id: 's1', title: 'Memahami Makna Ikhlas dalam Beribadah', slug: 'memahami-makna-ikhlas', excerpt: 'Hakikat ikhlas menurut ulama.', category: 'Akhlak & Tasawuf', date: '18/01/2026', image: '/window.svg', type: 'artikel' },
-  { id: 's2', title: 'Menata Kehidupan Islami di Era Digital', slug: 'menata-kehidupan-islami', excerpt: 'Strategi komitmen keislaman di era digital.', category: 'Kehidupan Islami', date: '12/01/2026', image: '/globe.svg', type: 'artikel' },
-  { id: 's3', title: 'Fiqh Ibadah Harian: Ringkas dan Praktis', slug: 'fiqh-ibadah-harian', excerpt: 'Rangkuman fiqh ibadah harian.', category: 'Fiqh & Yurisprudensi', date: '05/01/2026', image: '/file.svg', type: 'artikel' },
-  { id: 's4', title: 'Adab Menuntut Ilmu: Klasik dan Kontemporer', slug: 'adab-menuntut-ilmu', excerpt: 'Adab penuntut ilmu.', category: 'Sumber Belajar', date: '17/01/2026', image: '/next.svg', type: 'artikel' },
-  { id: 's5', title: 'Kajian Rutin: Tafsir Surat Al-Fatihah', slug: 'kajian-tafsir-al-fatihah', duration: '45:20', category: 'Kajian Kitab', date: '10/01/2026', image: '/window.svg', excerpt: 'Tafsir Al-Fatihah.', type: 'video' },
-  { id: 's6', title: 'Tanya Jawab: Hukum Jual Beli Online', slug: 'hukum-jual-beli-online', duration: '15:30', category: 'Muamalah', date: '12/01/2026', image: '/globe.svg', excerpt: 'Hukum jual beli online.', type: 'video' },
-  { id: 's7', title: 'Sejarah Peradaban Islam: Masa Keemasan', slug: 'sejarah-peradaban-islam', duration: '58:10', category: 'Sejarah', date: '08/01/2026', image: '/file.svg', excerpt: 'Masa keemasan peradaban Islam.', type: 'video' },
-  { id: 's8', title: 'Ep 1: Menjaga Hati di Zaman Fitnah', slug: 'menjaga-hati', duration: '25:00', category: 'Tazkiyatun Nafs', date: '14/01/2026', image: '/file.svg', excerpt: 'Menjaga hati.', type: 'podcast' },
-  { id: 's9', title: 'Ep 2: Kiat Sukses Pengusaha Muslim', slug: 'kiat-sukses-pengusaha', duration: '32:15', category: 'Bisnis Islami', date: '11/01/2026', image: '/window.svg', excerpt: 'Kiat pengusaha muslim.', type: 'podcast' },
-  { id: 's10', title: 'Ep 3: Mendidik Anak Cinta Al-Quran', slug: 'mendidik-anak', duration: '28:45', category: 'Parenting', date: '09/01/2026', image: '/globe.svg', excerpt: 'Mendidik anak cinta Al-Quran.', type: 'podcast' }
-];
+export const SEARCH_DATA: (ContentItem & { type: ContentType })[] = generateContentItems() as (ContentItem & { type: ContentType })[];
 
 export type CategoryNode = {
   name: string;

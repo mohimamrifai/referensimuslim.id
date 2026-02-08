@@ -1,3 +1,4 @@
+- selalu pelajar dan periksa terkait project ini
 - selalu lihat brief terlebih dahulu pada file brief.md
 - selalu lihat file package.json untuk mengetahui spesifikasi tech stack
 - gunakan pnpm sebagai package manager bukan npm.

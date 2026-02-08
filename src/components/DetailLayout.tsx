@@ -24,6 +24,8 @@ export interface ContentData {
   title: string;
   category: string;
   subcategory?: string;
+  image?: string;
+  excerpt?: string;
   author: {
     name: string;
     role: string;
