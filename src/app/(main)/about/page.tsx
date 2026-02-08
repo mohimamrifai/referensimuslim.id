@@ -55,12 +55,6 @@ export default function AboutPage() {
                ))}
              </ul>
           </div>
-          <div className="relative h-100 rounded-2xl overflow-hidden shadow-xl bg-gray-100">
-             {/* Placeholder Image */}
-             <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
-                <span className="text-gray-400 font-medium">Ilustrasi Visi Misi</span>
-             </div>
-          </div>
         </div>
 
         {/* Nilai Kami */}

@@ -1,8 +1,9 @@
-selalu lihat brief terlebih dahulu pada file brief.md
-selalu lihat file package.json untuk mengetahui spesifikasi tech stack
-gunakan pnpm sebagai package manager bukan npm.
-hanya kerjakan task sesuai insturksi spesifik.
-jika ada yang tidak sesuai dengan brief, segera beri tahu dan perbaiki
-jika ada yang tidak jelas, segera tanyakan
-jika pada brief tidak mendukung property pada database untuk membuat fitur yang ingin dibuat, segera beri tahu dan tanyakan
-setelah merubah kode jangan memberikan kode pada jawaban kamu.
+- selalu lihat brief terlebih dahulu pada file brief.md
+- selalu lihat file package.json untuk mengetahui spesifikasi tech stack
+- gunakan pnpm sebagai package manager bukan npm.
+- hanya kerjakan task sesuai insturksi spesifik.
+- jika ada yang tidak sesuai dengan brief, segera beri tahu dan perbaiki
+- jika ada yang tidak jelas, segera tanyakan
+- jika pada brief tidak mendukung property pada database untuk membuat fitur yang ingin dibuat, segera beri tahu dan tanyakan
+- setelah merubah kode jangan memberikan kode pada jawaban kamu.
+- jangan memberikan kode pada jawaban kamu

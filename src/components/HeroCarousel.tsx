@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { EmblaCarouselType } from 'embla-carousel';
+import { HOME_ARTICLES } from '@/mockup';
 
 type Slide = {
    title: string;
@@ -17,38 +18,15 @@ type Slide = {
    href: string;
  };
  
- const slides: Slide[] = [
-   {
-     title: 'Memahami Makna Ikhlas dalam Beribadah: Panduan Lengkap untuk Muslim Modern',
-     excerpt:
-       'Pembahasan tentang hakikat ikhlas menurut para ulama salaf dan aplikasinya dalam kehidupan sehari-hari.',
-     category: 'Akhlak & Tasawuf',
-     author: 'Ustadz Dr. Ahmad Zainuddin',
-     date: '18/01/2026',
-     image: '/window.svg',
-     href: '/artikel/memahami-makna-ikhlas',
-   },
-   {
-     title: 'Menata Kehidupan Islami di Era Digital',
-     excerpt:
-       'Strategi menjaga komitmen keislaman di tengah arus informasi dan hiburan yang cepat.',
-     category: 'Kehidupan Islami',
-     author: 'Ustadzah Fulanah',
-     date: '12/01/2026',
-     image: '/globe.svg',
-     href: '/artikel/menata-kehidupan-islami',
-   },
-   {
-     title: 'Fiqh Ibadah Harian: Ringkas dan Praktis',
-     excerpt:
-       'Rangkuman fiqh ibadah harian untuk memudahkan praktik ibadah sesuai Sunnah.',
-     category: 'Fiqh & Yurisprudensi',
-     author: 'Ustadz Abu Salim',
-     date: '05/01/2026',
-     image: '/file.svg',
-     href: '/artikel/fiqh-ibadah-harian',
-   },
- ];
+ const slides: Slide[] = HOME_ARTICLES.map((item) => ({
+   title: item.title,
+   excerpt: item.excerpt ?? '',
+   category: item.category,
+   author: item.author ?? 'Tim Redaksi',
+   date: item.date,
+   image: item.image,
+   href: `/${item.slug}`,
+ }));
  
  export default function HeroCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });

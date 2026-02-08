@@ -11,7 +11,7 @@ export default function TrustBadgeSection() {
   ];
 
   return (
-    <div className="border-t border-gray-200 mt-8 pt-8 pb-4">
+    <div className="mt-8 pt-8 pb-8">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {items.map((item, idx) => {
           const Icon = item.icon;

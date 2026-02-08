@@ -29,8 +29,8 @@ export default function MobileBottomNav() {
       icon: Headphones,
     },
     {
-      label: 'Tentang',
-      href: '/tentang',
+      label: 'Info',
+      href: '/about',
       icon: Info,
     },
   ];

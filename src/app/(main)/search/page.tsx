@@ -2,72 +2,33 @@
 
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import ContentCard, { type ContentItem } from '@/components/ContentCard';
+import ContentCard from '@/components/ContentCard';
 import { Search, X } from 'lucide-react';
+import { SEARCH_DATA } from '@/mockup';
 
-// Data dummy untuk simulasi pencarian
-const dummyData: (ContentItem & { type: 'artikel' | 'video' | 'podcast' })[] = [
-  {
-    id: "1",
-    title: "Adab Menuntut Ilmu: Klasik dan Kontemporer",
-    slug: "adab-menuntut-ilmu",
-    excerpt: "Ringkasan adab penuntut ilmu menurut para ulama beserta penerapannya di era digital.",
-    category: "Sumber Belajar",
-    date: "17/01/2026",
-    image: "/next.svg",
-    type: 'artikel'
-  },
-  {
-    id: "2",
-    title: "Tadabbur Ayat: Keteguhan Hati dalam Kesulitan",
-    slug: "tadabbur-ayat-keteguhan-hati",
-    excerpt: "Pembahasan ayat-ayat yang menguatkan hati, dilengkapi referensi dari kitab tafsir.",
-    category: "Studi Al-Quran",
-    date: "16/01/2026",
-    image: "/globe.svg",
-    type: 'artikel'
-  },
-  {
-    id: "v1",
-    title: "Kajian Rutin: Tafsir Surat Al-Fatihah",
-    slug: "kajian-tafsir-al-fatihah",
-    duration: "45:20",
-    category: "Kajian Kitab",
-    date: "10/01/2026",
-    image: "/window.svg",
-    excerpt: "Simak kajian mendalam mengenai tafsir Surat Al-Fatihah dan rahasia yang terkandung di dalamnya.",
-    type: 'video'
-  },
-  {
-    id: "p1",
-    title: "Ep 1: Menjaga Hati di Zaman Fitnah",
-    slug: "menjaga-hati",
-    duration: "25:00",
-    category: "Tazkiyatun Nafs",
-    date: "14/01/2026",
-    image: "/file.svg",
-    excerpt: "Bagaimana cara menjaga hati agar tetap bersih di tengah gempuran fitnah akhir zaman?",
-    type: 'podcast'
-  },
-  // Tambahkan data lain jika perlu
-];
+// centralized search data
 
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialQuery = searchParams.get('q') || '';
+  const initialTypeParam = searchParams.get('type');
+  const initialType = (initialTypeParam === 'artikel' || initialTypeParam === 'video' || initialTypeParam === 'podcast') ? initialTypeParam : 'all';
   
   const [query, setQuery] = useState(initialQuery);
-  const [filterType, setFilterType] = useState<'all' | 'artikel' | 'video' | 'podcast'>('all');
-  const [results, setResults] = useState(dummyData);
+  const [filterType, setFilterType] = useState<'all' | 'artikel' | 'video' | 'podcast'>(initialType);
+  const [results, setResults] = useState(SEARCH_DATA);
 
   useEffect(() => {
     setQuery(initialQuery);
   }, [initialQuery]);
+  useEffect(() => {
+    setFilterType(initialType);
+  }, [initialType]);
 
   useEffect(() => {
     const lowerQuery = query.toLowerCase();
-    const filtered = dummyData.filter(item => {
+    const filtered = SEARCH_DATA.filter(item => {
       const matchesQuery = item.title.toLowerCase().includes(lowerQuery) || 
                            item.category.toLowerCase().includes(lowerQuery);
       const matchesType = filterType === 'all' || item.type === filterType;
@@ -78,7 +39,7 @@ function SearchContent() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push(`/search?q=${encodeURIComponent(query)}`);
+    router.push(`/search?q=${encodeURIComponent(query)}${filterType !== 'all' ? `&type=${filterType}` : ''}`);
   };
 
   const clearSearch = () => {
