@@ -12,9 +12,6 @@ import {
   Printer, 
   CheckCircle, 
   ChevronRight, 
-  Facebook,
-  Twitter,
-  Linkedin,
   BookOpen
 } from 'lucide-react';
 

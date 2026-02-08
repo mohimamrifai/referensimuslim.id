@@ -1,7 +1,7 @@
  "use client"
 import Link from "next/link";
 import Image from "next/image";
-import { Home, LayoutDashboard, BookOpen, Video, Mic, Tags, Info, Menu, LogOut, Settings, PlusCircle } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, Mic, Tags, Menu, LogOut, Settings } from "lucide-react";
 import { useState } from "react";
 
 export default function DashboardLayout({
@@ -56,7 +56,7 @@ export default function DashboardLayout({
           <nav className="h-full p-3 space-y-2 overflow-y-auto custom-scrollbar">
             {menus.map((item) => {
               const Icon = item.icon;
-              const disabled = (item as any).disabled;
+              const disabled = (item as { disabled?: boolean }).disabled;
               return (
                 <Link
                   key={item.title}
@@ -77,8 +77,8 @@ export default function DashboardLayout({
           </nav>
         </aside>
 
-        <main className="flex-1">
-          <div className="p-4">
+        <main className="flex-1 min-w-0 overflow-x-hidden">
+          <div className="p-4 md:p-6 lg:p-8">
             {children}
           </div>
         </main>

@@ -320,7 +320,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
 
 const generateContentItems = (filterFn?: (item: ContentData & { type: ContentType }) => boolean): ContentItem[] => {
   return Object.entries(MOCK_DB)
-    .filter(([_, data]) => filterFn ? filterFn(data) : true)
+    .filter(([, data]) => filterFn ? filterFn(data) : true)
     .map(([slug, data]) => ({
       id: slug,
       slug: slug,

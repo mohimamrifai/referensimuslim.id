@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Play, Headphones } from 'lucide-react';
 
 export type ContentType = 'artikel' | 'video' | 'podcast';
 
@@ -23,12 +22,6 @@ export default function ContentCard({ item, type }: { item: ContentItem; type: C
   const shareUrl = `/${item.slug}`;
   const wa = `https://wa.me/?text=${encodeURIComponent(`${item.title} ${shareUrl}`)}`;
   const tg = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(item.title)}`;
-
-  const getIcon = () => {
-    if (type === 'video') return <Play className="h-6 w-6 text-white fill-white ml-0.5" />;
-    if (type === 'podcast') return <Headphones className="h-6 w-6 text-white" />;
-    return null;
-  };
 
   const getCtaText = () => {
     if (type === 'video') return 'Tonton Video';

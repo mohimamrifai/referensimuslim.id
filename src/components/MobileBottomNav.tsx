@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Grid, PlayCircle, Headphones, Info, BookOpen } from 'lucide-react';
+import { Home, PlayCircle, Headphones, Info, BookOpen } from 'lucide-react';
 
 export default function MobileBottomNav() {
   const pathname = usePathname();

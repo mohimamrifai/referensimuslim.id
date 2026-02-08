@@ -54,10 +54,10 @@ export default async function SubCategoryPage({
             <span className="text-gray-300 font-bold text-2xl">∅</span>
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Tidak ada konten ditemukan untuk "{displayName}"
+            Tidak ada konten ditemukan untuk &quot;{displayName}&quot;
           </h3>
           <p className="text-gray-500 max-w-md">
-            Kami tidak menemukan konten dengan kategori "{slugDecoded}". Coba pilih subkategori lain atau gunakan fitur pencarian.
+            Kami tidak menemukan konten dengan kategori &quot;{slugDecoded}&quot;. Coba pilih subkategori lain atau gunakan fitur pencarian.
           </p>
         </div>
       )}
