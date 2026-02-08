@@ -25,7 +25,6 @@ Tipe: Portal E-News Islami (Magazine)
 • Responsive (mobile-first)
 • Grid artikel
 • Featured article
-• Bookmark artikel
 • Infinite scroll / pagination
 • Share WhatsApp & Telegram
 • SEO basic (meta title, description)

@@ -19,7 +19,7 @@ export type ContentItem = {
 };
 
 export default function ContentCard({ item, type }: { item: ContentItem; type: ContentType }) {
-  const shareUrl = `/${type}/${item.slug}`;
+  const shareUrl = `/${item.slug}`;
   const wa = `https://wa.me/?text=${encodeURIComponent(`${item.title} ${shareUrl}`)}`;
   const tg = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(item.title)}`;
 
@@ -35,10 +35,10 @@ export default function ContentCard({ item, type }: { item: ContentItem; type: C
     return 'Baca Selengkapnya';
   };
 
-  const linkHref = `/${type}/${item.slug}`;
+  const linkHref = `/${item.slug}`;
 
   return (
-    <article className="group/card rounded-xl border border-gray-200 overflow-hidden bg-white hover:shadow-md transition-shadow h-full flex flex-col">
+    <article className="group/card rounded-md border border-gray-200 overflow-hidden bg-white hover:shadow-md transition-shadow h-full flex flex-col">
       <div className="relative aspect-video w-full overflow-hidden bg-gray-100">
         <Image
           src={item.image || '/window.svg'}
