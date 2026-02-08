@@ -113,10 +113,6 @@ export default function Footer() {
           <p className="text-gray-500 text-sm text-center md:text-left">
             &copy; {currentYear} Referensimuslim.id. Hak Cipta Dilindungi.
           </p>
-          <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="/privacy" className="hover:text-orange-600 transition-colors">Kebijakan Privasi</Link>
-            <Link href="/terms" className="hover:text-orange-600 transition-colors">Syarat & Ketentuan</Link>
-          </div>
         </div>
       </div>
     </footer>

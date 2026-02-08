@@ -87,7 +87,7 @@ function SearchContent() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-8 md:pl-[var(--sidebar-width)]">
+    <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-8 md:pl-(--sidebar-width)">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Hasil Pencarian</h1>
         
@@ -99,9 +99,9 @@ function SearchContent() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Cari konten..."
-              className="w-full pl-10 pr-10 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-sm"
+              className="w-full text-sm pl-10 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-sm"
             />
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
             {query && (
               <button 
                 type="button" 

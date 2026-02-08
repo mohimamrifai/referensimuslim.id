@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, FileText, Video, Mic, Info, Search, SearchIcon } from 'lucide-react';
+import { Home, Video, Mic, Info, Search, SearchIcon, BookOpen } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const menuItems = [
     { name: 'Beranda', icon: Home, href: '/' },
-    { name: 'Artikel', icon: FileText, href: '/artikel' },
+    { name: 'Artikel', icon: BookOpen, href: '/artikel' },
     { name: 'Video', icon: Video, href: '/video' },
     { name: 'Podcast', icon: Mic, href: '/podcast' },
     { name: 'Tentang Kami', icon: Info, href: '/about' },

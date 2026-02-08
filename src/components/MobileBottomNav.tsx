@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Grid, PlayCircle, Headphones, Info } from 'lucide-react';
+import { Home, Grid, PlayCircle, Headphones, Info, BookOpen } from 'lucide-react';
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
@@ -14,9 +14,9 @@ export default function MobileBottomNav() {
       icon: Home,
     },
     {
-      label: 'Kategori',
-      href: '/kategori',
-      icon: Grid,
+      label: 'Artikel',
+      href: '/artikel',
+      icon: BookOpen,
     },
     {
       label: 'Video',
