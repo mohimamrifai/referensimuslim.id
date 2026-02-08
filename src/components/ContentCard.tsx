@@ -12,6 +12,7 @@ export type ContentItem = {
   slug: string;
   image: string;
   category: string;
+  subcategory?: string;
   date: string;
   author?: string;
   excerpt?: string;
@@ -49,7 +50,7 @@ export default function ContentCard({ item, type }: { item: ContentItem; type: C
       </div>
       <div className="p-4 flex flex-col grow">
         <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
-          <span className="font-medium text-orange-600 bg-orange-50 px-2 text-[10px] py-0.5 rounded-full">{item.category}</span>
+          <span className="font-medium text-orange-600 bg-orange-50 px-2 text-[10px] py-0.5 rounded-full">{item.subcategory ?? item.category}</span>
           <span>{item.date}</span>
         </div>
         <h3 className="font-bold text-gray-900 line-clamp-2 mb-2 group-hover/card:text-orange-600 transition-colors">

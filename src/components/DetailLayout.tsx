@@ -23,6 +23,7 @@ export type ContentType = 'artikel' | 'video' | 'podcast';
 export interface ContentData {
   title: string;
   category: string;
+  subcategory?: string;
   author: {
     name: string;
     role: string;
@@ -37,6 +38,7 @@ export interface ContentData {
     name: string;
     role: string;
     image: string;
+    institution: string;
     verified: boolean;
   };
 }
@@ -106,7 +108,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
 
           {/* Category Badge */}
           <span className="inline-block bg-orange-100 text-orange-700 text-[10px] font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
-            {data.category}
+            {data.subcategory ?? data.category}
           </span>
 
           {/* Title */}
@@ -171,7 +173,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
                 />
               </div>
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                <div className="flex items-center justify-between mb-1">
                   <h4 className="font-bold text-gray-900 text-lg leading-tight">
                     {data.reference.name}
                   </h4>
@@ -181,7 +183,8 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-600 mb-2">{data.reference.role}</p>
+                <p className="text-sm text-gray-600 mb-1">{data.reference.role}</p>
+                <p className="text-xs text-gray-500">{data.reference.institution}</p>
               </div>
             </div>
           </div>

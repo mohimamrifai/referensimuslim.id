@@ -29,8 +29,9 @@ function SearchContent() {
   useEffect(() => {
     const lowerQuery = query.toLowerCase();
     const filtered = SEARCH_DATA.filter(item => {
-      const matchesQuery = item.title.toLowerCase().includes(lowerQuery) || 
-                           item.category.toLowerCase().includes(lowerQuery);
+      const inTitle = item.title.toLowerCase().includes(lowerQuery);
+      const inCategory = (item.subcategory ?? item.category).toLowerCase().includes(lowerQuery);
+      const matchesQuery = inTitle || inCategory;
       const matchesType = filterType === 'all' || item.type === filterType;
       return matchesQuery && matchesType;
     });

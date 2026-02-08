@@ -16,7 +16,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
        <p>Para ulama menjelaskan bahwa ikhlas adalah memurnikan amal untuk Allah semata, tanpa mengharapkan pujian manusia.</p>
        <blockquote class="border-l-4 border-orange-500 pl-4 italic my-4 text-gray-700 bg-gray-50 p-3 rounded-r-md">Amal kecil yang ikhlas lebih bernilai daripada amal besar yang tercampur riya.</blockquote>
        <ul class="list-disc ml-6 space-y-2"><li>Jaga niat di awal</li><li>Periksa kembali ketika amal berlangsung</li><li>Berdoa agar ditetapkan di atas keikhlasan</li></ul>`,
-    reference: { name: 'Imam Al-Ghazali', role: 'Ulama Tasawuf', image: '/globe.svg', verified: true }
+    reference: { name: 'Imam Al-Ghazali', role: 'Ulama Tasawuf', image: '/globe.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'menata-kehidupan-islami': {
     type: 'artikel',
@@ -31,7 +31,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
        <h2 class="text-xl font-bold mt-6 mb-3">Prinsip Dasar</h2>
        <p>Gunakan teknologi untuk memperkuat ibadah dan ilmu, bukan melalaikan kewajiban.</p>
        <ul class="list-disc ml-6 space-y-2"><li>Atur waktu menggunakan perangkat</li><li>Pilih konten bermanfaat</li><li>Jaga adab dalam interaksi online</li></ul>`,
-    reference: { name: 'Dr. Yusuf Qaradhawi', role: 'Cendekiawan Islam', image: '/file.svg', verified: true }
+    reference: { name: 'Dr. Yusuf Qaradhawi', role: 'Cendekiawan Islam', image: '/file.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'fiqh-ibadah-harian': {
     type: 'artikel',
@@ -46,7 +46,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
        <h2 class="text-xl font-bold mt-6 mb-3">Pokok-Pokok Ibadah</h2>
        <p>Pahami syarat dan rukun ibadah agar amalan sah dan diterima.</p>
        <ul class="list-disc ml-6 space-y-2"><li>Thaharah sebagai kunci ibadah</li><li>Shalat tepat waktu</li><li>Zikir dan doa harian</li></ul>`,
-    reference: { name: 'Imam Nawawi', role: 'Ulama Fiqh', image: '/next.svg', verified: true }
+    reference: { name: 'Imam Nawawi', role: 'Ulama Fiqh', image: '/next.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'adab-menuntut-ilmu': {
     type: 'artikel',
@@ -61,7 +61,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
        <h2 class="text-xl font-bold mt-6 mb-3">Niat yang Lurus</h2>
        <p>Niat harus dimurnikan untuk mencari ridha Allah, bukan kebanggaan.</p>
        <blockquote class="border-l-4 border-orange-500 pl-4 italic my-4 text-gray-700 bg-gray-50 p-3 rounded-r-md">Ilmu tanpa adab bagaikan api tanpa cahaya.</blockquote>`,
-    reference: { name: 'Syaikh Bakr Abu Zaid', role: 'Ulama Adab Ilmu', image: '/window.svg', verified: true }
+    reference: { name: 'Syaikh Bakr Abu Zaid', role: 'Ulama Adab Ilmu', image: '/window.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'tadabbur-ayat-keteguhan-hati': {
     type: 'artikel',
@@ -76,7 +76,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
        <h2 class="text-xl font-bold mt-6 mb-3">Menguatkan Keyakinan</h2>
        <p>Tadabbur membuka pintu hikmah dan ketenangan.</p>
        <ul class="list-disc ml-6 space-y-2"><li>Merenung makna ayat</li><li>Menerapkan dalam amalan</li><li>Menyampaikan dengan adab</li></ul>`,
-    reference: { name: 'Ibnu Katsir', role: 'Mufassir', image: '/file.svg', verified: true }
+    reference: { name: 'Ibnu Katsir', role: 'Mufassir', image: '/file.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'panduan-shalat-khusyuk': {
     type: 'artikel',
@@ -91,7 +91,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
        <h2 class="text-xl font-bold mt-6 mb-3">Langkah-Langkah</h2>
        <p>Persiapkan hati, fokus gerakan, dan pahami bacaan.</p>
        <ul class="list-disc ml-6 space-y-2"><li>Hindari gangguan</li><li>Perbanyak zikir</li><li>Pelajari makna doa</li></ul>`,
-    reference: { name: 'Syaikh Shalih Al-Munajjid', role: 'Pembina Dakwah', image: '/window.svg', verified: true }
+    reference: { name: 'Syaikh Shalih Al-Munajjid', role: 'Pembina Dakwah', image: '/window.svg', institution: 'Institut Studi Islam', verified: true }
   },
 
   'kajian-tafsir-al-fatihah': {
@@ -106,7 +106,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Pembahasan mendalam tentang makna Al-Fatihah.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Pokok Tafsir</h2>
        <p>Menjelaskan tujuh ayat utama sebagai ummul kitab.</p>`,
-    reference: { name: 'Imam Asy-Syafi’i', role: 'Ulama Fiqh', image: '/globe.svg', verified: true }
+    reference: { name: 'Imam Asy-Syafi’i', role: 'Ulama Fiqh', image: '/globe.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'hukum-jual-beli-online': {
     type: 'video',
@@ -120,7 +120,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Penjelasan hukum transaksi digital dalam perspektif syariah.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Kaidah Umum</h2>
        <p>Transparansi, kejujuran, dan akad yang jelas.</p>`,
-    reference: { name: 'Dr. Wahbah Az-Zuhaili', role: 'Ulama Fiqh', image: '/file.svg', verified: true }
+    reference: { name: 'Dr. Wahbah Az-Zuhaili', role: 'Ulama Fiqh', image: '/file.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'sejarah-peradaban-islam': {
     type: 'video',
@@ -134,7 +134,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Menelusuri kejayaan peradaban Islam dan kontribusinya.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Kontribusi Ilmiah</h2>
        <p>Sains, kedokteran, matematika, dan filsafat berkembang pesat.</p>`,
-    reference: { name: 'Ibnu Sina', role: 'Cendekiawan', image: '/next.svg', verified: true }
+    reference: { name: 'Ibnu Sina', role: 'Cendekiawan', image: '/next.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'fikih-zakat': {
     type: 'video',
@@ -148,7 +148,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Zakat sebagai pilar sosial dalam Islam.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Objek Zakat</h2>
        <p>Emas, perniagaan, pertanian, dan pendapatan.</p>`,
-    reference: { name: 'Imam Al-Mawardi', role: 'Ulama Fiqh', image: '/window.svg', verified: false }
+    reference: { name: 'Imam Al-Mawardi', role: 'Ulama Fiqh', image: '/window.svg', institution: 'Institut Studi Islam', verified: false }
   },
   'akhlak-rasul': {
     type: 'video',
@@ -162,7 +162,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Meneladani akhlak Rasulullah dalam setiap aspek kehidupan.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Praktik Nyata</h2>
        <p>Kejujuran, amanah, kasih sayang, dan kesabaran.</p>`,
-    reference: { name: 'Imam Tirmidzi', role: 'Ulama Hadits', image: '/file.svg', verified: true }
+    reference: { name: 'Imam Tirmidzi', role: 'Ulama Hadits', image: '/file.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'manajemen-waktu': {
     type: 'video',
@@ -176,7 +176,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Pengaturan waktu yang efektif menambah keberkahan.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Metode Praktis</h2>
        <p>Prioritaskan kewajiban, batasi distraksi, dan evaluasi harian.</p>`,
-    reference: { name: 'Al-Hasan Al-Bashri', role: 'Ulama', image: '/globe.svg', verified: false }
+    reference: { name: 'Al-Hasan Al-Bashri', role: 'Ulama', image: '/globe.svg', institution: 'Institut Studi Islam', verified: false }
   },
 
   'menjaga-hati': {
@@ -191,7 +191,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Menjaga kebersihan hati adalah kunci keselamatan.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Langkah Menjaga Hati</h2>
        <p>Banyak istighfar, jauhi fitnah, dan perkuat iman.</p>`,
-    reference: { name: 'Imam Ibnul Qayyim', role: 'Ulama', image: '/next.svg', verified: true }
+    reference: { name: 'Imam Ibnul Qayyim', role: 'Ulama', image: '/next.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'kiat-sukses-pengusaha': {
     type: 'podcast',
@@ -205,7 +205,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Pengusaha muslim sukses menyeimbangkan dunia dan akhirat.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Prinsip Utama</h2>
        <p>Kejujuran, adil, dan berkah dalam transaksi.</p>`,
-    reference: { name: 'Syaikh Abdurrahman As-Sa’di', role: 'Ulama', image: '/globe.svg', verified: false }
+    reference: { name: 'Syaikh Abdurrahman As-Sa’di', role: 'Ulama', image: '/globe.svg', institution: 'Institut Studi Islam', verified: false }
   },
   'mendidik-anak': {
     type: 'podcast',
@@ -219,7 +219,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Menanamkan cinta Al-Quran sejak dini.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Metode Efektif</h2>
        <p>Teladan orang tua, rutinitas, dan suasana kondusif.</p>`,
-    reference: { name: 'Syaikh Shalih Al-Fauzan', role: 'Ulama', image: '/file.svg', verified: true }
+    reference: { name: 'Syaikh Shalih Al-Fauzan', role: 'Ulama', image: '/file.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'tafsir-ayat-kursi-podcast': {
     type: 'podcast',
@@ -233,7 +233,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Ayat Kursi sebagai perlindungan dan penguat iman.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Intisari</h2>
        <p>Mengenal sifat-sifat Allah dan kekuasaan-Nya.</p>`,
-    reference: { name: 'Syaikh Asy-Syinqithi', role: 'Mufassir', image: '/next.svg', verified: false }
+    reference: { name: 'Syaikh Asy-Syinqithi', role: 'Mufassir', image: '/next.svg', institution: 'Institut Studi Islam', verified: false }
   },
   'keluarga-sakinah-podcast': {
     type: 'podcast',
@@ -247,7 +247,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Keluarga sakinah dibangun di atas takwa dan komunikasi.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Pilar Keluarga</h2>
        <p>Peran suami-istri dan pendidikan anak yang seimbang.</p>`,
-    reference: { name: 'Syaikh Shalih Al-Utsaimin', role: 'Ulama', image: '/globe.svg', verified: true }
+    reference: { name: 'Syaikh Shalih Al-Utsaimin', role: 'Ulama', image: '/globe.svg', institution: 'Institut Studi Islam', verified: true }
   },
   'pemuda-muslim-podcast': {
     type: 'podcast',
@@ -261,7 +261,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
       `<p>Pemuda muslim harus kuat iman dan beradab.</p>
        <h2 class="text-xl font-bold mt-6 mb-3">Strategi</h2>
        <p>Lingkungan baik, mentor, dan ilmu yang benar.</p>`,
-    reference: { name: 'Imam Syafi’i', role: 'Ulama', image: '/next.svg', verified: false }
+    reference: { name: 'Imam Syafi’i', role: 'Ulama', image: '/next.svg', institution: 'Institut Studi Islam', verified: false }
   }
 };
 
@@ -296,3 +296,74 @@ export const SEARCH_DATA: (ContentItem & { type: ContentType })[] = [
   { id: 's9', title: 'Ep 2: Kiat Sukses Pengusaha Muslim', slug: 'kiat-sukses-pengusaha', duration: '32:15', category: 'Bisnis Islami', date: '11/01/2026', image: '/window.svg', excerpt: 'Kiat pengusaha muslim.', type: 'podcast' },
   { id: 's10', title: 'Ep 3: Mendidik Anak Cinta Al-Quran', slug: 'mendidik-anak', duration: '28:45', category: 'Parenting', date: '09/01/2026', image: '/globe.svg', excerpt: 'Mendidik anak cinta Al-Quran.', type: 'podcast' }
 ];
+
+export type CategoryNode = {
+  name: string;
+  slug: string;
+  children?: { name: string; slug: string }[];
+};
+
+export const CATEGORY_TAXONOMY: CategoryNode[] = [
+  {
+    name: 'Pengetahuan Islam',
+    slug: 'pengetahuan-islam',
+    children: [
+      { name: 'Studi Al-Quran', slug: 'studi-al-quran' },
+      { name: 'Ilmu Hadits', slug: 'ilmu-hadits' },
+      { name: 'Fiqh & Yurisprudensi', slug: 'fiqh-yurisprudensi' },
+      { name: 'Aqidah & Teologi', slug: 'aqidah-teologi' }
+    ]
+  },
+  { name: 'Praktik Ibadah', slug: 'praktik-ibadah' },
+  { name: 'Kehidupan Islami', slug: 'kehidupan-islami' },
+  { name: 'Sumber Belajar', slug: 'sumber-belajar' }
+];
+
+const slugifyCategory = (s: string) =>
+  s
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+export const CATEGORY_CHILD_TO_PARENT: Record<string, string> = (() => {
+  const map: Record<string, string> = {};
+  CATEGORY_TAXONOMY.forEach((parent) => {
+    parent.children?.forEach((child) => {
+      map[child.slug] = parent.slug;
+    });
+  });
+  return map;
+})();
+
+export function getCategoryDisplayNameBySlug(slug: string): string {
+  const lower = slug.toLowerCase();
+  for (const parent of CATEGORY_TAXONOMY) {
+    if (parent.slug === lower) return parent.name;
+    const child = parent.children?.find((c) => c.slug === lower);
+    if (child) return child.name;
+  }
+  return slug.replace(/-/g, ' ');
+}
+
+export function listItemsByCategorySlug(slug: string) {
+  const lower = slug.toLowerCase();
+  const parent = CATEGORY_TAXONOMY.find((p) => p.slug === lower);
+  if (parent?.children?.length) {
+    const childSlugs = new Set(parent.children.map((c) => c.slug));
+    return SEARCH_DATA.filter((item) => childSlugs.has(slugifyCategory(item.subcategory ?? item.category)));
+  }
+  return SEARCH_DATA.filter((item) => slugifyCategory(item.subcategory ?? item.category) === lower);
+}
+
+export function getCategorySlugByName(name: string): string {
+  const lower = name.toLowerCase();
+  for (const parent of CATEGORY_TAXONOMY) {
+    if (parent.name.toLowerCase() === lower) return parent.slug;
+    const child = parent.children?.find((c) => c.name.toLowerCase() === lower);
+    if (child) return child.slug;
+  }
+  return slugifyCategory(name);
+}

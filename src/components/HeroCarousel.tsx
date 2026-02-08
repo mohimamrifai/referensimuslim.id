@@ -21,7 +21,7 @@ type Slide = {
  const slides: Slide[] = HOME_ARTICLES.map((item) => ({
    title: item.title,
    excerpt: item.excerpt ?? '',
-   category: item.category,
+   category: item.subcategory ?? item.category,
    author: item.author ?? 'Tim Redaksi',
    date: item.date,
    image: item.image,

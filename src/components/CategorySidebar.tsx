@@ -3,6 +3,7 @@
 import { useEffect, useState, type ElementType } from 'react';
 import { ChevronDown, ChevronRight, BookOpen, ListChecks, Heart, GraduationCap, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
+import { getCategorySlugByName } from '@/mockup';
 
 type Category = {
   name: string;
@@ -82,28 +83,36 @@ export default function CategorySidebar() {
           const IconComp = iconMap[cat.name] ?? BookOpen;
           return (
             <div key={cat.name}>
-              <button
-                className={`flex w-full items-center ${collapsed ? 'justify-center' : 'justify-between'} px-3 py-2 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-50`}
-                onClick={() => hasChildren && toggle(cat.name)}
+              <div
+                className={`flex w-full items-center ${collapsed ? 'justify-center' : 'justify-between'} px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-50`}
               >
-                <span className="flex items-center gap-2">
+                <Link
+                  href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name))}`}
+                  className="flex items-center gap-2 flex-1"
+                >
                   <span className="text-gray-600"><IconComp className={collapsed ? "h-5 w-5" : "h-5 w-5"} /></span>
                   {!collapsed && <span className="text-sm">{cat.name}</span>}
-                </span>
+                </Link>
                 {!collapsed && hasChildren ? (
-                  isOpen ? (
-                    <ChevronDown className="h-5 w-5 text-gray-500" />
-                  ) : (
-                    <ChevronRight className="h-5 w-5 text-gray-500" />
-                  )
+                  <button
+                    aria-label={isOpen ? `Tutup ${cat.name}` : `Buka ${cat.name}`}
+                    className="p-1 rounded hover:bg-gray-100"
+                    onClick={() => toggle(cat.name)}
+                  >
+                    {isOpen ? (
+                      <ChevronDown className="h-5 w-5 text-gray-500" />
+                    ) : (
+                      <ChevronRight className="h-5 w-5 text-gray-500" />
+                    )}
+                  </button>
                 ) : null}
-              </button>
+              </div>
               {hasChildren && isOpen && (
                 <div className={`pl-4 ${collapsed ? 'hidden' : ''}`}>
                   {cat.children!.map((child) => (
                     <Link
                       key={child.name}
-                      href={`/kategori/${encodeURIComponent(child.name.toLowerCase().replace(/\s+/g, '-'))}`}
+                      href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name))}/${encodeURIComponent(getCategorySlugByName(child.name))}`}
                       className="flex items-center justify-between rounded px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-gray-50"
                     >
                       <span>{child.name}</span>
