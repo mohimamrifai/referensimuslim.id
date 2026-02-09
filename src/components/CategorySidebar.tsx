@@ -21,7 +21,6 @@ const getCount = (categoryName: string, subcategoryName?: string) => {
 export default function CategorySidebar() {
   const [open, setOpen] = useState<Record<string, boolean>>({
     'Pengetahuan Islam': true,
-    'Akhlak & Tasawuf': true,
   });
   const [collapsed, setCollapsed] = useState<boolean>(false);
 

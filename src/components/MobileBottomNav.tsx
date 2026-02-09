@@ -1,36 +1,44 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Home, PlayCircle, Headphones, Info, BookOpen } from 'lucide-react';
+import { Suspense } from 'react';
 
-export default function MobileBottomNav() {
+function MobileBottomNavContent() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentType = searchParams.get('type');
 
   const navItems = [
     {
       label: 'Beranda',
       href: '/',
+      type: null,
       icon: Home,
     },
     {
       label: 'Artikel',
-      href: '/artikel',
+      href: '/search?q=&type=artikel',
+      type: 'artikel',
       icon: BookOpen,
     },
     {
       label: 'Video',
-      href: '/video',
+      href: '/search?q=&type=video',
+      type: 'video',
       icon: PlayCircle,
     },
     {
       label: 'Podcast',
-      href: '/podcast',
+      href: '/search?q=&type=podcast',
+      type: 'podcast',
       icon: Headphones,
     },
     {
       label: 'Info',
       href: '/about',
+      type: null,
       icon: Info,
     },
   ];
@@ -39,10 +47,19 @@ export default function MobileBottomNav() {
     <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:hidden pb-safe">
       <nav className="flex items-center justify-around h-16">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+          let isActive = false;
+
+          if (item.href === '/') {
+            isActive = pathname === '/';
+          } else if (item.href === '/about') {
+            isActive = pathname === '/about';
+          } else if (item.type) {
+            isActive = pathname === '/search' && currentType === item.type;
+          }
+
           return (
             <Link
-              key={item.href}
+              key={item.label}
               href={item.href}
               className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
                 isActive ? 'text-orange-600' : 'text-gray-500 hover:text-gray-900'
@@ -55,5 +72,13 @@ export default function MobileBottomNav() {
         })}
       </nav>
     </div>
+  );
+}
+
+export default function MobileBottomNav() {
+  return (
+    <Suspense fallback={<div className="fixed bottom-0 left-0 right-0 h-16 bg-white md:hidden" />}>
+      <MobileBottomNavContent />
+    </Suspense>
   );
 }

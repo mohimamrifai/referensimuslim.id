@@ -69,10 +69,10 @@ type Slide = {
        <div className="overflow-hidden rounded-2xl border border-gray-200" ref={emblaRef}>
          <div className="flex">
            {slides.map((item, idx) => (
-             <div className="min-w-0 flex-[0_0_100%] relative" key={idx}>
-               <div className="relative aspect-video sm:aspect-auto sm:h-120 md:h-136">
-                <Image
-                  src={item.image}
+            <div className="min-w-0 flex-[0_0_100%] relative" key={idx}>
+              <div className="relative aspect-square sm:aspect-auto sm:h-120 md:h-136">
+               <Image
+                 src={item.image}
                   alt={item.title}
                   fill
                   className="object-cover"

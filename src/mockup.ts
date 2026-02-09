@@ -398,7 +398,7 @@ const generateContentItems = (filterFn?: (item: ContentData & { type: ContentTyp
       date: data.publishedAt,
       image: data.image || data.author.image,
       type: data.type,
-      duration: data.duration,
+      duration: data.duration || data.readTime?.replace(' baca', ''),
     }));
 };
 

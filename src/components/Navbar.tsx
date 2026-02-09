@@ -10,10 +10,12 @@ const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+      setIsMobileSearchOpen(false);
     }
   };
 
@@ -80,12 +82,33 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden gap-4">
-            <Link href="/search" className="p-2 text-gray-600 hover:text-orange-600 focus:outline-none">
-              <SearchIcon className="w-6 h-6" />
-            </Link>
+            <button 
+              onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+              className="p-2 text-gray-600 hover:text-orange-600 focus:outline-none"
+            >
+              {isMobileSearchOpen ? <SearchIcon className="w-6 h-6 text-orange-600" /> : <SearchIcon className="w-6 h-6" />}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Search Input */}
+      {isMobileSearchOpen && (
+        <div className="md:hidden border-t border-gray-100 bg-gray-50 px-4 py-3 animate-in slide-in-from-top-2">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Cari artikel, video atau podcast.."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
+              autoFocus
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-sm"
+            />
+            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

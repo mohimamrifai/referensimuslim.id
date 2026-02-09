@@ -1,56 +1,87 @@
 'use client';
 
 import Link from "next/link";
-import useEmblaCarousel from 'embla-carousel-react';
 import { CATEGORY_TAXONOMY, listItemsByCategorySlug } from "@/mockup";
+import { 
+  BookOpen, 
+  Moon, 
+  Heart, 
+  Users, 
+  GraduationCap, 
+  History,
+  LucideIcon 
+} from 'lucide-react';
 
 export default function MobileCategoryGrid() {
-  const [emblaRef] = useEmblaCarousel({
-    align: 'start',
-    containScroll: 'trimSnaps',
-    dragFree: true
-  });
-
-  const uniformColor = 'from-orange-500 to-orange-600';
-  const categories = CATEGORY_TAXONOMY.map((parent) => {
-    const subCount = parent.children?.length ?? 0;
-    const contentCount = listItemsByCategorySlug(parent.slug).length;
-    return {
-      name: parent.name,
-      subCount,
-      contentCount,
-      href: `/kategori/${parent.slug}`,
-      color: uniformColor,
-    };
-  });
+  const categoryConfig: Record<string, { icon: LucideIcon, colorClass: string, iconColorClass: string }> = {
+    'Pengetahuan Islam': { 
+      icon: BookOpen, 
+      colorClass: 'bg-blue-50 border-blue-100', 
+      iconColorClass: 'text-blue-600 bg-blue-100' 
+    },
+    'Praktik Ibadah': { 
+      icon: Moon, 
+      colorClass: 'bg-emerald-50 border-emerald-100', 
+      iconColorClass: 'text-emerald-600 bg-emerald-100' 
+    },
+    'Akhlak & Tasawuf': { 
+      icon: Heart, 
+      colorClass: 'bg-purple-50 border-purple-100', 
+      iconColorClass: 'text-purple-600 bg-purple-100' 
+    },
+    'Kehidupan Islami': { 
+      icon: Users, 
+      colorClass: 'bg-orange-50 border-orange-100', 
+      iconColorClass: 'text-orange-600 bg-orange-100' 
+    },
+    'Sumber Belajar': { 
+      icon: GraduationCap, 
+      colorClass: 'bg-pink-50 border-pink-100', 
+      iconColorClass: 'text-pink-600 bg-pink-100' 
+    },
+    'Sejarah': { 
+      icon: History, 
+      colorClass: 'bg-amber-50 border-amber-100', 
+      iconColorClass: 'text-amber-600 bg-amber-100' 
+    },
+  };
 
   return (
     <div className="md:hidden space-y-4">
       <div className="flex items-center justify-between px-1">
-        <h2 className="text-base font-semibold text-gray-800">Kategori</h2>
+        <h2 className="text-xl font-bold text-gray-900">Kategori</h2>
         <Link href="/kategori" className="text-sm font-semibold text-orange-700 hover:text-orange-800">
           Lihat Semua
         </Link>
       </div>
       
-      <div className="overflow-hidden -mx-4 px-4" ref={emblaRef}>
-        <div className="flex gap-3">
-          {categories.map((cat, index) => {
-            return (
-              <div key={index} className="flex-[0_0_40%] min-w-0">
-                <Link href={cat.href} className={`block rounded-xl p-3 text-white bg-linear-to-br ${cat.color} shadow-sm active:scale-[0.98] transition-transform h-full`}>
-                  <div className="flex flex-col items-center gap-2 py-1">
-                    <div className="text-center">
-                      <div className="font-semibold leading-tight text-xs mb-0.5">{cat.name}</div>
-                      <div className="text-[10px] opacity-90 font-medium">{cat.subCount} sub kategori</div>
-                      <div className="text-[10px] opacity-90 font-medium">{cat.contentCount} konten</div>
-                    </div>
-                  </div>
-                </Link>
+      <div className="grid grid-cols-2 gap-3">
+        {CATEGORY_TAXONOMY.map((cat, index) => {
+          const config = categoryConfig[cat.name] || { 
+            icon: BookOpen, 
+            colorClass: 'bg-gray-50 border-gray-100', 
+            iconColorClass: 'text-gray-600 bg-gray-100' 
+          };
+          const Icon = config.icon;
+          const count = listItemsByCategorySlug(cat.slug).length;
+
+          return (
+            <Link 
+              key={index} 
+              href={`/kategori/${cat.slug}`} 
+              className={`aspect-square flex flex-col items-center justify-center gap-2 p-3 rounded-lg border transition-all hover:shadow-sm ${config.colorClass}`}
+            >
+              <div className={`p-2 rounded-full ${config.iconColorClass}`}>
+                <Icon className="w-6 h-6" />
               </div>
-            );
-          })}
-        </div>
+              
+              <div className="text-center">
+                <h3 className="font-bold text-gray-900 text-sm leading-tight mb-0.5">{cat.name}</h3>
+                <p className="text-[10px] text-gray-500">{count} konten</p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

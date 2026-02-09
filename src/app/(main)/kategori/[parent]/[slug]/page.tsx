@@ -41,13 +41,23 @@ export default async function SubCategoryPage({
       </div>
 
       {items.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {items.map((item) => (
-            <div key={item.id} className="h-full">
-              <ContentCard item={item} type={item.type} />
-            </div>
-          ))}
-        </div>
+        <>
+          {/* Mobile View */}
+          <div className="md:hidden flex flex-col">
+            {items.map((item) => (
+              <ContentCard key={item.id} item={item} type={item.type} variant="list" />
+            ))}
+          </div>
+
+          {/* Desktop View */}
+          <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {items.map((item) => (
+              <div key={item.id} className="h-full">
+                <ContentCard item={item} type={item.type} />
+              </div>
+            ))}
+          </div>
+        </>
       ) : (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <div className="bg-gray-50 p-6 rounded-full mb-4">
