@@ -32,6 +32,8 @@ export interface ContentData {
   readTime?: string;
   duration?: string;
   views: string;
+  videoUrl?: string;
+  audioUrl?: string;
   content: string; // HTML string
   reference: {
     name: string;
@@ -54,6 +56,8 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
 
   // Handle Reading Progress
   useEffect(() => {
+    if (type !== 'artikel') return;
+
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const progress = (window.scrollY / totalHeight) * 100;
@@ -62,7 +66,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [type]);
 
   const handlePrint = () => {
     window.print();
@@ -195,19 +199,21 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
           <div className="sticky top-24 space-y-4">
             
             {/* Reading Progress */}
-            <div className="bg-white border border-gray-200 rounded-md p-6 shadow-sm">
-              <h3 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wider">Progress Baca</h3>
-              <div className="flex items-end gap-2 mb-2">
-                <span className="text-xl font-bold text-orange-600">{Math.round(readingProgress)}%</span>
-                <span className="text-sm text-gray-500 mb-1">selesai</span>
+            {type === 'artikel' && (
+              <div className="bg-white border border-gray-200 rounded-md p-6 shadow-sm">
+                <h3 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wider">Progress Baca</h3>
+                <div className="flex items-end gap-2 mb-2">
+                  <span className="text-xl font-bold text-orange-600">{Math.round(readingProgress)}%</span>
+                  <span className="text-sm text-gray-500 mb-1">selesai</span>
+                </div>
+                <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <div 
+                    className="bg-orange-600 h-full rounded-full transition-all duration-300 ease-out"
+                    style={{ width: `${readingProgress}%` }}
+                  />
+                </div>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                <div 
-                  className="bg-orange-600 h-full rounded-full transition-all duration-300 ease-out"
-                  style={{ width: `${readingProgress}%` }}
-                />
-              </div>
-            </div>
+            )}
 
             {/* Actions */}
             <div className="space-y-2">

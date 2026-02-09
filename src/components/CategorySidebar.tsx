@@ -3,32 +3,25 @@
 import { useEffect, useState, type ElementType } from 'react';
 import { ChevronDown, ChevronRight, BookOpen, ListChecks, Heart, GraduationCap, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { getCategorySlugByName } from '@/mockup';
+import { getCategorySlugByName, CATEGORY_TAXONOMY, SEARCH_DATA } from '@/mockup';
 
-type Category = {
-  name: string;
-  count?: number;
-  children?: Category[];
+// Helper function to count items
+const getCount = (categoryName: string, subcategoryName?: string) => {
+  return SEARCH_DATA.filter((item) => {
+    if (subcategoryName) {
+      return (
+        item.category.toLowerCase() === categoryName.toLowerCase() &&
+        item.subcategory?.trim().toLowerCase() === subcategoryName.trim().toLowerCase()
+      );
+    }
+    return item.category.toLowerCase() === categoryName.toLowerCase();
+  }).length;
 };
-
-const categories: Category[] = [
-  {
-    name: 'Pengetahuan Islam',
-    children: [
-      { name: 'Studi Al-Quran', count: 156 },
-      { name: 'Ilmu Hadits', count: 243 },
-      { name: 'Fiqh & Yurisprudensi', count: 198 },
-      { name: 'Aqidah & Teologi', count: 134 },
-    ],
-  },
-  { name: 'Praktik Ibadah' },
-  { name: 'Kehidupan Islami' },
-  { name: 'Sumber Belajar' },
-];
 
 export default function CategorySidebar() {
   const [open, setOpen] = useState<Record<string, boolean>>({
     'Pengetahuan Islam': true,
+    'Akhlak & Tasawuf': true,
   });
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
@@ -77,7 +70,7 @@ export default function CategorySidebar() {
         </button>
       </div>
       <nav className={`px-2 pt-4 ${collapsed ? 'space-y-1' : 'space-y-1'} flex-1 overflow-y-auto`}>
-        {categories.map((cat) => {
+        {CATEGORY_TAXONOMY.map((cat) => {
           const isOpen = !!open[cat.name];
           const hasChildren = !!cat.children?.length;
           const IconComp = iconMap[cat.name] ?? BookOpen;
@@ -109,18 +102,21 @@ export default function CategorySidebar() {
               </div>
               {hasChildren && isOpen && (
                 <div className={`pl-4 ${collapsed ? 'hidden' : ''}`}>
-                  {cat.children!.map((child) => (
+                  {cat.children!.map((child) => {
+                    const count = getCount(cat.name, child.name);
+                    return (
                     <Link
                       key={child.name}
                       href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name))}/${encodeURIComponent(getCategorySlugByName(child.name))}`}
                       className="flex items-center justify-between rounded px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-gray-50"
                     >
                       <span>{child.name}</span>
-                      {typeof child.count === 'number' && (
-                        <span className="text-xs text-gray-400">{child.count}</span>
+                      {count > 0 && (
+                        <span className="text-xs text-gray-400">{count}</span>
                       )}
                     </Link>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
