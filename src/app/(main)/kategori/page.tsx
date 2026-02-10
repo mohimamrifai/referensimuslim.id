@@ -29,7 +29,7 @@ export default function CategoryIndexPage() {
         {categories.map((cat) => (
           <Link
             key={cat.slug}
-            href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name))}`}
+            href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name) || cat.slug)}`}
             className="group w-full flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-xl border border-gray-200 bg-white p-2 md:p-4 hover:border-orange-300 hover:bg-orange-50 transition-colors"
           >
             <div className="flex items-center gap-3 min-w-0">

@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Home, Video, Mic, Info, Search, SearchIcon, BookOpen } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState, Suspense } from 'react';
 
-const Navbar = () => {
+function NavbarContent() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentType = searchParams.get('type');
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
@@ -20,11 +22,11 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { name: 'Beranda', icon: Home, href: '/' },
-    { name: 'Artikel', icon: BookOpen, href: '/artikel' },
-    { name: 'Video', icon: Video, href: '/video' },
-    { name: 'Podcast', icon: Mic, href: '/podcast' },
-    { name: 'Tentang Kami', icon: Info, href: '/about' },
+    { name: 'Beranda', icon: Home, href: '/', type: null },
+    { name: 'Artikel', icon: BookOpen, href: '/search?q=&type=artikel', type: 'artikel' },
+    { name: 'Video', icon: Video, href: '/search?q=&type=video', type: 'video' },
+    { name: 'Podcast', icon: Mic, href: '/search?q=&type=podcast', type: 'podcast' },
+    { name: 'Tentang Kami', icon: Info, href: '/about', type: null },
   ];
 
   return (
@@ -51,7 +53,16 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+              let isActive = false;
+
+              if (item.href === '/') {
+                isActive = pathname === '/';
+              } else if (item.href === '/about') {
+                isActive = pathname === '/about';
+              } else if (item.type) {
+                isActive = pathname === '/search' && currentType === item.type;
+              }
+
               return (
                 <Link
                   key={item.name}
@@ -110,6 +121,14 @@ const Navbar = () => {
         </div>
       )}
     </nav>
+  );
+}
+
+const Navbar = () => {
+  return (
+    <Suspense fallback={<div className="h-16 bg-white border-b border-gray-100" />}>
+      <NavbarContent />
+    </Suspense>
   );
 };
 

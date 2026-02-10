@@ -15,9 +15,12 @@ import {
   BookOpen
 } from 'lucide-react';
 
+import { incrementView } from '@/app/actions/content';
+
 export type ContentType = 'artikel' | 'video' | 'podcast';
 
 export interface ContentData {
+  slug: string;
   title: string;
   category: string;
   subcategory?: string;
@@ -53,6 +56,17 @@ interface DetailLayoutProps {
 export default function DetailLayout({ type, data, children }: DetailLayoutProps) {
   const [readingProgress, setReadingProgress] = useState(0);
   const [quoteResult, setQuoteResult] = useState<string | null>(null);
+
+  // Increment View Count after 30 seconds
+  useEffect(() => {
+    if (!data.slug) return;
+
+    const timer = setTimeout(() => {
+      incrementView(data.slug);
+    }, 30000);
+
+    return () => clearTimeout(timer);
+  }, [data.slug]);
 
   // Handle Reading Progress
   useEffect(() => {
@@ -219,7 +233,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
             <div className="space-y-2">
               <button 
                 onClick={handleShare}
-                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group"
+                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
               >
                 <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
                   <Share2 className="w-4 h-4" />
@@ -229,7 +243,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
 
               <button 
                 onClick={handleQuote}
-                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group"
+                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
               >
                 <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
                   <Quote className="w-4 h-4" />
@@ -249,7 +263,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
 
               <button 
                 onClick={handlePrint}
-                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group"
+                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
               >
                 <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
                   <Printer className="w-4 h-4" />

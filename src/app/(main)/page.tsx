@@ -1,17 +1,105 @@
-import HeroCarousel from "@/components/HeroCarousel";
+import HeroCarousel, { HeroSlide } from "@/components/HeroCarousel";
 import MobileCategoryGrid from "@/components/MobileCategoryGrid";
-import ContentCard from "@/components/ContentCard";
+import ContentCard, { ContentItem } from "@/components/ContentCard";
 import ContentCarousel from "@/components/ContentCarousel";
 import StatsSection from "@/components/StatsSection";
 import TrustBadgeSection from "@/components/TrustBadgeSection";
-import { HOME_ARTICLES, HOME_VIDEOS, HOME_PODCASTS } from "@/mockup";
+import { HOME_VIDEOS, HOME_PODCASTS } from "@/mockup";
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { ContentType, ContentStatus } from "@prisma/client";
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+async function getHeroArticles(): Promise<HeroSlide[]> {
+  try {
+    const articles = await prisma.content.findMany({
+      where: {
+        type: ContentType.ARTIKEL,
+        status: ContentStatus.PUBLISHED,
+      },
+      take: 5, // Limit to 5 for Hero
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        category: true,
+        subcategory: true,
+        author: true,
+      },
+    });
+
+    return articles.map((article) => ({
+      id: article.id,
+      title: article.title,
+      excerpt: article.excerpt || "",
+      category: article.subcategory?.name || article.category.name,
+      author: article.author.name,
+      date: new Date(article.createdAt).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+      image: article.image || "/placeholder.jpg",
+      href: `/${article.slug}`,
+    }));
+  } catch (error) {
+    console.error("Error fetching hero articles:", error);
+    return [];
+  }
+}
+
+async function getLatestArticles(): Promise<ContentItem[]> {
+  try {
+    const articles = await prisma.content.findMany({
+      where: {
+        type: ContentType.ARTIKEL,
+        status: ContentStatus.PUBLISHED,
+      },
+      take: 10,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        category: true,
+        subcategory: true,
+        author: true,
+      },
+    });
+
+    return articles.map((article) => ({
+      id: article.id,
+      title: article.title,
+      slug: article.slug,
+      image: article.image || "/placeholder.jpg",
+      category: article.category.name,
+      subcategory: article.subcategory?.name,
+      date: new Date(article.createdAt).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
+      author: article.author.name,
+      excerpt: article.excerpt || "",
+      duration: article.readTime || "5 menit", // Use readTime if available
+      type: 'artikel',
+    }));
+  } catch (error) {
+    console.error("Error fetching latest articles:", error);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const [heroSlides, latestArticles] = await Promise.all([
+    getHeroArticles(),
+    getLatestArticles()
+  ]);
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 pt-6 pb-0">
       <div className="space-y-6">
-            <HeroCarousel />
+            <HeroCarousel slides={heroSlides} />
             <MobileCategoryGrid />
             <div className="space-y-6">
               {/* Artikel Terbaru */}
@@ -23,7 +111,7 @@ export default function Home() {
                     </Link>
                 </div>
                 <div className="flex flex-col">
-                    {HOME_ARTICLES.slice(0, 5).map((a) => (
+                    {latestArticles.slice(0, 5).map((a) => (
                         <ContentCard key={a.id} item={a} type="artikel" variant="list" />
                     ))}
                 </div>
@@ -31,7 +119,7 @@ export default function Home() {
 
               <div className="hidden md:block">
                 <ContentCarousel title="Artikel Terbaru" linkHref="/search?q=&type=artikel">
-                  {HOME_ARTICLES.map((a) => (
+                  {latestArticles.map((a) => (
                     <div key={a.id} className="min-w-0 flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_32%]">
                       <ContentCard item={a} type="artikel" />
                     </div>

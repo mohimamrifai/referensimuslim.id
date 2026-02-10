@@ -3,7 +3,7 @@
 import { useEffect, useState, type ElementType } from 'react';
 import { ChevronDown, ChevronRight, BookOpen, ListChecks, Heart, GraduationCap, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { getCategorySlugByName, CATEGORY_TAXONOMY, SEARCH_DATA } from '@/mockup';
+import { CATEGORY_TAXONOMY, SEARCH_DATA } from '@/mockup';
 
 // Helper function to count items
 const getCount = (categoryName: string, subcategoryName?: string) => {
@@ -19,9 +19,7 @@ const getCount = (categoryName: string, subcategoryName?: string) => {
 };
 
 export default function CategorySidebar() {
-  const [open, setOpen] = useState<Record<string, boolean>>({
-    'Pengetahuan Islam': true,
-  });
+  const [open, setOpen] = useState<string | null>('Pengetahuan Islam');
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,7 +42,7 @@ export default function CategorySidebar() {
   }, [collapsed]);
 
   const toggle = (key: string) => {
-    setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
+    setOpen((prev) => (prev === key ? null : key));
   };
 
   const iconMap: Record<string, ElementType> = {
@@ -70,7 +68,7 @@ export default function CategorySidebar() {
       </div>
       <nav className={`px-2 pt-4 ${collapsed ? 'space-y-1' : 'space-y-1'} flex-1 overflow-y-auto`}>
         {CATEGORY_TAXONOMY.map((cat) => {
-          const isOpen = !!open[cat.name];
+          const isOpen = open === cat.name;
           const hasChildren = !!cat.children?.length;
           const IconComp = iconMap[cat.name] ?? BookOpen;
           return (
@@ -79,7 +77,7 @@ export default function CategorySidebar() {
                 className={`flex w-full items-center ${collapsed ? 'justify-center' : 'justify-between'} px-3 py-2 text-left font-medium text-gray-700 hover:bg-gray-50`}
               >
                 <Link
-                  href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name))}`}
+                  href={`/kategori/${encodeURIComponent(cat.slug)}`}
                   className="flex items-center gap-2 flex-1"
                 >
                   <span className="text-gray-600"><IconComp className={collapsed ? "h-5 w-5" : "h-5 w-5"} /></span>
@@ -88,36 +86,38 @@ export default function CategorySidebar() {
                 {!collapsed && hasChildren ? (
                   <button
                     aria-label={isOpen ? `Tutup ${cat.name}` : `Buka ${cat.name}`}
-                    className="p-1 rounded hover:bg-gray-100"
+                    className="p-1 rounded hover:bg-gray-100 transition-colors"
                     onClick={() => toggle(cat.name)}
                   >
-                    {isOpen ? (
-                      <ChevronDown className="h-5 w-5 text-gray-500" />
-                    ) : (
-                      <ChevronRight className="h-5 w-5 text-gray-500" />
-                    )}
+                    <ChevronDown className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                   </button>
                 ) : null}
               </div>
-              {hasChildren && isOpen && (
-                <div className={`pl-4 ${collapsed ? 'hidden' : ''}`}>
-                  {cat.children!.map((child) => {
-                    const count = getCount(cat.name, child.name);
-                    return (
-                    <Link
-                      key={child.name}
-                      href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name))}/${encodeURIComponent(getCategorySlugByName(child.name))}`}
-                      className="flex items-center justify-between rounded px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-gray-50"
-                    >
-                      <span>{child.name}</span>
-                      {count > 0 && (
-                        <span className="text-xs text-gray-400">{count}</span>
-                      )}
-                    </Link>
-                    );
-                  })}
+              <div
+                className={`grid transition-all duration-300 ease-in-out ${
+                  hasChildren && isOpen && !collapsed ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                }`}
+              >
+                <div className={`overflow-hidden pl-4 ${collapsed ? 'hidden' : ''}`}>
+                  <div className="py-1">
+                    {cat.children!.map((child) => {
+                      const count = getCount(cat.name, child.name);
+                      return (
+                      <Link
+                        key={child.name}
+                        href={`/kategori/${encodeURIComponent(cat.slug)}/${encodeURIComponent(child.slug)}`}
+                        className="flex items-center justify-between rounded px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-gray-50 transition-colors"
+                      >
+                        <span>{child.name}</span>
+                        {count > 0 && (
+                          <span className="text-xs text-gray-400">{count}</span>
+                        )}
+                      </Link>
+                      );
+                    })}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           );
         })}

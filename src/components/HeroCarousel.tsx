@@ -1,35 +1,32 @@
  'use client';
  
  import Image from 'next/image';
- import Link from 'next/link';
- import useEmblaCarousel from 'embla-carousel-react';
+import Link from 'next/link';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import { useCallback, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { EmblaCarouselType } from 'embla-carousel';
-import { HOME_ARTICLES } from '@/mockup';
 
-type Slide = {
-   title: string;
-   excerpt: string;
-   category: string;
-   author: string;
-   date: string;
-   image: string;
-   href: string;
- };
- 
- const slides: Slide[] = HOME_ARTICLES.map((item) => ({
-   title: item.title,
-   excerpt: item.excerpt ?? '',
-   category: item.subcategory ?? item.category,
-   author: item.author ?? 'Tim Redaksi',
-   date: item.date,
-   image: item.image,
-   href: `/${item.slug}`,
- }));
- 
- export default function HeroCarousel() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
+export type HeroSlide = {
+  id: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  author: string;
+  date: string;
+  image: string;
+  href: string;
+};
+
+interface HeroCarouselProps {
+  slides: HeroSlide[];
+}
+
+export default function HeroCarousel({ slides }: HeroCarouselProps) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' }, [
+    Autoplay({ delay: 5000, stopOnInteraction: true }),
+  ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
 

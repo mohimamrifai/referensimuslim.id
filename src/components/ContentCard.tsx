@@ -17,16 +17,18 @@ export type ContentItem = {
   author?: string;
   excerpt?: string;
   duration?: string;
+  type: ContentType;
 };
 
-export default function ContentCard({ item, type, variant = 'default' }: { item: ContentItem; type: ContentType; variant?: 'default' | 'list' }) {
+export default function ContentCard({ item, type, variant = 'default' }: { item: ContentItem; type?: ContentType; variant?: 'default' | 'list' }) {
+  const finalType = type || item.type;
   const shareUrl = `/${item.slug}`;
   const wa = `https://wa.me/?text=${encodeURIComponent(`${item.title} ${shareUrl}`)}`;
   const tg = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(item.title)}`;
 
   const getCtaText = () => {
-    if (type === 'video') return 'Tonton Video';
-    if (type === 'podcast') return 'Dengarkan';
+    if (finalType === 'video') return 'Tonton Video';
+    if (finalType === 'podcast') return 'Dengarkan';
     return 'Baca Selengkapnya';
   };
 
@@ -69,7 +71,7 @@ export default function ContentCard({ item, type, variant = 'default' }: { item:
                     <User className="w-3 h-3" />
                     <span className="truncate max-w-[100px] sm:max-w-[150px]">{item.author || 'Redaksi'}</span>
                 </div>
-                {(item.duration || type === 'artikel') && (
+                {(item.duration || finalType === 'artikel') && (
                      <div className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         <span>{item.duration || '5 menit'}</span>

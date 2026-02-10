@@ -7,6 +7,7 @@ const MOCK_AUDIO_URL = 'https://www.youtube.com/embed/IbNclpsajNM';
 
 export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'memahami-makna-ikhlas': {
+    slug: 'memahami-makna-ikhlas',
     type: 'artikel',
     title: 'Memahami Makna Ikhlas dalam Beribadah',
     category: 'Akhlak & Tasawuf',
@@ -26,6 +27,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Imam Al-Ghazali', role: 'Ulama Tasawuf', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'menata-kehidupan-islami': {
+    slug: 'menata-kehidupan-islami',
     type: 'artikel',
     title: 'Menata Kehidupan Islami di Era Digital',
     category: 'Kehidupan Islami',
@@ -44,6 +46,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Dr. Yusuf Qaradhawi', role: 'Cendekiawan Islam', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'fiqh-ibadah-harian': {
+    slug: 'fiqh-ibadah-harian',
     type: 'artikel',
     title: 'Fiqh Ibadah Harian: Ringkas dan Praktis',
     category: 'Fiqh & Yurisprudensi',
@@ -62,6 +65,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Imam Nawawi', role: 'Ulama Fiqh', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'adab-menuntut-ilmu': {
+    slug: 'adab-menuntut-ilmu',
     type: 'artikel',
     title: 'Adab Menuntut Ilmu: Klasik dan Kontemporer',
     category: 'Sumber Belajar',
@@ -80,6 +84,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Syaikh Bakr Abu Zaid', role: 'Ulama Adab Ilmu', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'tadabbur-ayat-keteguhan-hati': {
+    slug: 'tadabbur-ayat-keteguhan-hati',
     type: 'artikel',
     title: 'Tadabbur Ayat: Keteguhan Hati dalam Kesulitan',
     category: 'Pengetahuan Islam',
@@ -98,6 +103,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Ibnu Katsir', role: 'Mufassir', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'panduan-shalat-khusyuk': {
+    slug: 'panduan-shalat-khusyuk',
     type: 'artikel',
     title: 'Panduan Shalat Khusyuk: Langkah Praktis',
     category: 'Praktik Ibadah',
@@ -117,6 +123,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   },
 
   'kajian-tafsir-al-fatihah': {
+    slug: 'kajian-tafsir-al-fatihah',
     type: 'video',
     videoUrl: MOCK_VIDEO_URL,
     title: 'Kajian Rutin: Tafsir Surat Al-Fatihah',
@@ -135,6 +142,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Imam Asy-Syafi’i', role: 'Ulama Fiqh', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'hukum-jual-beli-online': {
+    slug: 'hukum-jual-beli-online',
     type: 'video',
     videoUrl: MOCK_VIDEO_URL,
     title: 'Tanya Jawab: Hukum Jual Beli Online',
@@ -153,6 +161,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Dr. Wahbah Az-Zuhaili', role: 'Ulama Fiqh', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'sejarah-peradaban-islam': {
+    slug: 'sejarah-peradaban-islam',
     type: 'video',
     videoUrl: MOCK_VIDEO_URL,
     title: 'Sejarah Peradaban Islam: Masa Keemasan',
@@ -170,6 +179,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Ibnu Sina', role: 'Cendekiawan', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'fikih-zakat': {
+    slug: 'fikih-zakat',
     type: 'video',
     videoUrl: MOCK_VIDEO_URL,
     title: 'Fikih Zakat: Prinsip dan Praktik',
@@ -188,6 +198,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Imam Al-Mawardi', role: 'Ulama Fiqh', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: false }
   },
   'akhlak-rasul': {
+    slug: 'akhlak-rasul',
     type: 'video',
     videoUrl: MOCK_VIDEO_URL,
     title: 'Akhlak Rasulullah: Teladan Sehari-hari',
@@ -206,6 +217,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Imam Tirmidzi', role: 'Ulama Hadits', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'manajemen-waktu': {
+    slug: 'manajemen-waktu',
     type: 'video',
     videoUrl: MOCK_VIDEO_URL,
     title: 'Manajemen Waktu bagi Muslim Produktif',
@@ -225,6 +237,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   },
 
   'jiwa-jiwa-yang-rapuh': {
+    slug: 'jiwa-jiwa-yang-rapuh',
     type: 'podcast',
     title: 'Jiwa Jiwa yang Rapuh - [Bincang Isu 30]',
     category: 'Akhlak & Tasawuf',
@@ -244,6 +257,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   },
 
   'menjaga-hati': {
+    slug: 'menjaga-hati',
     type: 'podcast',
     title: 'Ep 1: Menjaga Hati di Zaman Fitnah',
     category: 'Akhlak & Tasawuf',
@@ -261,6 +275,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Imam Ibnul Qayyim', role: 'Ulama', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'kiat-sukses-pengusaha': {
+    slug: 'kiat-sukses-pengusaha',
     type: 'podcast',
     title: 'Ep 2: Kiat Sukses Pengusaha Muslim',
     category: 'Kehidupan Islami',
@@ -278,6 +293,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Syaikh Abdurrahman As-Sa’di', role: 'Ulama', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: false }
   },
   'mendidik-anak': {
+    slug: 'mendidik-anak',
     type: 'podcast',
     title: 'Ep 3: Mendidik Anak Cinta Al-Quran',
     category: 'Kehidupan Islami',
@@ -295,6 +311,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Syaikh Shalih Al-Fauzan', role: 'Ulama', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'tafsir-ayat-kursi-podcast': {
+    slug: 'tafsir-ayat-kursi-podcast',
     type: 'podcast',
     title: 'Ep 4: Tafsir Ayat Kursi',
     category: 'Pengetahuan Islam',
@@ -312,6 +329,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Syaikh Asy-Syinqithi', role: 'Mufassir', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: false }
   },
   'keluarga-sakinah-podcast': {
+    slug: 'keluarga-sakinah-podcast',
     type: 'podcast',
     title: 'Ep 5: Membangun Keluarga Sakinah',
     category: 'Kehidupan Islami',
@@ -329,6 +347,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
     reference: { name: 'Syaikh Shalih Al-Utsaimin', role: 'Ulama', image: MOCK_IMAGE, institution: 'Institut Studi Islam', verified: true }
   },
   'pemuda-muslim-podcast': {
+    slug: 'pemuda-muslim-podcast',
     type: 'podcast',
     title: 'Ep 6: Pemuda Muslim dan Tantangan Zaman',
     category: 'Kehidupan Islami',
@@ -347,6 +366,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   },
   // NEW CONTENT FOR ILMU HADITS
   'pengantar-ilmu-hadits': {
+    slug: 'pengantar-ilmu-hadits',
     type: 'artikel',
     title: 'Pengantar Ilmu Mustalahul Hadits',
     category: 'Pengetahuan Islam',
@@ -365,6 +385,7 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   },
   // NEW CONTENT FOR AQIDAH & TEOLOGI
   'memahami-rukun-iman': {
+    slug: 'memahami-rukun-iman',
     type: 'video',
     videoUrl: MOCK_VIDEO_URL,
     title: 'Memahami Rukun Iman: Pondasi Keyakinan',
@@ -433,97 +454,89 @@ export const CATEGORY_TAXONOMY: CategoryNode[] = [
       { name: 'Puasa', slug: 'puasa' },
       { name: 'Zakat', slug: 'zakat' },
       { name: 'Haji & Umrah', slug: 'haji-umrah' },
-      { name: 'Fiqh Ibadah', slug: 'fiqh-ibadah' }
+      { name: 'Doa & Dzikir', slug: 'doa-dzikir' }
     ]
   },
-  { 
-    name: 'Akhlak & Tasawuf', 
+  {
+    name: 'Akhlak & Tasawuf',
     slug: 'akhlak-tasawuf',
     children: [
-      { name: 'Akhlak', slug: 'akhlak' },
       { name: 'Tazkiyatun Nafs', slug: 'tazkiyatun-nafs' },
-      { name: 'Adab', slug: 'adab' }
+      { name: 'Akhlak', slug: 'akhlak' },
+      { name: 'Adab', slug: 'adab' },
+      { name: 'Kisah Teladan', slug: 'kisah-teladan' }
     ]
   },
-  { 
-    name: 'Kehidupan Islami', 
+  {
+    name: 'Sejarah',
+    slug: 'sejarah',
+    children: [
+      { name: 'Sejarah Nabi', slug: 'sejarah-nabi' },
+      { name: 'Sejarah Sahabat', slug: 'sejarah-sahabat' },
+      { name: 'Peradaban Islam', slug: 'peradaban-islam' },
+      { name: 'Tokoh Islam', slug: 'tokoh-islam' }
+    ]
+  },
+  {
+    name: 'Kehidupan Islami',
     slug: 'kehidupan-islami',
     children: [
       { name: 'Keluarga', slug: 'keluarga' },
       { name: 'Parenting', slug: 'parenting' },
       { name: 'Pernikahan', slug: 'pernikahan' },
-      { name: 'Ekonomi Syariah', slug: 'ekonomi-syariah' },
-      { name: 'Kesehatan', slug: 'kesehatan' },
+      { name: 'Pemuda', slug: 'pemuda' },
+      { name: 'Wanita Muslimah', slug: 'wanita-muslimah' },
       { name: 'Bisnis Islami', slug: 'bisnis-islami' },
-      { name: 'Produktivitas', slug: 'produktivitas' },
-      { name: 'Pemuda', slug: 'pemuda' }
+      { name: 'Kesehatan', slug: 'kesehatan' },
+      { name: 'Produktivitas', slug: 'produktivitas' }
     ]
   },
-  { 
-    name: 'Sumber Belajar', 
+  {
+    name: 'Sumber Belajar',
     slug: 'sumber-belajar',
     children: [
-      { name: 'Buku', slug: 'buku' },
-      { name: 'Kitab Kuning', slug: 'kitab-kuning' },
-      { name: 'Jurnal', slug: 'jurnal' }
-    ]
-  },
-  { 
-    name: 'Sejarah', 
-    slug: 'sejarah',
-    children: [
-      { name: 'Sirah Nabawiyah', slug: 'sirah-nabawiyah' },
-      { name: 'Sejarah Peradaban', slug: 'sejarah-peradaban' },
-      { name: 'Tokoh Islam', slug: 'tokoh-islam' }
+      { name: 'Buku & Kitab', slug: 'buku-kitab' },
+      { name: 'Jurnal Ilmiah', slug: 'jurnal-ilmiah' },
+      { name: 'Fatwa', slug: 'fatwa' },
+      { name: 'Kamus Istilah', slug: 'kamus-istilah' }
     ]
   }
 ];
 
-const slugifyCategory = (s: string) =>
-  s
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/&/g, ' ')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-
-export const CATEGORY_CHILD_TO_PARENT: Record<string, string> = (() => {
-  const map: Record<string, string> = {};
-  CATEGORY_TAXONOMY.forEach((parent) => {
-    parent.children?.forEach((child) => {
-      map[child.slug] = parent.slug;
-    });
-  });
-  return map;
-})();
-
-export function getCategoryDisplayNameBySlug(slug: string): string {
-  const lower = slug.toLowerCase();
-  for (const parent of CATEGORY_TAXONOMY) {
-    if (parent.slug === lower) return parent.name;
-    const child = parent.children?.find((c) => c.slug === lower);
-    if (child) return child.name;
+export const getCategorySlugByName = (name: string): string | undefined => {
+  for (const cat of CATEGORY_TAXONOMY) {
+    if (cat.name === name) return cat.slug;
+    if (cat.children) {
+      const child = cat.children.find(c => c.name === name);
+      if (child) return child.slug;
+    }
   }
-  return slug.replace(/-/g, ' ');
-}
+  return undefined;
+};
 
-export function listItemsByCategorySlug(slug: string) {
-  const lower = slug.toLowerCase();
-  const parent = CATEGORY_TAXONOMY.find((p) => p.slug === lower);
-  if (parent?.children?.length) {
-    const childSlugs = new Set(parent.children.map((c) => c.slug));
-    return SEARCH_DATA.filter((item) => childSlugs.has(slugifyCategory(item.subcategory ?? item.category)));
+export const getCategoryDisplayNameBySlug = (slug: string): string | undefined => {
+  for (const cat of CATEGORY_TAXONOMY) {
+    if (cat.slug === slug) return cat.name;
+    if (cat.children) {
+      const child = cat.children.find(c => c.slug === slug);
+      if (child) return child.name;
+    }
   }
-  return SEARCH_DATA.filter((item) => slugifyCategory(item.subcategory ?? item.category) === lower);
-}
+  return undefined;
+};
 
-export function getCategorySlugByName(name: string): string {
-  const lower = name.toLowerCase();
-  for (const parent of CATEGORY_TAXONOMY) {
-    if (parent.name.toLowerCase() === lower) return parent.slug;
-    const child = parent.children?.find((c) => c.name.toLowerCase() === lower);
-    if (child) return child.slug;
+export const listItemsByCategorySlug = (categorySlug: string, subCategorySlug?: string): ContentItem[] => {
+  const categoryName = getCategoryDisplayNameBySlug(categorySlug);
+  if (!categoryName) return [];
+
+  let items = generateContentItems(item => item.category === categoryName);
+
+  if (subCategorySlug) {
+    const subCategoryName = getCategoryDisplayNameBySlug(subCategorySlug);
+    if (subCategoryName) {
+      items = items.filter(item => item.subcategory === subCategoryName);
+    }
   }
-  return slugifyCategory(name);
-}
+
+  return items;
+};
