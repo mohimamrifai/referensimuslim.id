@@ -1,5 +1,6 @@
  "use client"
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { LayoutDashboard, BookOpen, Video, Mic, Tags, Menu, LogOut, Settings } from "lucide-react";
 import { useState } from "react";
@@ -9,10 +10,11 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menus = [
     { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { title: "Artikel", href: "/dashboard/posts", icon: BookOpen },
+    { title: "Artikel", href: "/dashboard/post", icon: BookOpen },
     { title: "Video", href: "/dashboard/videos", icon: Video },
     { title: "Podcast", href: "/dashboard/podcasts", icon: Mic },
     { title: "Kategori & Sub Kategori", href: "/dashboard/categories", icon: Tags },
@@ -57,19 +59,25 @@ export default function DashboardLayout({
             {menus.map((item) => {
               const Icon = item.icon;
               const disabled = (item as { disabled?: boolean }).disabled;
+              const isActive = item.href === '/dashboard' 
+                ? pathname === '/dashboard' 
+                : pathname.startsWith(item.href);
+              
               return (
                 <Link
                   key={item.title}
                   href={item.href}
                   aria-disabled={disabled}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm ${
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
                     disabled
                       ? "text-gray-400 pointer-events-none"
-                      : "text-gray-700 hover:bg-gray-50"
+                      : isActive
+                        ? "bg-orange-50 text-orange-700 font-medium"
+                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                   }`}
                   onClick={() => setOpen(false)}
                 >
-                  <Icon className="h-5 w-5 text-orange-600" />
+                  <Icon className={`h-5 w-5 ${isActive ? "text-orange-600" : "text-gray-500 group-hover:text-gray-700"}`} />
                   <span className="truncate">{item.title}</span>
                 </Link>
               );

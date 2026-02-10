@@ -425,18 +425,58 @@ export const CATEGORY_TAXONOMY: CategoryNode[] = [
       { name: 'Aqidah & Teologi', slug: 'aqidah-teologi' }
     ]
   },
-  { name: 'Praktik Ibadah', slug: 'praktik-ibadah' },
+  { 
+    name: 'Praktik Ibadah', 
+    slug: 'praktik-ibadah',
+    children: [
+      { name: 'Shalat', slug: 'shalat' },
+      { name: 'Puasa', slug: 'puasa' },
+      { name: 'Zakat', slug: 'zakat' },
+      { name: 'Haji & Umrah', slug: 'haji-umrah' },
+      { name: 'Fiqh Ibadah', slug: 'fiqh-ibadah' }
+    ]
+  },
   { 
     name: 'Akhlak & Tasawuf', 
     slug: 'akhlak-tasawuf',
     children: [
       { name: 'Akhlak', slug: 'akhlak' },
-      { name: 'Tazkiyatun Nafs', slug: 'tazkiyatun-nafs' }
+      { name: 'Tazkiyatun Nafs', slug: 'tazkiyatun-nafs' },
+      { name: 'Adab', slug: 'adab' }
     ]
   },
-  { name: 'Kehidupan Islami', slug: 'kehidupan-islami' },
-  { name: 'Sumber Belajar', slug: 'sumber-belajar' },
-  { name: 'Sejarah', slug: 'sejarah' }
+  { 
+    name: 'Kehidupan Islami', 
+    slug: 'kehidupan-islami',
+    children: [
+      { name: 'Keluarga', slug: 'keluarga' },
+      { name: 'Parenting', slug: 'parenting' },
+      { name: 'Pernikahan', slug: 'pernikahan' },
+      { name: 'Ekonomi Syariah', slug: 'ekonomi-syariah' },
+      { name: 'Kesehatan', slug: 'kesehatan' },
+      { name: 'Bisnis Islami', slug: 'bisnis-islami' },
+      { name: 'Produktivitas', slug: 'produktivitas' },
+      { name: 'Pemuda', slug: 'pemuda' }
+    ]
+  },
+  { 
+    name: 'Sumber Belajar', 
+    slug: 'sumber-belajar',
+    children: [
+      { name: 'Buku', slug: 'buku' },
+      { name: 'Kitab Kuning', slug: 'kitab-kuning' },
+      { name: 'Jurnal', slug: 'jurnal' }
+    ]
+  },
+  { 
+    name: 'Sejarah', 
+    slug: 'sejarah',
+    children: [
+      { name: 'Sirah Nabawiyah', slug: 'sirah-nabawiyah' },
+      { name: 'Sejarah Peradaban', slug: 'sejarah-peradaban' },
+      { name: 'Tokoh Islam', slug: 'tokoh-islam' }
+    ]
+  }
 ];
 
 const slugifyCategory = (s: string) =>

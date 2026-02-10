@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enums
+enum ContentType {
+  ARTIKEL
+  VIDEO
+  PODCAST
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+}
+
+// Models
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed password
+  name      String
+  role      UserRole @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String     @unique
+  description String?
+  
+  // Hierarchy: Self-relation for Parent/Child categories
+  parentId    String?
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+
+  // Relations to Content
+  contents    Content[]  @relation("ContentCategory")
+  subContents Content[]  @relation("ContentSubcategory")
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("categories")
+}
+
+model Tag {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  contents  Content[] 
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("tags")
+}
+
+model Author {
+  id        String    @id @default(uuid())
+  name      String
+  role      String?   // e.g. "Pembina Pesantren", "Sejarawan Islam"
+  image     String?   // Avatar URL
+  bio       String?
+  
+  contents  Content[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("authors")
+}
+
+model Reference {
+  id          String    @id @default(uuid())
+  name        String
+  role        String?   // e.g. "Ulama Fiqh", "Mufassir"
+  image       String?   // Avatar URL
+  institution String?   // e.g. "Institut Studi Islam"
+  verified    Boolean   @default(false)
+  
+  contents    Content[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("references")
+}
+
+model Content {
+  id          String        @id @default(uuid())
+  slug        String        @unique
+  title       String
+  excerpt     String?       @db.Text
+  content     String        @db.Text // HTML Content
+  image       String?       // Featured Image URL
+  
+  type        ContentType
+  status      ContentStatus @default(DRAFT)
+  
+  // Stats
+  views       Int           @default(0)
+  
+  // Type-specific fields
+  videoUrl    String?       // For VIDEO
+  audioUrl    String?       // For PODCAST
+  duration    String?       // For VIDEO & PODCAST (e.g. "15:30")
+  readTime    String?       // For ARTIKEL (e.g. "5 menit baca") - can also be calculated
+  
+  // Relations
+  categoryId  String
+  category    Category      @relation("ContentCategory", fields: [categoryId], references: [id])
+  
+  subcategoryId String?
+  subcategory   Category?   @relation("ContentSubcategory", fields: [subcategoryId], references: [id])
+  
+  authorId    String
+  author      Author        @relation(fields: [authorId], references: [id])
+  
+  referenceId String?
+  reference   Reference?    @relation(fields: [referenceId], references: [id])
+  
+  tags        Tag[]
+
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([type])
+  @@index([status])
+  @@index([categoryId])
+  @@map("contents")
+}
