@@ -2,8 +2,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { LayoutDashboard, BookOpen, Video, Mic, Tags, Menu, LogOut, Settings } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, Mic, Tags, Menu, LogOut, Settings, FolderTree } from "lucide-react";
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 export default function DashboardLayout({
   children,
@@ -17,7 +18,8 @@ export default function DashboardLayout({
     { title: "Artikel", href: "/dashboard/post", icon: BookOpen },
     { title: "Video", href: "/dashboard/videos", icon: Video },
     { title: "Podcast", href: "/dashboard/podcasts", icon: Mic },
-    { title: "Kategori & Sub Kategori", href: "/dashboard/categories", icon: Tags },
+    { title: "Kategori & Sub Kategori", href: "/dashboard/categories", icon: FolderTree },
+    { title: "Manajemen Tags", href: "/dashboard/tags", icon: Tags },
     { title: "Pengaturan", href: "/dashboard/settings", icon: Settings },
   ];
 
@@ -42,7 +44,11 @@ export default function DashboardLayout({
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden sm:inline text-sm text-gray-500">Admin</span>
-            <button className="inline-flex p-2 rounded hover:bg-gray-100">
+            <button 
+              onClick={() => signOut({ callbackUrl: '/login-admin' })}
+              className="inline-flex p-2 rounded hover:bg-gray-100"
+              title="Keluar"
+            >
               <LogOut className="h-5 w-5 text-gray-700" />
             </button>
           </div>

@@ -246,7 +246,7 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Video</label>
-              <div className="min-h-[400px]">
+              <div className="min-h-100">
                 <RichTextEditor 
                   content={formData.content} 
                   onChange={(content) => setFormData({ ...formData, content })} 

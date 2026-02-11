@@ -4,7 +4,6 @@ import ContentCard, { ContentItem } from "@/components/ContentCard";
 import ContentCarousel from "@/components/ContentCarousel";
 import StatsSection from "@/components/StatsSection";
 import TrustBadgeSection from "@/components/TrustBadgeSection";
-import { HOME_PODCASTS } from "@/mockup";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ContentType, ContentStatus } from "@prisma/client";
@@ -131,11 +130,53 @@ async function getFeaturedVideos(): Promise<ContentItem[]> {
   }
 }
 
+async function getLatestPodcasts(): Promise<ContentItem[]> {
+  try {
+    const podcasts = await prisma.content.findMany({
+      where: {
+        type: ContentType.PODCAST,
+        status: ContentStatus.PUBLISHED,
+      },
+      take: 10,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        category: true,
+        subcategory: true,
+        author: true,
+      },
+    });
+
+    return podcasts.map((podcast) => ({
+      id: podcast.id,
+      title: podcast.title,
+      slug: podcast.slug,
+      image: podcast.image || "/placeholder.jpg",
+      category: podcast.category.name,
+      subcategory: podcast.subcategory?.name,
+      date: new Date(podcast.createdAt).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
+      author: podcast.author.name,
+      excerpt: podcast.excerpt || "",
+      duration: podcast.duration || "00:00",
+      type: 'podcast',
+    }));
+  } catch (error) {
+    console.error("Error fetching latest podcasts:", error);
+    return [];
+  }
+}
+
 export default async function Home() {
-  const [heroSlides, latestArticles, featuredVideos] = await Promise.all([
+  const [heroSlides, latestArticles, featuredVideos, latestPodcasts] = await Promise.all([
     getHeroArticles(),
     getLatestArticles(),
-    getFeaturedVideos()
+    getFeaturedVideos(),
+    getLatestPodcasts()
   ]);
 
   return (
@@ -203,7 +244,7 @@ export default async function Home() {
                     </Link>
                 </div>
                 <div className="flex flex-col">
-                    {HOME_PODCASTS.slice(0, 5).map((p) => (
+                    {latestPodcasts.slice(0, 5).map((p) => (
                         <ContentCard key={p.id} item={p} type="podcast" variant="list" />
                     ))}
                 </div>
@@ -211,7 +252,7 @@ export default async function Home() {
 
               <div className="hidden md:block">
                 <ContentCarousel title="Dengarkan Podcast" linkHref="/search?q=&type=podcast">
-                  {HOME_PODCASTS.map((p) => (
+                  {latestPodcasts.map((p) => (
                     <div key={p.id} className="min-w-0 flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_32%]">
                       <ContentCard item={p} type="podcast" />
                     </div>
