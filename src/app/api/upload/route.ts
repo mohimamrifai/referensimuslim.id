@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir, unlink } from 'fs/promises';
 import path from 'path';
 
 export async function POST(request: Request) {
@@ -36,5 +36,38 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error saving file', error);
     return NextResponse.json({ success: false, message: 'Upload failed' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const { url } = await request.json();
+
+    if (!url) {
+      return NextResponse.json({ success: false, message: 'No URL provided' }, { status: 400 });
+    }
+
+    // Extract filename from URL (e.g., /api/view-image/filename.jpg -> filename.jpg)
+    const filename = url.split('/').pop();
+
+    if (!filename) {
+      return NextResponse.json({ success: false, message: 'Invalid URL' }, { status: 400 });
+    }
+
+    const filepath = path.join(process.cwd(), 'src/assets/uploads', filename);
+
+    try {
+      await unlink(filepath);
+      return NextResponse.json({ success: true, message: 'File deleted' });
+    } catch (error) {
+      if ((error as { code?: string }).code === 'ENOENT') {
+         // File doesn't exist, consider it deleted
+         return NextResponse.json({ success: true, message: 'File already deleted' });
+      }
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error deleting file', error);
+    return NextResponse.json({ success: false, message: 'Delete failed' }, { status: 500 });
   }
 }

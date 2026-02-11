@@ -3,16 +3,20 @@
 import { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Eye, Pencil, Trash2 } from 'lucide-react';
+import ConfirmDialog from './ConfirmDialog';
 
 interface ArticleActionMenuProps {
   articleId: string;
   slug: string;
-  categorySlug: string;
 }
 
-export default function ArticleActionMenu({ articleId, slug, categorySlug }: ArticleActionMenuProps) {
+export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenuProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -59,6 +63,25 @@ export default function ArticleActionMenu({ articleId, slug, categorySlug }: Art
     setIsOpen(!isOpen);
   };
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/articles/${articleId}`, {
+        method: 'DELETE',
+      });
+      
+      if (!res.ok) throw new Error('Failed to delete');
+      
+      setShowDeleteDialog(false);
+      router.refresh();
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('Gagal menghapus artikel');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <>
       <button
@@ -80,7 +103,7 @@ export default function ArticleActionMenu({ articleId, slug, categorySlug }: Art
           }}
         >
           <Link
-            href={`/${categorySlug}/${slug}`}
+            href={`/${slug}`}
             target="_blank"
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 transition-colors"
             onClick={() => setIsOpen(false)}
@@ -100,9 +123,7 @@ export default function ArticleActionMenu({ articleId, slug, categorySlug }: Art
             className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
             onClick={() => {
               setIsOpen(false);
-              if (confirm('Apakah Anda yakin ingin menghapus artikel ini?')) {
-                alert('Fitur hapus belum diimplementasikan');
-              }
+              setShowDeleteDialog(true);
             }}
           >
             <Trash2 className="w-4 h-4" />
@@ -111,6 +132,17 @@ export default function ArticleActionMenu({ articleId, slug, categorySlug }: Art
         </div>,
         document.body
       )}
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Hapus Artikel"
+        message="Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak dapat dibatalkan dan akan menghapus gambar terkait."
+        confirmLabel="Ya, Hapus"
+        variant="danger"
+        loading={isDeleting}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteDialog(false)}
+      />
     </>
   );
 }

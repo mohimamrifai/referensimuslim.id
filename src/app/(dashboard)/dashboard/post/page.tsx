@@ -65,14 +65,14 @@ export default async function ArticlesPage(props: {
 
   return (
     <div className="max-w-7xl mx-auto pb-12 space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Manajemen Artikel</h1>
           <p className="text-gray-500">Kelola semua artikel yang ada di referensimuslim.id</p>
         </div>
         <Link
           href="/dashboard/post/create"
-          className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 flex items-center gap-2 transition-colors"
+          className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors w-full md:w-auto"
         >
           <Plus className="w-4 h-4" />
           Buat Artikel Baru
@@ -86,14 +86,14 @@ export default async function ArticlesPage(props: {
           <table className="w-full text-left text-sm">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th className="px-6 py-4 font-semibold text-gray-700 w-12 text-center">No</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 w-20">Gambar</th>
-                <th className="px-6 py-4 font-semibold text-gray-700">Judul</th>
-                <th className="px-6 py-4 font-semibold text-gray-700">Kategori</th>
-                <th className="px-6 py-4 font-semibold text-gray-700">Penulis</th>
-                <th className="px-6 py-4 font-semibold text-gray-700">Status</th>
-                <th className="px-6 py-4 font-semibold text-gray-700">Tanggal</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 text-right">Aksi</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 w-12 text-center whitespace-nowrap">No</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 w-20 whitespace-nowrap">Gambar</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Judul</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Kategori</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Penulis</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Status</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Tanggal</th>
+                <th className="px-6 py-4 font-semibold text-gray-700 text-right sticky right-0 bg-gray-50 z-10 border-l border-gray-100 shadow-[rgba(0,0,0,0.05)_-4px_0_12px_-4px]">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -105,9 +105,9 @@ export default async function ArticlesPage(props: {
                 </tr>
               ) : (
                 articles.map((article, index) => (
-                  <tr key={article.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-gray-500 text-center">{index + 1}</td>
-                    <td className="px-6 py-4">
+                  <tr key={article.id} className="group hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 text-gray-500 text-center whitespace-nowrap">{index + 1}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div className="relative w-10 h-10 rounded-md overflow-hidden bg-gray-100 border border-gray-200 aspect-square">
                         {article.image ? (
                           <Image
@@ -122,16 +122,16 @@ export default async function ArticlesPage(props: {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 max-w-xs truncate" title={article.title}>
+                    <td className="px-6 py-4 font-medium text-gray-900 max-w-xs truncate whitespace-nowrap" title={article.title}>
                       {article.title}
                     </td>
-                    <td className="px-6 py-4 text-gray-600">
+                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
                       <span className="bg-gray-100 px-2 py-1 rounded text-xs">
                         {article.category.name}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-600">{article.author.name}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">{article.author.name}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wide ${
                           article.status === 'PUBLISHED'
@@ -144,18 +144,17 @@ export default async function ArticlesPage(props: {
                         {article.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-500">
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
                       {new Date(article.createdAt).toLocaleDateString('id-ID', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
                       })}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right sticky right-0 bg-white group-hover:bg-gray-50 transition-colors z-10 border-l border-gray-100 shadow-[rgba(0,0,0,0.05)_-4px_0_12px_-4px]">
                       <ArticleActionMenu 
                         articleId={article.id}
                         slug={article.slug}
-                        categorySlug={article.category.slug}
                       />
                     </td>
                   </tr>

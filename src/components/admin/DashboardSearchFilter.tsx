@@ -18,19 +18,18 @@ export default function DashboardSearchFilter({ categories }: { categories: Cate
 
   // Debounce search update
   useEffect(() => {
-    const handleSearch = (term: string) => {
+    const handler = setTimeout(() => {
+      const currentSearchParam = searchParams.get('search') || '';
+      if (search === currentSearchParam) return;
+
       const params = new URLSearchParams(searchParams);
-      if (term) {
-        params.set('search', term);
+      if (search) {
+        params.set('search', search);
       } else {
         params.delete('search');
       }
       params.set('page', '1'); // Reset to page 1
       replace(`${pathname}?${params.toString()}`);
-    };
-
-    const handler = setTimeout(() => {
-      handleSearch(search);
     }, 500);
     return () => clearTimeout(handler);
   }, [search, pathname, replace, searchParams]);
@@ -58,9 +57,9 @@ export default function DashboardSearchFilter({ categories }: { categories: Cate
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
         <select
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white min-w-[150px]"
+          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white w-full sm:w-[150px]"
           onChange={(e) => handleFilterChange('category', e.target.value)}
           defaultValue={searchParams.get('category') || 'all'}
         >
@@ -72,7 +71,7 @@ export default function DashboardSearchFilter({ categories }: { categories: Cate
           ))}
         </select>
         <select
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white min-w-[150px]"
+          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white w-full sm:w-[150px]"
           onChange={(e) => handleFilterChange('status', e.target.value)}
           defaultValue={searchParams.get('status') || 'all'}
         >
