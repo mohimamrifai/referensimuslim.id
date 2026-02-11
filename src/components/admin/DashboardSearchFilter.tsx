@@ -59,7 +59,7 @@ export default function DashboardSearchFilter({ categories }: { categories: Cate
       </div>
       <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
         <select
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white w-full"
+          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white w-max"
           onChange={(e) => handleFilterChange('category', e.target.value)}
           defaultValue={searchParams.get('category') || 'all'}
         >

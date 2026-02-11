@@ -6,6 +6,7 @@ import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Category } from '@prisma/client';
 import { updateCategory, getCategories } from '@/app/actions/category';
+import SearchableSelect from './SearchableSelect';
 
 interface EditCategoryModalProps {
   category: Category;
@@ -135,16 +136,12 @@ export default function EditCategoryModal({ category, isOpen, onClose }: EditCat
 
           <div className="space-y-1">
             <label className="text-sm font-medium text-gray-700">Parent Kategori</label>
-            <select
+            <SearchableSelect
               value={formData.parentId}
-              onChange={(e) => setFormData({ ...formData, parentId: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
-            >
-              <option value="">-- Tidak ada (Root Category) --</option>
-              {parents.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
+              onChange={(val) => setFormData({ ...formData, parentId: val })}
+              options={parents}
+              placeholder="-- Tidak ada (Root Category) --"
+            />
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
