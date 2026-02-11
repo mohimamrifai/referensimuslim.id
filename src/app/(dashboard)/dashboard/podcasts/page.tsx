@@ -2,14 +2,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import { ContentType, ContentStatus, Prisma } from '@prisma/client';
-import { BookOpen, Plus } from 'lucide-react';
+import { Plus, Mic } from 'lucide-react';
 import ArticleActionMenu from '@/components/admin/ArticleActionMenu';
 import DashboardSearchFilter from '@/components/admin/DashboardSearchFilter';
 import DashboardPagination from '@/components/admin/DashboardPagination';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ArticlesPage(props: {
+export default async function PodcastsPage(props: {
   searchParams?: Promise<{
     search?: string;
     page?: string;
@@ -27,7 +27,7 @@ export default async function ArticlesPage(props: {
 
   // Build where clause
   const where: Prisma.ContentWhereInput = {
-    type: ContentType.ARTIKEL,
+    type: ContentType.PODCAST,
     ...(search && {
       title: {
         contains: search,
@@ -42,7 +42,7 @@ export default async function ArticlesPage(props: {
     })
   };
 
-  const [articles, totalArticles, categories] = await Promise.all([
+  const [podcasts, totalPodcasts, categories] = await Promise.all([
     prisma.content.findMany({
       where,
       include: {
@@ -61,21 +61,21 @@ export default async function ArticlesPage(props: {
     })
   ]);
 
-  const totalPages = Math.ceil(totalArticles / limit);
+  const totalPages = Math.ceil(totalPodcasts / limit);
 
   return (
     <div className="max-w-7xl mx-auto pb-12 space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manajemen Artikel</h1>
-          <p className="text-gray-500">Kelola semua artikel yang ada di referensimuslim.id</p>
+          <h1 className="text-2xl font-bold text-gray-900">Manajemen Podcast</h1>
+          <p className="text-gray-500">Kelola konten podcast yang ada di referensimuslim.id</p>
         </div>
         <Link
-          href="/dashboard/post/create"
+          href="/dashboard/podcasts/create"
           className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 flex items-center justify-center gap-2 transition-colors w-full md:w-auto"
         >
           <Plus className="w-4 h-4" />
-          Buat Artikel Baru
+          Buat Podcast Baru
         </Link>
       </div>
 
@@ -97,57 +97,57 @@ export default async function ArticlesPage(props: {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {articles.length === 0 ? (
+              {podcasts.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-3 md:px-6 py-8 text-center text-gray-500">
-                    Belum ada artikel. Silakan buat artikel baru.
+                    Belum ada podcast. Silakan buat podcast baru.
                   </td>
                 </tr>
               ) : (
-                articles.map((article, index) => (
-                  <tr key={article.id} className="group hover:bg-gray-50 transition-colors">
+                podcasts.map((podcast, index) => (
+                  <tr key={podcast.id} className="group hover:bg-gray-50 transition-colors">
                     <td className="px-3 md:px-6 py-4 text-gray-500 text-center whitespace-nowrap">{index + 1}</td>
                     <td className="px-3 md:px-6 py-4 whitespace-nowrap">
                       <div className="relative w-10 h-10 rounded-md overflow-hidden bg-gray-100 border border-gray-200 aspect-square">
-                        {article.image ? (
+                        {podcast.image ? (
                           <Image
-                            src={article.image}
-                            alt={article.title}
+                            src={podcast.image}
+                            alt={podcast.title}
                             fill
                             className="object-cover"
-                            unoptimized={article.image.startsWith('/uploads') || article.image.startsWith('/api/view-image')}
+                            unoptimized={podcast.image.startsWith('/uploads') || podcast.image.startsWith('/api/view-image')}
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-300">
-                            <BookOpen className="w-4 h-4" />
+                            <Mic className="w-4 h-4" />
                           </div>
                         )}
                       </div>
                     </td>
-                    <td className="px-3 md:px-6 py-4 font-medium text-gray-900 max-w-xs truncate whitespace-nowrap" title={article.title}>
-                      {article.title}
+                    <td className="px-3 md:px-6 py-4 font-medium text-gray-900 max-w-xs truncate whitespace-nowrap" title={podcast.title}>
+                      {podcast.title}
                     </td>
                     <td className="px-3 md:px-6 py-4 text-gray-600 whitespace-nowrap">
                       <span className="bg-gray-100 px-2 py-1 rounded text-xs">
-                        {article.category.name}
+                        {podcast.category.name}
                       </span>
                     </td>
-                    <td className="px-3 md:px-6 py-4 text-gray-600 whitespace-nowrap">{article.author.name}</td>
+                    <td className="px-3 md:px-6 py-4 text-gray-600 whitespace-nowrap">{podcast.author.name}</td>
                     <td className="px-3 md:px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wide ${
-                          article.status === 'PUBLISHED'
+                          podcast.status === 'PUBLISHED'
                             ? 'bg-green-100 text-green-700'
-                            : article.status === 'DRAFT'
+                            : podcast.status === 'DRAFT'
                             ? 'bg-yellow-100 text-yellow-700'
                             : 'bg-red-100 text-red-700'
                         }`}
                       >
-                        {article.status}
+                        {podcast.status}
                       </span>
                     </td>
                     <td className="px-3 md:px-6 py-4 text-gray-500 whitespace-nowrap">
-                      {new Date(article.createdAt).toLocaleDateString('id-ID', {
+                      {new Date(podcast.createdAt).toLocaleDateString('id-ID', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric',
@@ -155,8 +155,9 @@ export default async function ArticlesPage(props: {
                     </td>
                     <td className="px-3 md:px-6 py-4 text-right sticky right-0 bg-white group-hover:bg-gray-50 transition-colors z-10 border-l border-gray-100 shadow-[rgba(0,0,0,0.05)_-4px_0_12px_-4px]">
                       <ArticleActionMenu 
-                        articleId={article.id}
-                        slug={article.slug}
+                        articleId={podcast.id}
+                        slug={podcast.slug}
+                        baseUrl="/dashboard/podcasts"
                       />
                     </td>
                   </tr>

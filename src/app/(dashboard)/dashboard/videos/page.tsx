@@ -86,29 +86,29 @@ export default async function VideosPage(props: {
           <table className="w-full text-left text-sm">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                <th className="px-6 py-4 font-semibold text-gray-700 w-12 text-center whitespace-nowrap">No</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 w-20 whitespace-nowrap">Thumbnail</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Judul</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Kategori</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Pemateri</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Status</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Durasi</th>
-                <th className="px-6 py-4 font-semibold text-gray-700 text-right sticky right-0 bg-gray-50 z-10 border-l border-gray-100 shadow-[rgba(0,0,0,0.05)_-4px_0_12px_-4px]">Aksi</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 w-12 text-center whitespace-nowrap">No</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 w-20 whitespace-nowrap">Thumbnail</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Judul</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Kategori</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Penulis</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Status</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 whitespace-nowrap">Tanggal</th>
+                <th className="px-3 md:px-6 py-4 font-semibold text-gray-700 text-right sticky right-0 bg-gray-50 z-10 border-l border-gray-100 shadow-[rgba(0,0,0,0.05)_-4px_0_12px_-4px]">Aksi</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {videos.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={8} className="px-3 md:px-6 py-8 text-center text-gray-500">
                     Belum ada video. Silakan buat video baru.
                   </td>
                 </tr>
               ) : (
                 videos.map((video, index) => (
                   <tr key={video.id} className="group hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-gray-500 text-center whitespace-nowrap">{index + 1}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="relative w-10 h-10 rounded-md overflow-hidden bg-gray-100 border border-gray-200 aspect-video">
+                    <td className="px-3 md:px-6 py-4 text-gray-500 text-center whitespace-nowrap">{index + 1}</td>
+                    <td className="px-3 md:px-6 py-4 whitespace-nowrap">
+                      <div className="relative w-10 h-10 rounded-md overflow-hidden bg-gray-100 border border-gray-200 aspect-square">
                         {video.image ? (
                           <Image
                             src={video.image}
@@ -124,16 +124,16 @@ export default async function VideosPage(props: {
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 max-w-xs truncate whitespace-nowrap" title={video.title}>
+                    <td className="px-3 md:px-6 py-4 font-medium text-gray-900 max-w-xs truncate whitespace-nowrap" title={video.title}>
                       {video.title}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">
+                    <td className="px-3 md:px-6 py-4 text-gray-600 whitespace-nowrap">
                       <span className="bg-gray-100 px-2 py-1 rounded text-xs">
                         {video.category.name}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">{video.author.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 md:px-6 py-4 text-gray-600 whitespace-nowrap">{video.author.name}</td>
+                    <td className="px-3 md:px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 py-0.5 rounded-full text-[10px] font-medium uppercase tracking-wide ${
                           video.status === 'PUBLISHED'
@@ -146,10 +146,14 @@ export default async function VideosPage(props: {
                         {video.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
-                      {video.duration || '-'}
+                    <td className="px-3 md:px-6 py-4 text-gray-500 whitespace-nowrap">
+                      {new Date(video.createdAt).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
                     </td>
-                    <td className="px-6 py-4 text-right sticky right-0 bg-white group-hover:bg-gray-50 transition-colors z-10 border-l border-gray-100 shadow-[rgba(0,0,0,0.05)_-4px_0_12px_-4px]">
+                    <td className="px-3 md:px-6 py-4 text-right sticky right-0 bg-white group-hover:bg-gray-50 transition-colors z-10 border-l border-gray-100 shadow-[rgba(0,0,0,0.05)_-4px_0_12px_-4px]">
                       <ArticleActionMenu 
                         articleId={video.id}
                         slug={video.slug}

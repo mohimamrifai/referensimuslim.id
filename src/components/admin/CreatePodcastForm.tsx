@@ -22,7 +22,7 @@ interface Reference {
   name: string;
 }
 
-interface VideoData {
+interface PodcastData {
   id?: string;
   title?: string;
   slug?: string;
@@ -39,7 +39,7 @@ interface VideoData {
   tags?: string[];
 }
 
-export default function CreateVideoForm({ initialData }: { initialData?: VideoData }) {
+export default function CreatePodcastForm({ initialData }: { initialData?: PodcastData }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -110,7 +110,7 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
     setLoading(true);
 
     try {
-      const url = initialData ? `/api/admin/videos/${initialData.id}` : '/api/admin/videos';
+      const url = initialData ? `/api/admin/podcasts/${initialData.id}` : '/api/admin/podcasts';
       const method = initialData ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -119,12 +119,12 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error(initialData ? 'Failed to update video' : 'Failed to create video');
+      if (!res.ok) throw new Error(initialData ? 'Failed to update podcast' : 'Failed to create podcast');
 
-      router.push('/dashboard/videos');
+      router.push('/dashboard/podcasts');
       router.refresh();
     } catch {
-      alert(initialData ? 'Error updating video' : 'Error creating video');
+      alert(initialData ? 'Error updating podcast' : 'Error creating podcast');
     } finally {
       setLoading(false);
     }
@@ -141,12 +141,12 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
 
     setFormData(prev => ({
       ...prev,
-      title: `Video Kajian [ ${randomNum} ]`,
-      slug: `video-kajian-${randomNum}`,
-      excerpt: `Ringkasan video kajian nomor ${randomNum}. Video ini membahas topik penting dalam Islam.`,
+      title: `Podcast Kajian [ ${randomNum} ]`,
+      slug: `podcast-kajian-${randomNum}`,
+      excerpt: `Ringkasan podcast kajian nomor ${randomNum}. Podcast ini membahas topik penting dalam Islam.`,
       content: `
-        <p>Ini adalah deskripsi lengkap untuk video <strong>Video Kajian [ ${randomNum} ]</strong>.</p>
-        <p>Dalam video ini, pemateri menjelaskan tentang konsep dasar dan implementasi dalam kehidupan sehari-hari.</p>
+        <p>Ini adalah deskripsi lengkap untuk podcast <strong>Podcast Kajian [ ${randomNum} ]</strong>.</p>
+        <p>Dalam podcast ini, pemateri menjelaskan tentang konsep dasar dan implementasi dalam kehidupan sehari-hari.</p>
         <h2>Poin Penting</h2>
         <ul>
           <li>Pembahasan utama</li>
@@ -161,7 +161,7 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
       status: 'PUBLISHED',
       videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Dummy YouTube URL
       duration: `${Math.floor(Math.random() * 60) + 10}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
-      tags: ['Kajian', 'Video', `Auto-${randomNum}`]
+      tags: ['Kajian', 'Podcast', `Auto-${randomNum}`]
     }));
   }, [categories, authors, references]);
 
@@ -210,11 +210,11 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
         <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul Video</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul Podcast</label>
               <input
                 type="text"
                 required
-                placeholder="Masukkan judul video..."
+                placeholder="Masukkan judul podcast..."
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400"
                 value={formData.title}
                 onChange={e => setFormData({ ...formData, title: e.target.value })}
@@ -231,13 +231,14 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
                 value={formData.videoUrl}
                 onChange={e => setFormData({ ...formData, videoUrl: e.target.value })}
               />
+              <p className="text-xs text-gray-500 mt-1">Masukkan URL YouTube untuk podcast ini.</p>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Excerpt (Ringkasan)</label>
               <textarea
                 rows={3}
-                placeholder="Ringkasan singkat video..."
+                placeholder="Ringkasan singkat podcast..."
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400 resize-none"
                 value={formData.excerpt}
                 onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
@@ -245,7 +246,7 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Video</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Podcast</label>
               <div className="min-h-[400px]">
                 <RichTextEditor 
                   content={formData.content} 
@@ -261,7 +262,7 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
       <div className="space-y-6">
         {/* Publishing Status */}
         <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Publishing</h3>
+          <h3 className="font-semibold text-gray-900 border-b pb-2">Status Publikasi</h3>
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
@@ -293,7 +294,7 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
             className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
-            {initialData ? 'Simpan Perubahan' : 'Simpan Video'}
+            {initialData ? 'Simpan Perubahan' : 'Simpan Podcast'}
           </button>
         </div>
 
@@ -393,7 +394,7 @@ export default function CreateVideoForm({ initialData }: { initialData?: VideoDa
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Thumbnail Video</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Thumbnail Podcast</label>
             <ImageUploader
               value={formData.image}
               onChange={(url) => setFormData({ ...formData, image: url })}

@@ -25,9 +25,14 @@ export default function ArticleActionMenu({ articleId, slug, baseUrl = '/dashboa
   // Determine API endpoint based on baseUrl
   // if baseUrl is /dashboard/post -> api is /api/admin/articles
   // if baseUrl is /dashboard/videos -> api is /api/admin/videos
-  const apiEndpoint = baseUrl === '/dashboard/videos' 
-    ? `/api/admin/videos/${articleId}` 
-    : `/api/admin/articles/${articleId}`;
+  // if baseUrl is /dashboard/podcasts -> api is /api/admin/podcasts
+  let apiEndpoint = `/api/admin/articles/${articleId}`;
+  
+  if (baseUrl === '/dashboard/videos') {
+    apiEndpoint = `/api/admin/videos/${articleId}`;
+  } else if (baseUrl === '/dashboard/podcasts') {
+    apiEndpoint = `/api/admin/podcasts/${articleId}`;
+  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
