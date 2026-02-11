@@ -4,7 +4,7 @@ import ContentCard, { ContentItem } from "@/components/ContentCard";
 import ContentCarousel from "@/components/ContentCarousel";
 import StatsSection from "@/components/StatsSection";
 import TrustBadgeSection from "@/components/TrustBadgeSection";
-import { HOME_VIDEOS, HOME_PODCASTS } from "@/mockup";
+import { HOME_PODCASTS } from "@/mockup";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ContentType, ContentStatus } from "@prisma/client";
@@ -90,10 +90,52 @@ async function getLatestArticles(): Promise<ContentItem[]> {
   }
 }
 
+async function getFeaturedVideos(): Promise<ContentItem[]> {
+  try {
+    const videos = await prisma.content.findMany({
+      where: {
+        type: ContentType.VIDEO,
+        status: ContentStatus.PUBLISHED,
+      },
+      take: 10,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        category: true,
+        subcategory: true,
+        author: true,
+      },
+    });
+
+    return videos.map((video) => ({
+      id: video.id,
+      title: video.title,
+      slug: video.slug,
+      image: video.image || "/placeholder.jpg",
+      category: video.category.name,
+      subcategory: video.subcategory?.name,
+      date: new Date(video.createdAt).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
+      author: video.author.name,
+      excerpt: video.excerpt || "",
+      duration: video.duration || "00:00",
+      type: 'video',
+    }));
+  } catch (error) {
+    console.error("Error fetching featured videos:", error);
+    return [];
+  }
+}
+
 export default async function Home() {
-  const [heroSlides, latestArticles] = await Promise.all([
+  const [heroSlides, latestArticles, featuredVideos] = await Promise.all([
     getHeroArticles(),
-    getLatestArticles()
+    getLatestArticles(),
+    getFeaturedVideos()
   ]);
 
   return (
@@ -136,7 +178,7 @@ export default async function Home() {
                     </Link>
                 </div>
                 <div className="flex flex-col">
-                    {HOME_VIDEOS.slice(0, 5).map((v) => (
+                    {featuredVideos.slice(0, 5).map((v) => (
                         <ContentCard key={v.id} item={v} type="video" variant="list" />
                     ))}
                 </div>
@@ -144,7 +186,7 @@ export default async function Home() {
 
               <div className="hidden md:block">
                 <ContentCarousel title="Video Pilihan" linkHref="/search?q=&type=video">
-                  {HOME_VIDEOS.map((v) => (
+                  {featuredVideos.map((v) => (
                     <div key={v.id} className="min-w-0 flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_32%]">
                       <ContentCard item={v} type="video" />
                     </div>

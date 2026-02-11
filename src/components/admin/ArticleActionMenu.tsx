@@ -10,9 +10,10 @@ import ConfirmDialog from './ConfirmDialog';
 interface ArticleActionMenuProps {
   articleId: string;
   slug: string;
+  baseUrl?: string;
 }
 
-export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenuProps) {
+export default function ArticleActionMenu({ articleId, slug, baseUrl = '/dashboard/post' }: ArticleActionMenuProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -20,6 +21,13 @@ export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenu
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
+  // Determine API endpoint based on baseUrl
+  // if baseUrl is /dashboard/post -> api is /api/admin/articles
+  // if baseUrl is /dashboard/videos -> api is /api/admin/videos
+  const apiEndpoint = baseUrl === '/dashboard/videos' 
+    ? `/api/admin/videos/${articleId}` 
+    : `/api/admin/articles/${articleId}`;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,7 +74,7 @@ export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenu
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/admin/articles/${articleId}`, {
+      const res = await fetch(apiEndpoint, {
         method: 'DELETE',
       });
       
@@ -76,7 +84,7 @@ export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenu
       router.refresh();
     } catch (error) {
       console.error('Delete error:', error);
-      alert('Gagal menghapus artikel');
+      alert('Gagal menghapus item');
     } finally {
       setIsDeleting(false);
     }
@@ -112,12 +120,12 @@ export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenu
             Lihat Artikel
           </Link>
           <Link
-            href={`/dashboard/post/${articleId}/edit`}
+            href={`${baseUrl}/${articleId}/edit`}
             className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors"
             onClick={() => setIsOpen(false)}
           >
             <Pencil className="w-4 h-4" />
-            Edit Artikel
+            Edit
           </Link>
           <button
             className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-red-600 transition-colors"
@@ -127,7 +135,7 @@ export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenu
             }}
           >
             <Trash2 className="w-4 h-4" />
-            Hapus Artikel
+            Hapus
           </button>
         </div>,
         document.body
@@ -135,9 +143,9 @@ export default function ArticleActionMenu({ articleId, slug }: ArticleActionMenu
 
       <ConfirmDialog
         isOpen={showDeleteDialog}
-        title="Hapus Artikel"
-        message="Apakah Anda yakin ingin menghapus artikel ini? Tindakan ini tidak dapat dibatalkan dan akan menghapus gambar terkait."
-        confirmLabel="Ya, Hapus"
+        title="Hapus Item"
+        message="Apakah Anda yakin ingin menghapus item ini? Tindakan ini tidak dapat dibatalkan."
+        confirmLabel="Hapus"
         variant="danger"
         loading={isDeleting}
         onConfirm={handleDelete}
