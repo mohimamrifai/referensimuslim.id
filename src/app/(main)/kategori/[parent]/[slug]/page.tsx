@@ -8,7 +8,6 @@ export default async function SubCategoryPage({
   params: Promise<{ parent: string; slug: string }>;
 }) {
   const { parent, slug } = await params;
-  console.log('SubCategoryPage params:', { parent, slug });
   
   const parentDecoded = decodeURIComponent(parent).toLowerCase();
   const slugDecoded = decodeURIComponent(slug).toLowerCase();
@@ -16,8 +15,6 @@ export default async function SubCategoryPage({
   const items = listItemsByCategorySlug(slugDecoded);
   const displayName = getCategoryDisplayNameBySlug(slugDecoded);
   const parentDisplay = getCategoryDisplayNameBySlug(parentDecoded);
-
-  console.log(`SubCategoryPage: searching for '${slugDecoded}' (raw: ${slug}), found ${items.length} items.`);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-8">

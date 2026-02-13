@@ -8,9 +8,15 @@ interface ImageUploaderProps {
   value?: string;
   onChange: (url: string) => void;
   label?: string;
+  aspectRatio?: 'video' | 'square';
 }
 
-export default function ImageUploader({ value, onChange, label = 'Upload Gambar' }: ImageUploaderProps) {
+export default function ImageUploader({ 
+  value, 
+  onChange, 
+  label = 'Upload Gambar',
+  aspectRatio = 'video'
+}: ImageUploaderProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,7 +57,7 @@ export default function ImageUploader({ value, onChange, label = 'Upload Gambar'
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       
       {value ? (
-        <div className="relative w-full aspect-video rounded-lg overflow-hidden border bg-gray-100 max-w-md">
+        <div className={`relative w-full ${aspectRatio === 'square' ? 'aspect-square max-w-[200px]' : 'aspect-video max-w-md'} rounded-lg overflow-hidden border bg-gray-100`}>
           <Image 
             src={value} 
             alt="Uploaded" 
@@ -68,8 +74,8 @@ export default function ImageUploader({ value, onChange, label = 'Upload Gambar'
           </button>
         </div>
       ) : (
-        <div className="flex items-center justify-center w-full max-w-md">
-          <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+        <div className={`flex items-center justify-center w-full ${aspectRatio === 'square' ? 'max-w-[200px]' : 'max-w-md'}`}>
+          <label className={`flex flex-col items-center justify-center w-full ${aspectRatio === 'square' ? 'aspect-square' : 'h-40'} border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors`}>
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               {loading ? (
                 <Loader2 className="w-8 h-8 text-gray-400 animate-spin mb-2" />
