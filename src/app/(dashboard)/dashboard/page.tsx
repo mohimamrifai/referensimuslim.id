@@ -6,11 +6,11 @@ import {
   Eye,
   TrendingUp
 } from "lucide-react";
-import { getDashboardStats } from "@/utils/dashboard-stats";
+import { getDashboardStats } from "@/lib/dashboard-stats";
 import DashboardCharts from "@/components/dashboard/DashboardCharts";
 
-export default function DashboardPage() {
-  const dashboardStats = getDashboardStats();
+export default async function DashboardPage() {
+  const dashboardStats = await getDashboardStats();
 
   const stats = [
     { 
@@ -56,6 +56,7 @@ export default function DashboardPage() {
       bg: "bg-cyan-50" 
     },
   ];
+
 
   return (
     <div className="max-w-7xl mx-auto pb-12">

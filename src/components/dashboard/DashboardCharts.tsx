@@ -13,7 +13,7 @@ import {
   YAxis, 
   CartesianGrid
 } from 'recharts';
-import type { DashboardStats } from '@/utils/dashboard-stats';
+import type { DashboardStats } from '@/lib/dashboard-stats';
 
 interface DashboardChartsProps {
   stats: DashboardStats;
