@@ -1,6 +1,8 @@
 import ContentCard from "@/components/ContentCard";
 import Link from "next/link";
-import { getCategoryDisplayNameBySlug, listItemsByCategorySlug } from "@/mockup";
+import { prisma } from "@/lib/prisma";
+import { ContentStatus } from "@prisma/client";
+import { notFound } from "next/navigation";
 
 export default async function SubCategoryPage({
   params,
@@ -12,9 +14,42 @@ export default async function SubCategoryPage({
   const parentDecoded = decodeURIComponent(parent).toLowerCase();
   const slugDecoded = decodeURIComponent(slug).toLowerCase();
 
-  const items = listItemsByCategorySlug(slugDecoded);
-  const displayName = getCategoryDisplayNameBySlug(slugDecoded);
-  const parentDisplay = getCategoryDisplayNameBySlug(parentDecoded);
+  const category = await prisma.category.findUnique({
+    where: { slug: slugDecoded },
+    include: {
+      parent: true,
+      subContents: {
+        where: { status: ContentStatus.PUBLISHED },
+        orderBy: { createdAt: 'desc' },
+        include: {
+          author: true,
+          category: true,
+          subcategory: true,
+        }
+      }
+    }
+  });
+
+  if (!category) {
+    notFound();
+  }
+
+  const items = category.subContents.map(item => ({
+    id: item.id,
+    title: item.title,
+    slug: item.slug,
+    image: item.image || item.author.image || '/placeholder.jpg',
+    category: item.category.name,
+    subcategory: item.subcategory?.name,
+    date: item.createdAt.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+    author: item.author.name,
+    excerpt: item.excerpt || '',
+    type: item.type.toLowerCase() as 'artikel' | 'video' | 'podcast',
+    duration: item.duration || item.readTime || undefined,
+  }));
+
+  const displayName = category.name;
+  const parentDisplay = category.parent?.name || parentDecoded;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-8">

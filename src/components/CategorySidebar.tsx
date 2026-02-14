@@ -3,22 +3,13 @@
 import { useEffect, useState, type ElementType } from 'react';
 import { ChevronDown, ChevronRight, BookOpen, ListChecks, Heart, GraduationCap, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
-import { CATEGORY_TAXONOMY, SEARCH_DATA } from '@/mockup';
+import type { CategoryTreeItem } from '@/app/actions/category';
 
-// Helper function to count items
-const getCount = (categoryName: string, subcategoryName?: string) => {
-  return SEARCH_DATA.filter((item) => {
-    if (subcategoryName) {
-      return (
-        item.category.toLowerCase() === categoryName.toLowerCase() &&
-        item.subcategory?.trim().toLowerCase() === subcategoryName.trim().toLowerCase()
-      );
-    }
-    return item.category.toLowerCase() === categoryName.toLowerCase();
-  }).length;
-};
+interface CategorySidebarProps {
+  categories: CategoryTreeItem[];
+}
 
-export default function CategorySidebar() {
+export default function CategorySidebar({ categories }: CategorySidebarProps) {
   const [open, setOpen] = useState<string | null>('Pengetahuan Islam');
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
@@ -67,7 +58,7 @@ export default function CategorySidebar() {
         </button>
       </div>
       <nav className={`px-2 pt-4 ${collapsed ? 'space-y-1' : 'space-y-1'} flex-1 overflow-y-auto`}>
-        {CATEGORY_TAXONOMY.map((cat) => {
+        {categories.map((cat) => {
           const isOpen = open === cat.name;
           const hasChildren = !!cat.children?.length;
           const IconComp = iconMap[cat.name] ?? BookOpen;
@@ -100,8 +91,7 @@ export default function CategorySidebar() {
               >
                 <div className={`overflow-hidden pl-4 ${collapsed ? 'hidden' : ''}`}>
                   <div className="py-1">
-                    {cat.children!.map((child) => {
-                      const count = getCount(cat.name, child.name);
+                    {cat.children.map((child) => {
                       return (
                       <Link
                         key={child.name}
@@ -109,8 +99,8 @@ export default function CategorySidebar() {
                         className="flex items-center justify-between rounded px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-gray-50 transition-colors"
                       >
                         <span>{child.name}</span>
-                        {count > 0 && (
-                          <span className="text-xs text-gray-400">{count}</span>
+                        {child.count > 0 && (
+                          <span className="text-xs text-gray-400">{child.count}</span>
                         )}
                       </Link>
                       );

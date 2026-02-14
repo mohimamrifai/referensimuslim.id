@@ -1,20 +1,12 @@
 import Link from "next/link";
-import { SEARCH_DATA, getCategorySlugByName } from "@/mockup";
 import { BookOpen } from "lucide-react";
+import { getCategoryTree } from "@/app/actions/category";
 
-function toSlug(name: string) {
-  return name.toLowerCase().replace(/\s+/g, "-");
-}
+export default async function CategoryIndexPage() {
+  const categories = await getCategoryTree();
 
-export default function CategoryIndexPage() {
-  const counts = new Map<string, number>();
-  SEARCH_DATA.forEach((item) => {
-    counts.set(item.category, (counts.get(item.category) ?? 0) + 1);
-  });
-
-  const categories = Array.from(counts.entries())
-    .map(([name, count]) => ({ name, count, slug: toSlug(name) }))
-    .sort((a, b) => b.count - a.count);
+  // Sort by count descending
+  const sortedCategories = [...categories].sort((a, b) => b.count - a.count);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6 py-8">
@@ -26,10 +18,10 @@ export default function CategoryIndexPage() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-        {categories.map((cat) => (
+        {sortedCategories.map((cat) => (
           <Link
             key={cat.slug}
-            href={`/kategori/${encodeURIComponent(getCategorySlugByName(cat.name) || cat.slug)}`}
+            href={`/kategori/${encodeURIComponent(cat.slug)}`}
             className="group w-full flex flex-col sm:flex-row items-start sm:items-center justify-between rounded-xl border border-gray-200 bg-white p-2 md:p-4 hover:border-orange-300 hover:bg-orange-50 transition-colors"
           >
             <div className="flex items-center gap-3 min-w-0">

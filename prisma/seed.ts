@@ -278,6 +278,24 @@ async function main() {
     console.log(`Migrated content: ${data.title}`);
   }
 
+  // 5. Create Default Social Media
+  const socialMedias = [
+    { platform: 'Facebook', url: 'https://facebook.com', order: 1 },
+    { platform: 'Twitter', url: 'https://twitter.com', order: 2 },
+    { platform: 'Instagram', url: 'https://instagram.com', order: 3 },
+    { platform: 'Youtube', url: 'https://youtube.com', order: 4 },
+  ];
+
+  for (const sm of socialMedias) {
+    const existing = await prisma.socialMedia.findFirst({ where: { platform: sm.platform } });
+    if (!existing) {
+      await prisma.socialMedia.create({
+        data: sm
+      });
+      console.log(`Created social media: ${sm.platform}`);
+    }
+  }
+
   console.log('Seeding finished.');
 }
 

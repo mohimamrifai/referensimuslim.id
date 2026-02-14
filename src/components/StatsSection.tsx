@@ -2,7 +2,13 @@
 
 import { Users, FileText, GraduationCap, Star } from 'lucide-react';
 
-export default function StatsSection() {
+export default function StatsSection({ 
+  articleCount = 2500, 
+  authorCount = 45 
+}: { 
+  articleCount?: number; 
+  authorCount?: number; 
+}) {
   const stats = [
     { 
       label: 'Pembaca Aktif', 
@@ -13,14 +19,14 @@ export default function StatsSection() {
     },
     { 
       label: 'Artikel Berkualitas', 
-      value: '2.500+', 
+      value: `${articleCount}+`, 
       icon: FileText, 
       color: 'text-emerald-600', 
       bg: 'bg-emerald-50' 
     },
     { 
       label: 'Ulama Kontributor', 
-      value: '45+', 
+      value: `${authorCount}+`, 
       icon: GraduationCap, 
       color: 'text-purple-600', 
       bg: 'bg-purple-50' 

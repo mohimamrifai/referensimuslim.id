@@ -3,6 +3,57 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
+export type CategoryTreeItem = {
+  id: string;
+  name: string;
+  slug: string;
+  children: {
+    id: string;
+    name: string;
+    slug: string;
+    count: number;
+  }[];
+  count: number;
+};
+
+export async function getCategoryTree(): Promise<CategoryTreeItem[]> {
+  try {
+    const categories = await prisma.category.findMany({
+      where: { parentId: null },
+      include: {
+        children: {
+          include: {
+            _count: {
+              select: { subContents: true }
+            }
+          },
+          orderBy: { name: 'asc' }
+        },
+        _count: {
+          select: { contents: true }
+        }
+      },
+      orderBy: { name: 'asc' }
+    });
+
+    return categories.map(cat => ({
+      id: cat.id,
+      name: cat.name,
+      slug: cat.slug,
+      children: cat.children.map(child => ({
+        id: child.id,
+        name: child.name,
+        slug: child.slug,
+        count: child._count.subContents
+      })),
+      count: cat._count.contents
+    }));
+  } catch (error) {
+    console.error('Error fetching category tree:', error);
+    return [];
+  }
+}
+
 export async function getCategories() {
   return await prisma.category.findMany({
     orderBy: { name: 'asc' }

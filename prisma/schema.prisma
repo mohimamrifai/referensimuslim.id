@@ -41,6 +41,19 @@ model User {
   @@map("users")
 }
 
+model SocialMedia {
+  id        String   @id @default(uuid())
+  platform  String   // e.g. "Facebook", "Twitter", "Instagram", "Youtube"
+  url       String
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("social_medias")
+}
+
 model Category {
   id          String     @id @default(uuid())
   name        String

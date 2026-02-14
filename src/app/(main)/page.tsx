@@ -7,6 +7,7 @@ import TrustBadgeSection from "@/components/TrustBadgeSection";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ContentType, ContentStatus } from "@prisma/client";
+import { getCategoryTree } from "@/app/actions/category";
 
 export const dynamic = 'force-dynamic';
 
@@ -172,18 +173,23 @@ async function getLatestPodcasts(): Promise<ContentItem[]> {
 }
 
 export default async function Home() {
-  const [heroSlides, latestArticles, featuredVideos, latestPodcasts] = await Promise.all([
+  const [heroSlides, latestArticles, featuredVideos, latestPodcasts, categories, stats] = await Promise.all([
     getHeroArticles(),
     getLatestArticles(),
     getFeaturedVideos(),
-    getLatestPodcasts()
+    getLatestPodcasts(),
+    getCategoryTree(),
+    Promise.all([
+      prisma.content.count({ where: { status: ContentStatus.PUBLISHED } }),
+      prisma.author.count(),
+    ]).then(([articleCount, authorCount]) => ({ articleCount, authorCount })),
   ]);
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 pt-6 pb-0">
       <div className="space-y-6">
             <HeroCarousel slides={heroSlides} />
-            <MobileCategoryGrid />
+            <MobileCategoryGrid categories={categories} />
             <div className="space-y-6">
               {/* Artikel Terbaru */}
               <div className="md:hidden">
@@ -218,9 +224,9 @@ export default async function Home() {
                         Lihat Semua
                     </Link>
                 </div>
-                <div className="flex flex-col">
-                    {featuredVideos.slice(0, 5).map((v) => (
-                        <ContentCard key={v.id} item={v} type="video" variant="list" />
+                <div className="grid grid-cols-1 gap-4">
+                    {featuredVideos.slice(0, 3).map((v) => (
+                        <ContentCard key={v.id} item={v} type="video" />
                     ))}
                 </div>
               </div>
@@ -235,23 +241,23 @@ export default async function Home() {
                 </ContentCarousel>
               </div>
 
-              {/* Podcast */}
+              {/* Podcast Terbaru */}
               <div className="md:hidden">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Dengarkan Podcast</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Podcast Terbaru</h2>
                     <Link href="/search?q=&type=podcast" className="text-orange-600 font-bold text-sm hover:underline">
                         Lihat Semua
                     </Link>
                 </div>
                 <div className="flex flex-col">
-                    {latestPodcasts.slice(0, 5).map((p) => (
+                    {latestPodcasts.slice(0, 3).map((p) => (
                         <ContentCard key={p.id} item={p} type="podcast" variant="list" />
                     ))}
                 </div>
               </div>
 
               <div className="hidden md:block">
-                <ContentCarousel title="Dengarkan Podcast" linkHref="/search?q=&type=podcast">
+                <ContentCarousel title="Podcast Terbaru" linkHref="/search?q=&type=podcast">
                   {latestPodcasts.map((p) => (
                     <div key={p.id} className="min-w-0 flex-[0_0_85%] sm:flex-[0_0_45%] lg:flex-[0_0_32%]">
                       <ContentCard item={p} type="podcast" />
@@ -260,10 +266,10 @@ export default async function Home() {
                 </ContentCarousel>
               </div>
 
-              <StatsSection />
+              <StatsSection articleCount={stats.articleCount} authorCount={stats.authorCount} />
               <TrustBadgeSection />
             </div>
-          </div>
-        </div>
+      </div>
+    </div>
   );
 }

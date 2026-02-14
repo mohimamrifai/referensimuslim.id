@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { Plus, User } from 'lucide-react';
 import AuthorActionMenu from '@/components/admin/AuthorActionMenu';
 import DashboardPagination from '@/components/admin/DashboardPagination';
@@ -20,8 +21,8 @@ export default async function AuthorsPage(props: {
   const limit = 10;
   const skip = (page - 1) * limit;
 
-  const where = search ? {
-    name: { contains: search, mode: 'insensitive' as const }
+  const where: Prisma.AuthorWhereInput = search ? {
+    name: { contains: search, mode: 'insensitive' }
   } : {};
 
   const [authors, totalAuthors] = await Promise.all([

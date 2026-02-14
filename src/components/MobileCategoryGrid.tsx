@@ -1,7 +1,6 @@
 'use client';
 
 import Link from "next/link";
-import { CATEGORY_TAXONOMY, listItemsByCategorySlug } from "@/mockup";
 import { 
   BookOpen, 
   Moon, 
@@ -11,8 +10,13 @@ import {
   History,
   LucideIcon 
 } from 'lucide-react';
+import type { CategoryTreeItem } from "@/app/actions/category";
 
-export default function MobileCategoryGrid() {
+interface MobileCategoryGridProps {
+  categories: CategoryTreeItem[];
+}
+
+export default function MobileCategoryGrid({ categories }: MobileCategoryGridProps) {
   const categoryConfig: Record<string, { icon: LucideIcon, colorClass: string, iconColorClass: string }> = {
     'Pengetahuan Islam': { 
       icon: BookOpen, 
@@ -56,14 +60,14 @@ export default function MobileCategoryGrid() {
       </div>
       
       <div className="grid grid-cols-2 gap-3">
-        {CATEGORY_TAXONOMY.map((cat, index) => {
+        {categories.map((cat, index) => {
           const config = categoryConfig[cat.name] || { 
             icon: BookOpen, 
             colorClass: 'bg-gray-50 border-gray-100', 
             iconColorClass: 'text-gray-600 bg-gray-100' 
           };
           const Icon = config.icon;
-          const count = listItemsByCategorySlug(cat.slug).length;
+          const count = cat.count;
 
           return (
             <Link 
