@@ -2,7 +2,7 @@ import { PrismaClient, ContentType, ContentStatus, UserRole } from '@prisma/clie
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
-import { MOCK_DB } from '../src/mockup';
+import { MOCK_DB } from './data';
 
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });

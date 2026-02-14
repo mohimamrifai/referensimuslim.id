@@ -1,9 +1,37 @@
-import type { ContentData, ContentType } from '@/components/DetailLayout';
-import type { ContentItem } from '@/components/ContentCard';
 
-const MOCK_IMAGE = 'https://images.unsplash.com/photo-1564121211835-e88c852648ab?auto=format&fit=crop&q=80&w=1000';
-const MOCK_VIDEO_URL = 'https://www.youtube.com/embed/0HR7XHF7rWI';
-const MOCK_AUDIO_URL = 'https://www.youtube.com/embed/IbNclpsajNM';
+export const MOCK_IMAGE = 'https://images.unsplash.com/photo-1564121211835-e88c852648ab?auto=format&fit=crop&q=80&w=1000';
+export const MOCK_VIDEO_URL = 'https://www.youtube.com/embed/0HR7XHF7rWI';
+export const MOCK_AUDIO_URL = 'https://www.youtube.com/embed/IbNclpsajNM';
+
+export type ContentType = 'artikel' | 'video' | 'podcast';
+
+export interface ContentData {
+  slug: string;
+  title: string;
+  category: string;
+  subcategory?: string;
+  image?: string;
+  excerpt?: string;
+  author: {
+    name: string;
+    role: string;
+    image: string;
+  };
+  publishedAt: string;
+  readTime?: string;
+  duration?: string;
+  views: string;
+  videoUrl?: string;
+  audioUrl?: string;
+  content: string; // HTML string
+  reference: {
+    name: string;
+    role: string;
+    image: string;
+    institution: string;
+    verified: boolean;
+  };
+}
 
 export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
   'memahami-makna-ikhlas': {
@@ -403,140 +431,4 @@ export const MOCK_DB: Record<string, ContentData & { type: ContentType }> = {
        <p>Iman kepada Allah, Malaikat, Kitab, Rasul, Hari Akhir, dan Takdir.</p>`,
     reference: { name: 'Imam Ath-Thahawi', role: 'Ulama Aqidah', image: MOCK_IMAGE, institution: 'Salaf', verified: true }
   }
-};
-
-const generateContentItems = (filterFn?: (item: ContentData & { type: ContentType }) => boolean): ContentItem[] => {
-  return Object.entries(MOCK_DB)
-    .filter(([, data]) => filterFn ? filterFn(data) : true)
-    .map(([slug, data]) => ({
-      id: slug,
-      slug: slug,
-      title: data.title,
-      excerpt: data.excerpt || data.content.substring(0, 100).replace(/<[^>]*>/g, '') + '...',
-      category: data.category,
-      subcategory: data.subcategory?.trim(),
-      author: data.author.name,
-      date: data.publishedAt,
-      image: data.image || data.author.image,
-      type: data.type,
-      duration: data.duration || data.readTime?.replace(' baca', ''),
-    }));
-};
-
-export const HOME_ARTICLES: ContentItem[] = generateContentItems(item => item.type === 'artikel').slice(0, 4);
-export const HOME_VIDEOS: ContentItem[] = generateContentItems(item => item.type === 'video').slice(0, 3);
-export const HOME_PODCASTS: ContentItem[] = generateContentItems(item => item.type === 'podcast').slice(0, 3);
-
-export const SEARCH_DATA: (ContentItem & { type: ContentType })[] = generateContentItems() as (ContentItem & { type: ContentType })[];
-
-export type CategoryNode = {
-  name: string;
-  slug: string;
-  children?: { name: string; slug: string }[];
-};
-
-export const CATEGORY_TAXONOMY: CategoryNode[] = [
-  {
-    name: 'Pengetahuan Islam',
-    slug: 'pengetahuan-islam',
-    children: [
-      { name: 'Studi Al-Quran', slug: 'studi-al-quran' },
-      { name: 'Ilmu Hadits', slug: 'ilmu-hadits' },
-      { name: 'Fiqh & Yurisprudensi', slug: 'fiqh-yurisprudensi' },
-      { name: 'Aqidah & Teologi', slug: 'aqidah-teologi' }
-    ]
-  },
-  { 
-    name: 'Praktik Ibadah', 
-    slug: 'praktik-ibadah',
-    children: [
-      { name: 'Shalat', slug: 'shalat' },
-      { name: 'Puasa', slug: 'puasa' },
-      { name: 'Zakat', slug: 'zakat' },
-      { name: 'Haji & Umrah', slug: 'haji-umrah' },
-      { name: 'Doa & Dzikir', slug: 'doa-dzikir' }
-    ]
-  },
-  {
-    name: 'Akhlak & Tasawuf',
-    slug: 'akhlak-tasawuf',
-    children: [
-      { name: 'Tazkiyatun Nafs', slug: 'tazkiyatun-nafs' },
-      { name: 'Akhlak', slug: 'akhlak' },
-      { name: 'Adab', slug: 'adab' },
-      { name: 'Kisah Teladan', slug: 'kisah-teladan' }
-    ]
-  },
-  {
-    name: 'Sejarah',
-    slug: 'sejarah',
-    children: [
-      { name: 'Sejarah Nabi', slug: 'sejarah-nabi' },
-      { name: 'Sejarah Sahabat', slug: 'sejarah-sahabat' },
-      { name: 'Peradaban Islam', slug: 'peradaban-islam' },
-      { name: 'Tokoh Islam', slug: 'tokoh-islam' }
-    ]
-  },
-  {
-    name: 'Kehidupan Islami',
-    slug: 'kehidupan-islami',
-    children: [
-      { name: 'Keluarga', slug: 'keluarga' },
-      { name: 'Parenting', slug: 'parenting' },
-      { name: 'Pernikahan', slug: 'pernikahan' },
-      { name: 'Pemuda', slug: 'pemuda' },
-      { name: 'Wanita Muslimah', slug: 'wanita-muslimah' },
-      { name: 'Bisnis Islami', slug: 'bisnis-islami' },
-      { name: 'Kesehatan', slug: 'kesehatan' },
-      { name: 'Produktivitas', slug: 'produktivitas' }
-    ]
-  },
-  {
-    name: 'Sumber Belajar',
-    slug: 'sumber-belajar',
-    children: [
-      { name: 'Buku & Kitab', slug: 'buku-kitab' },
-      { name: 'Jurnal Ilmiah', slug: 'jurnal-ilmiah' },
-      { name: 'Fatwa', slug: 'fatwa' },
-      { name: 'Kamus Istilah', slug: 'kamus-istilah' }
-    ]
-  }
-];
-
-export const getCategorySlugByName = (name: string): string | undefined => {
-  for (const cat of CATEGORY_TAXONOMY) {
-    if (cat.name === name) return cat.slug;
-    if (cat.children) {
-      const child = cat.children.find(c => c.name === name);
-      if (child) return child.slug;
-    }
-  }
-  return undefined;
-};
-
-export const getCategoryDisplayNameBySlug = (slug: string): string | undefined => {
-  for (const cat of CATEGORY_TAXONOMY) {
-    if (cat.slug === slug) return cat.name;
-    if (cat.children) {
-      const child = cat.children.find(c => c.slug === slug);
-      if (child) return child.name;
-    }
-  }
-  return undefined;
-};
-
-export const listItemsByCategorySlug = (categorySlug: string, subCategorySlug?: string): ContentItem[] => {
-  const categoryName = getCategoryDisplayNameBySlug(categorySlug);
-  if (!categoryName) return [];
-
-  let items = generateContentItems(item => item.category === categoryName);
-
-  if (subCategorySlug) {
-    const subCategoryName = getCategoryDisplayNameBySlug(subCategorySlug);
-    if (subCategoryName) {
-      items = items.filter(item => item.subcategory === subCategoryName);
-    }
-  }
-
-  return items;
 };

@@ -74,7 +74,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   // Add type property to satisfy components that might expect it in data
   // although DetailLayout takes type as a separate prop.
-  // The MOCK_DB had type in the object, so let's keep it safe.
   const dataWithType = {
     ...contentData,
     type: content.type.toLowerCase() as 'artikel' | 'video' | 'podcast',
