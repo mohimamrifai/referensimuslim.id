@@ -56,7 +56,7 @@ async function getLatestArticles(): Promise<ContentItem[]> {
         type: ContentType.ARTIKEL,
         status: ContentStatus.PUBLISHED,
       },
-      take: 10,
+      take: 6,
       orderBy: {
         createdAt: "desc",
       },
@@ -97,7 +97,7 @@ async function getFeaturedVideos(): Promise<ContentItem[]> {
         type: ContentType.VIDEO,
         status: ContentStatus.PUBLISHED,
       },
-      take: 10,
+      take: 6,
       orderBy: {
         createdAt: "desc",
       },
@@ -138,7 +138,7 @@ async function getLatestPodcasts(): Promise<ContentItem[]> {
         type: ContentType.PODCAST,
         status: ContentStatus.PUBLISHED,
       },
-      take: 10,
+      take: 6,
       orderBy: {
         createdAt: "desc",
       },
@@ -200,7 +200,7 @@ export default async function Home() {
                     </Link>
                 </div>
                 <div className="flex flex-col">
-                    {latestArticles.slice(0, 5).map((a) => (
+                    {latestArticles.map((a) => (
                         <ContentCard key={a.id} item={a} type="artikel" variant="list" />
                     ))}
                 </div>
@@ -225,7 +225,7 @@ export default async function Home() {
                     </Link>
                 </div>
                 <div className="grid grid-cols-1 gap-4">
-                    {featuredVideos.slice(0, 3).map((v) => (
+                    {featuredVideos.map((v) => (
                         <ContentCard key={v.id} item={v} type="video" />
                     ))}
                 </div>
@@ -250,7 +250,7 @@ export default async function Home() {
                     </Link>
                 </div>
                 <div className="flex flex-col">
-                    {latestPodcasts.slice(0, 3).map((p) => (
+                    {latestPodcasts.map((p) => (
                         <ContentCard key={p.id} item={p} type="podcast" variant="list" />
                     ))}
                 </div>

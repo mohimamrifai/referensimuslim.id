@@ -99,7 +99,7 @@ export default function SettingsForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
+    <form onSubmit={handleSubmit} className="max-w-2xl bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Informasi Akun</h2>
         <div className="space-y-4">
