@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import DetailLayout, { ContentData } from './DetailLayout';
+import DetailLayout, { ContentData } from '../layout/DetailLayout';
 
 interface ArticleDetailProps {
   data: ContentData;

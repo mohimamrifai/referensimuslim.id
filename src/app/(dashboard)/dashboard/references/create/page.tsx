@@ -1,4 +1,4 @@
-import ReferenceForm from '@/components/admin/ReferenceForm';
+import ReferenceForm from '@/components/admin/references/ReferenceForm';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 

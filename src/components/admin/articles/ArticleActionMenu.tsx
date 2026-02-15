@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Eye, Pencil, Trash2 } from 'lucide-react';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../ui/ConfirmDialog';
 
 interface ArticleActionMenuProps {
   articleId: string;

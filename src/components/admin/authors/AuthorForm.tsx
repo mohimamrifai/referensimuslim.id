@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
-import ImageUploader from './ImageUploader';
+import ImageUploader from '../ui/ImageUploader';
 
 interface AuthorFormProps {
   initialData?: {

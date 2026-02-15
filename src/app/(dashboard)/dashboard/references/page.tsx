@@ -2,9 +2,9 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
-import ReferenceActionMenu from '@/components/admin/ReferenceActionMenu';
-import DashboardSearch from '@/components/admin/DashboardSearch';
-import DashboardPagination from '@/components/admin/DashboardPagination';
+import ReferenceActionMenu from '@/components/admin/references/ReferenceActionMenu';
+import DashboardSearch from '@/components/admin/dashboard/DashboardSearch';
+import DashboardPagination from '@/components/admin/dashboard/DashboardPagination';
 
 export const dynamic = 'force-dynamic';
 

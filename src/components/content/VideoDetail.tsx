@@ -1,6 +1,6 @@
 'use client';
 
-import DetailLayout, { ContentData } from './DetailLayout';
+import DetailLayout, { ContentData } from '../layout/DetailLayout';
 import { Play } from 'lucide-react';
 
 interface VideoDetailProps {

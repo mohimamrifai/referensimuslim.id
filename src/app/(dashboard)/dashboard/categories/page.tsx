@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
-import CategoryList from '@/components/admin/CategoryList';
-import CreateCategoryButton from '@/components/admin/CreateCategoryButton';
+import CategoryList from '@/components/admin/categories/CategoryList';
+import CreateCategoryButton from '@/components/admin/categories/CreateCategoryButton';
 
 export const dynamic = 'force-dynamic';
 

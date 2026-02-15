@@ -1,4 +1,4 @@
-import CreatePodcastForm from '@/components/admin/CreatePodcastForm';
+import CreatePodcastForm from '@/components/admin/podcasts/CreatePodcastForm';
 
 export default function CreatePodcastPage() {
   return (

@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
-import ArticleDetail from '@/components/ArticleDetail';
-import VideoDetail from '@/components/VideoDetail';
-import PodcastDetail from '@/components/PodcastDetail';
+import ArticleDetail from '@/components/content/ArticleDetail';
+import VideoDetail from '@/components/content/VideoDetail';
+import PodcastDetail from '@/components/content/PodcastDetail';
 import { prisma } from '@/lib/prisma';
 import { ContentStatus, ContentType } from '@prisma/client';
-import type { ContentData } from '@/components/DetailLayout';
+import type { ContentData } from '@/components/layout/DetailLayout';
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

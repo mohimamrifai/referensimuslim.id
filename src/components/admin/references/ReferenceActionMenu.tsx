@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '../ui/ConfirmDialog';
 
 interface ReferenceActionMenuProps {
   referenceId: string;

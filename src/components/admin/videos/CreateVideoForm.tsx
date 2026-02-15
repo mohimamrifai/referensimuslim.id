@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import RichTextEditor from './RichTextEditor';
-import ImageUploader from './ImageUploader';
-import SearchableSelect from './SearchableSelect';
+import RichTextEditor from '../ui/RichTextEditor';
+import ImageUploader from '../ui/ImageUploader';
+import SearchableSelect from '../ui/SearchableSelect';
 import { Loader2, Save, Wand2 } from 'lucide-react';
 
 interface Category {
@@ -23,7 +23,7 @@ interface Reference {
   name: string;
 }
 
-interface PodcastData {
+interface VideoData {
   id?: string;
   title?: string;
   slug?: string;
@@ -40,7 +40,7 @@ interface PodcastData {
   tags?: string[];
 }
 
-export default function CreatePodcastForm({ initialData }: { initialData?: PodcastData }) {
+export default function CreateVideoForm({ initialData }: { initialData?: VideoData }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -111,7 +111,7 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
     setLoading(true);
 
     try {
-      const url = initialData ? `/api/admin/podcasts/${initialData.id}` : '/api/admin/podcasts';
+      const url = initialData ? `/api/admin/videos/${initialData.id}` : '/api/admin/videos';
       const method = initialData ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -120,12 +120,12 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error(initialData ? 'Failed to update podcast' : 'Failed to create podcast');
+      if (!res.ok) throw new Error(initialData ? 'Failed to update video' : 'Failed to create video');
 
-      router.push('/dashboard/podcasts');
+      router.push('/dashboard/videos');
       router.refresh();
     } catch {
-      alert(initialData ? 'Error updating podcast' : 'Error creating podcast');
+      alert(initialData ? 'Error updating video' : 'Error creating video');
     } finally {
       setLoading(false);
     }
@@ -142,12 +142,12 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
 
     setFormData(prev => ({
       ...prev,
-      title: `Podcast Kajian [ ${randomNum} ]`,
-      slug: `podcast-kajian-${randomNum}`,
-      excerpt: `Ringkasan podcast kajian nomor ${randomNum}. Podcast ini membahas topik penting dalam Islam.`,
+      title: `Video Kajian [ ${randomNum} ]`,
+      slug: `video-kajian-${randomNum}`,
+      excerpt: `Ringkasan video kajian nomor ${randomNum}. Video ini membahas topik penting dalam Islam.`,
       content: `
-        <p>Ini adalah deskripsi lengkap untuk podcast <strong>Podcast Kajian [ ${randomNum} ]</strong>.</p>
-        <p>Dalam podcast ini, pemateri menjelaskan tentang konsep dasar dan implementasi dalam kehidupan sehari-hari.</p>
+        <p>Ini adalah deskripsi lengkap untuk video <strong>Video Kajian [ ${randomNum} ]</strong>.</p>
+        <p>Dalam video ini, pemateri menjelaskan tentang konsep dasar dan implementasi dalam kehidupan sehari-hari.</p>
         <h2>Poin Penting</h2>
         <ul>
           <li>Pembahasan utama</li>
@@ -162,7 +162,7 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
       status: 'PUBLISHED',
       videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Dummy YouTube URL
       duration: `${Math.floor(Math.random() * 60) + 10}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
-      tags: ['Kajian', 'Podcast', `Auto-${randomNum}`]
+      tags: ['Kajian', 'Video', `Auto-${randomNum}`]
     }));
   }, [categories, authors, references]);
 
@@ -211,11 +211,11 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
         <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul Podcast</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul Video</label>
               <input
                 type="text"
                 required
-                placeholder="Masukkan judul podcast..."
+                placeholder="Masukkan judul video..."
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400"
                 value={formData.title}
                 onChange={e => setFormData({ ...formData, title: e.target.value })}
@@ -232,14 +232,13 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
                 value={formData.videoUrl}
                 onChange={e => setFormData({ ...formData, videoUrl: e.target.value })}
               />
-              <p className="text-xs text-gray-500 mt-1">Masukkan URL YouTube untuk podcast ini.</p>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Excerpt (Ringkasan)</label>
               <textarea
                 rows={3}
-                placeholder="Ringkasan singkat podcast..."
+                placeholder="Ringkasan singkat video..."
                 className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400 resize-none"
                 value={formData.excerpt}
                 onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
@@ -247,8 +246,8 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Podcast</label>
-              <div className="min-h-[400px]">
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Video</label>
+              <div className="min-h-100">
                 <RichTextEditor 
                   content={formData.content} 
                   onChange={(content) => setFormData({ ...formData, content })} 
@@ -263,7 +262,7 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
       <div className="space-y-6">
         {/* Publishing Status */}
         <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Status Publikasi</h3>
+          <h3 className="font-semibold text-gray-900 border-b pb-2">Publishing</h3>
           
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
@@ -295,7 +294,7 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
             className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
-            {initialData ? 'Simpan Perubahan' : 'Simpan Podcast'}
+            {initialData ? 'Simpan Perubahan' : 'Simpan Video'}
           </button>
         </div>
 
@@ -379,7 +378,7 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Thumbnail Podcast</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Thumbnail Video</label>
             <ImageUploader
               value={formData.image}
               onChange={(url) => setFormData({ ...formData, image: url })}

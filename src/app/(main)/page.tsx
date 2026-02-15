@@ -1,9 +1,9 @@
-import HeroCarousel, { HeroSlide } from "@/components/HeroCarousel";
-import MobileCategoryGrid from "@/components/MobileCategoryGrid";
-import ContentCard, { ContentItem } from "@/components/ContentCard";
-import ContentCarousel from "@/components/ContentCarousel";
-import StatsSection from "@/components/StatsSection";
-import TrustBadgeSection from "@/components/TrustBadgeSection";
+import HeroCarousel, { HeroSlide } from "@/components/home/HeroCarousel";
+import MobileCategoryGrid from "@/components/content/MobileCategoryGrid";
+import ContentCard, { ContentItem } from "@/components/content/ContentCard";
+import ContentCarousel from "@/components/content/ContentCarousel";
+import StatsSection from "@/components/home/StatsSection";
+import TrustBadgeSection from "@/components/home/TrustBadgeSection";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ContentType, ContentStatus } from "@prisma/client";

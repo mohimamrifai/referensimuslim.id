@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { ContentStatus, ContentType, Prisma } from "@prisma/client";
-import ContentCard from "@/components/ContentCard";
-import SearchFilters from "@/components/SearchFilters";
+import ContentCard from "@/components/content/ContentCard";
+import SearchFilters from "@/components/content/SearchFilters";
 
 export default async function SearchPage({
   searchParams,

@@ -1,4 +1,4 @@
-import CreateArticleForm from '@/components/admin/CreateArticleForm';
+import CreateArticleForm from '@/components/admin/articles/CreateArticleForm';
 
 export default function CreateArticlePage() {
   return (

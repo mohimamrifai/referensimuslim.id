@@ -6,7 +6,7 @@ import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Category } from '@prisma/client';
 import { updateCategory, getCategories } from '@/app/actions/category';
-import SearchableSelect from './SearchableSelect';
+import SearchableSelect from '../ui/SearchableSelect';
 
 interface EditCategoryModalProps {
   category: Category;

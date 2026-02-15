@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { ArrowLeft } from 'lucide-react';
-import AuthorForm from '@/components/admin/AuthorForm';
+import AuthorForm from '@/components/admin/authors/AuthorForm';
 
 export default async function EditAuthorPage({
   params,

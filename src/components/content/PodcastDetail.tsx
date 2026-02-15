@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import DetailLayout, { ContentData } from './DetailLayout';
+import DetailLayout, { ContentData } from '../layout/DetailLayout';
 import { Mic, Play, Pause, Volume2 } from 'lucide-react';
 import Image from 'next/image';
 

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
-import TagList from '@/components/admin/TagList';
-import CreateTagButton from '@/components/admin/CreateTagButton';
+import TagList from '@/components/admin/tags/TagList';
+import CreateTagButton from '@/components/admin/tags/CreateTagButton';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,7 +1,7 @@
-import Navbar from "@/components/Navbar";
-import MobileBottomNav from "@/components/MobileBottomNav";
-import Footer from "@/components/Footer";
-import CategorySidebar from "@/components/CategorySidebar";
+import Navbar from "@/components/layout/Navbar";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
+import Footer from "@/components/layout/Footer";
+import CategorySidebar from "@/components/content/CategorySidebar";
 import { getCategoryTree } from "@/app/actions/category";
 
 export default async function MainLayout({

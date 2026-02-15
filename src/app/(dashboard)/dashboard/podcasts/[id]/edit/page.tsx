@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import CreatePodcastForm from '@/components/admin/CreatePodcastForm';
+import CreatePodcastForm from '@/components/admin/podcasts/CreatePodcastForm';
 
 interface PodcastData {
   id?: string;

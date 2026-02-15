@@ -1,5 +1,5 @@
-import SettingsForm from '@/components/admin/SettingsForm';
-import SocialMediaSettings from '@/components/admin/SocialMediaSettings';
+import SettingsForm from '@/components/admin/settings/SettingsForm';
+import SocialMediaSettings from '@/components/admin/settings/SocialMediaSettings';
 import { Settings } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 

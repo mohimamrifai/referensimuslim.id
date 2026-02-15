@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import CreateVideoForm from '@/components/admin/CreateVideoForm';
+import CreateVideoForm from '@/components/admin/videos/CreateVideoForm';
 
 interface VideoData {
   id?: string;

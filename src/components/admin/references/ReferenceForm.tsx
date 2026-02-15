@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import ImageUploader from './ImageUploader';
+import ImageUploader from '../ui/ImageUploader';
 
 interface ReferenceFormProps {
   initialData?: {

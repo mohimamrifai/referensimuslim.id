@@ -1,4 +1,4 @@
-import CreateVideoForm from '@/components/admin/CreateVideoForm';
+import CreateVideoForm from '@/components/admin/videos/CreateVideoForm';
 
 export default function CreateVideoPage() {
   return (

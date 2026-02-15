@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import ReferenceForm from '@/components/admin/ReferenceForm';
+import ReferenceForm from '@/components/admin/references/ReferenceForm';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { notFound } from 'next/navigation';

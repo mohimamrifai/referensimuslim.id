@@ -7,7 +7,7 @@ import {
   TrendingUp
 } from "lucide-react";
 import { getDashboardStats } from "@/lib/dashboard-stats";
-import DashboardCharts from "@/components/dashboard/DashboardCharts";
+import DashboardCharts from "@/components/admin/dashboard/DashboardCharts";
 
 export default async function DashboardPage() {
   const dashboardStats = await getDashboardStats();

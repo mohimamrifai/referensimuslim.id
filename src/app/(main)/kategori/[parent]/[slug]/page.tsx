@@ -1,4 +1,4 @@
-import ContentCard from "@/components/ContentCard";
+import ContentCard from "@/components/content/ContentCard";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ContentStatus } from "@prisma/client";

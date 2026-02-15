@@ -6,7 +6,7 @@ import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { createCategory } from '@/app/actions/category';
 import { getCategories } from '@/app/actions/category'; // Helper to fetch parents
-import SearchableSelect from './SearchableSelect';
+import SearchableSelect from '../ui/SearchableSelect';
 
 interface CreateCategoryModalProps {
   isOpen: boolean;

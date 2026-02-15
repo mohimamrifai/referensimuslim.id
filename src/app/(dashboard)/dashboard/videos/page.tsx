@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import { ContentType, ContentStatus, Prisma } from '@prisma/client';
 import { Plus, Video } from 'lucide-react';
-import ArticleActionMenu from '@/components/admin/ArticleActionMenu';
-import DashboardSearchFilter from '@/components/admin/DashboardSearchFilter';
-import DashboardPagination from '@/components/admin/DashboardPagination';
+import ArticleActionMenu from '@/components/admin/articles/ArticleActionMenu';
+import DashboardSearchFilter from '@/components/admin/dashboard/DashboardSearchFilter';
+import DashboardPagination from '@/components/admin/dashboard/DashboardPagination';
 
 export const dynamic = 'force-dynamic';
 

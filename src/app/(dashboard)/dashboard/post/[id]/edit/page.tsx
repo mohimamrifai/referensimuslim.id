@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import CreateArticleForm from '@/components/admin/CreateArticleForm';
+import CreateArticleForm from '@/components/admin/articles/CreateArticleForm';
 import { notFound } from 'next/navigation';
 
 export default async function EditArticlePage({ params }: { params: Promise<{ id: string }> }) {

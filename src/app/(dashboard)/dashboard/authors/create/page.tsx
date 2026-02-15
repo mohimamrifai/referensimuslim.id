@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import AuthorForm from '@/components/admin/AuthorForm';
+import AuthorForm from '@/components/admin/authors/AuthorForm';
 
 export default function CreateAuthorPage() {
   return (
