@@ -224,9 +224,9 @@ export default async function Home() {
                         Lihat Semua
                     </Link>
                 </div>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="flex flex-col">
                     {featuredVideos.map((v) => (
-                        <ContentCard key={v.id} item={v} type="video" />
+                        <ContentCard key={v.id} item={v} type="video" variant="list" />
                     ))}
                 </div>
               </div>
