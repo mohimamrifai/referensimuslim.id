@@ -12,7 +12,8 @@ import {
   Printer, 
   CheckCircle, 
   ChevronRight, 
-  BookOpen
+  BookOpen,
+  Download
 } from 'lucide-react';
 
 import { incrementView } from '@/app/actions/content';
@@ -86,6 +87,80 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
     window.print();
   };
 
+  const handleDownloadPdf = async () => {
+    const element = document.getElementById('printable-content');
+    if (!element) return;
+
+    try {
+      // Clone the element to manipulate it for PDF generation
+      const clone = element.cloneNode(true) as HTMLElement;
+      
+      // Remove breadcrumb (nav)
+      const nav = clone.querySelector('nav');
+      if (nav) nav.remove();
+
+      // Remove all icons (svg)
+      const icons = clone.querySelectorAll('svg');
+      icons.forEach(icon => icon.remove());
+
+      // Remove no-print elements
+      const noPrint = clone.querySelectorAll('.no-print');
+      noPrint.forEach(el => el.remove());
+
+      // Remove styling (colors, backgrounds, shadows, borders)
+      const allElements = clone.querySelectorAll('*');
+      allElements.forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.style.color = '#000000';
+          el.style.backgroundColor = 'transparent';
+          el.style.boxShadow = 'none';
+          el.style.border = 'none';
+          el.style.borderRadius = '0';
+          
+          // Remove common Tailwind layout/color classes
+          el.classList.remove(
+            'bg-orange-100', 'text-orange-700', 'text-orange-600', 
+            'bg-gray-100', 'bg-gray-50', 'text-gray-900', 'text-gray-500', 'text-gray-600',
+            'shadow-sm', 'border', 'border-gray-100', 'border-gray-200', 'rounded-md', 'rounded-full'
+          );
+        }
+      });
+      
+      // Remove specific prose color class
+      const article = clone.querySelector('article');
+      if (article) {
+        article.classList.remove('prose-orange');
+      }
+
+      // Create a temporary container to render the clone
+      const container = document.createElement('div');
+      container.style.position = 'absolute';
+      container.style.left = '-9999px';
+      container.style.top = '0';
+      container.style.width = element.offsetWidth + 'px'; // Match original width
+      container.appendChild(clone);
+      document.body.appendChild(container);
+
+      const html2pdf = (await import('html2pdf.js')).default;
+      
+      const opt = {
+        margin: [0.5, 0.5] as [number, number],
+        filename: `${data.slug}.pdf`,
+        image: { type: 'jpeg' as const, quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in' as const, format: 'a4' as const, orientation: 'portrait' as const }
+      };
+
+      await html2pdf().set(opt).from(clone).save();
+
+      // Clean up
+      document.body.removeChild(container);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Gagal mengunduh PDF. Silakan coba lagi.');
+    }
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -135,7 +210,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
 
           {/* Author Info */}
           <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 border border-gray-200 no-print">
               <Image 
                 src={data.author.image}
                 alt={data.author.name}
@@ -155,11 +230,11 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
               <Calendar className="w-4 h-4" />
               <span className='text-[12px]'>{data.publishedAt}</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 no-print">
               <Clock className="w-4 h-4" />
               <span className='text-[12px]'>{type === 'video' || type === 'podcast' ? data.duration : data.readTime}</span>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 no-print">
               <Eye className="w-4 h-4" /> 
               <span className='text-[12px]'>{data.views} views</span>
             </div>
@@ -181,7 +256,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
               Referensi / Narasumber
             </h3>
             <div className="flex items-start gap-4">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200 no-print">
                 <Image 
                   src={data.reference.image}
                   alt={data.reference.name}
@@ -195,7 +270,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
                     {data.reference.name}
                   </h4>
                   {data.reference.verified && (
-                    <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-100">
+                    <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-100 no-print">
                       <CheckCircle className="w-3 h-3" /> VERIFIED
                     </span>
                   )}
@@ -261,6 +336,18 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
                 </div>
               )}
 
+              {type === 'artikel' && (
+                <button 
+                  onClick={handleDownloadPdf}
+                  className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
+                >
+                  <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
+                    <Download className="w-4 h-4" />
+                  </div>
+                  <span className="font-medium text-sm">Download PDF</span>
+                </button>
+              )}
+
               <button 
                 onClick={handlePrint}
                 className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
@@ -292,6 +379,22 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
           }
           #printable-content nav {
             display: none !important;
+          }
+          #printable-content svg {
+            display: none !important;
+          }
+          .no-print {
+            display: none !important;
+          }
+          #printable-content * {
+            background-color: transparent !important;
+            color: #000 !important;
+            box-shadow: none !important;
+            border: none !important;
+          }
+          #printable-content img {
+            border: none !important;
+            box-shadow: none !important;
           }
         }
       `}</style>
