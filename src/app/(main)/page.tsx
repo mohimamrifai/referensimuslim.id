@@ -8,6 +8,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { ContentType, ContentStatus } from "@prisma/client";
 import { getCategoryTree } from "@/app/actions/category";
+import AdSpace from "@/components/content/AdSpace";
 
 export const dynamic = 'force-dynamic';
 
@@ -189,6 +190,7 @@ export default async function Home() {
     <div className="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 pt-6 pb-0">
       <div className="space-y-6">
             <HeroCarousel slides={heroSlides} />
+            <AdSpace position="HOME_TOP" />
             <MobileCategoryGrid categories={categories} />
             <div className="space-y-6">
               {/* Artikel Terbaru */}
@@ -215,6 +217,8 @@ export default async function Home() {
                   ))}
                 </ContentCarousel>
               </div>
+
+              <AdSpace position="HOME_MIDDLE" />
 
               {/* Video Pilihan */}
               <div className="md:hidden">

@@ -2,18 +2,21 @@
 
 import DetailLayout, { ContentData } from '../layout/DetailLayout';
 import { Play } from 'lucide-react';
+import { getYouTubeEmbedUrl } from '@/lib/youtube';
 
 interface VideoDetailProps {
   data: ContentData;
 }
 
 export default function VideoDetail({ data }: VideoDetailProps) {
+  const embedUrl = data.videoUrl ? getYouTubeEmbedUrl(data.videoUrl) : null;
+
   return (
     <DetailLayout type="video" data={data}>
-      {data.videoUrl ? (
+      {embedUrl ? (
         <div className="mb-8 aspect-video bg-gray-900 rounded-md overflow-hidden shadow-lg">
           <iframe 
-            src={data.videoUrl} 
+            src={embedUrl} 
             title={data.title}
             className="w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 

@@ -8,13 +8,15 @@ interface ImageUploaderProps {
   value?: string;
   onChange: (url: string) => void;
   label?: string;
-  aspectRatio?: 'video' | 'square';
+  folder?: string;
+  aspectRatio?: 'video' | 'square' | 'banner';
 }
 
 export default function ImageUploader({ 
   value, 
   onChange, 
   label = 'Upload Gambar',
+  folder = 'uploads',
   aspectRatio = 'video'
 }: ImageUploaderProps) {
   const [loading, setLoading] = useState(false);
@@ -29,6 +31,7 @@ export default function ImageUploader({
 
     const formData = new FormData();
     formData.append('file', file);
+    if (folder) formData.append('folder', folder);
 
     try {
       const res = await fetch('/api/upload', {
@@ -57,25 +60,37 @@ export default function ImageUploader({
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       
       {value ? (
-        <div className={`relative w-full ${aspectRatio === 'square' ? 'aspect-square max-w-[200px]' : 'aspect-video max-w-md'} rounded-lg overflow-hidden border bg-gray-100`}>
+        <div className={`relative w-full ${
+          aspectRatio === 'square' ? 'aspect-square max-w-[200px]' : 
+          aspectRatio === 'banner' ? 'aspect-[970/250] max-w-[970px]' :
+          'aspect-video max-w-md'
+        } rounded-lg overflow-hidden border bg-gray-100`}>
           <Image 
             src={value} 
             alt="Uploaded" 
             fill 
             className="object-cover" 
-            unoptimized={value.startsWith('/uploads') || value.startsWith('/api/view-image')} // Local uploads don't need optimization/domains if served statically
+            unoptimized={value.startsWith('/uploads') || value.startsWith('/api/view-image')}
           />
           <button
             type="button"
             onClick={handleRemove}
-            className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-red-50 text-red-600"
+            className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-red-50 text-red-600 z-10"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
       ) : (
-        <div className={`flex items-center justify-center w-full ${aspectRatio === 'square' ? 'max-w-[200px]' : 'max-w-md'}`}>
-          <label className={`flex flex-col items-center justify-center w-full ${aspectRatio === 'square' ? 'aspect-square' : 'h-40'} border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors`}>
+        <div className={`flex items-center justify-center w-full ${
+          aspectRatio === 'square' ? 'max-w-[200px]' : 
+          aspectRatio === 'banner' ? 'max-w-[970px]' :
+          'max-w-md'
+        }`}>
+          <label className={`flex flex-col items-center justify-center w-full ${
+            aspectRatio === 'square' ? 'aspect-square' : 
+            aspectRatio === 'banner' ? 'aspect-[970/250]' :
+            'h-40'
+          } border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors`}>
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               {loading ? (
                 <Loader2 className="w-8 h-8 text-gray-400 animate-spin mb-2" />
