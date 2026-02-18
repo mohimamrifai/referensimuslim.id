@@ -1,5 +1,6 @@
 import SettingsForm from '@/components/admin/settings/SettingsForm';
 import SocialMediaSettings from '@/components/admin/settings/SocialMediaSettings';
+import MaintenanceSwitch from '@/components/admin/settings/MaintenanceSwitch';
 import { Settings } from 'lucide-react';
 import { prisma } from '@/lib/prisma';
 
@@ -9,6 +10,11 @@ export default async function SettingsPage() {
   const socialMedias = await prisma.socialMedia.findMany({
     orderBy: { order: 'asc' },
   });
+
+  const maintenanceSetting = await prisma.systemSetting.findUnique({
+    where: { key: 'maintenance_mode' },
+  });
+  const isMaintenance = maintenanceSetting?.value === 'true';
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pb-6 sm:pb-12 space-y-4 sm:space-y-8">
@@ -30,6 +36,11 @@ export default async function SettingsPage() {
         
         <div className="space-y-6">
           <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+             <h2 className="text-xl font-semibold text-gray-800">Konfigurasi Sistem</h2>
+          </div>
+          <MaintenanceSwitch initialStatus={isMaintenance} />
+
+          <div className="flex items-center gap-2 pb-2 border-b border-gray-200 mt-8">
              <h2 className="text-xl font-semibold text-gray-800">Media Sosial</h2>
           </div>
           <SocialMediaSettings initialData={socialMedias} />
@@ -38,3 +49,4 @@ export default async function SettingsPage() {
     </div>
   );
 }
+

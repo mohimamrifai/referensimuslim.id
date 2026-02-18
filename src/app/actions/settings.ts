@@ -96,3 +96,34 @@ export async function deleteSocialMedia(id: string) {
     return { success: false, error: 'Failed to delete social media' };
   }
 }
+
+export async function getMaintenanceStatus() {
+  try {
+    const setting = await prisma.systemSetting.findUnique({
+      where: { key: 'maintenance_mode' },
+    });
+    return setting?.value === 'true';
+  } catch (error) {
+    console.error('Failed to get maintenance status:', error);
+    return false; // Default to false if error
+  }
+}
+
+export async function toggleMaintenanceMode(currentState: boolean) {
+  try {
+    const newState = !currentState;
+    await prisma.systemSetting.upsert({
+      where: { key: 'maintenance_mode' },
+      update: { value: String(newState) },
+      create: { key: 'maintenance_mode', value: String(newState) },
+    });
+    
+    revalidatePath('/');
+    revalidatePath('/dashboard/settings');
+    return { success: true, isMaintenance: newState };
+  } catch (error) {
+    console.error('Failed to toggle maintenance mode:', error);
+    throw new Error('Failed to toggle maintenance mode');
+  }
+}
+

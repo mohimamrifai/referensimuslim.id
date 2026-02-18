@@ -3,12 +3,26 @@ import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import Footer from "@/components/layout/Footer";
 import CategorySidebar from "@/components/content/CategorySidebar";
 import { getCategoryTree } from "@/app/actions/category";
+import { auth } from "@/auth";
+import { getMaintenanceStatus } from "@/app/actions/settings";
+import { redirect } from "next/navigation";
 
 export default async function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isMaintenance = await getMaintenanceStatus();
+  
+  if (isMaintenance) {
+    const session = await auth();
+    const role = (session?.user as { role?: string })?.role;
+    
+    if (role !== 'ADMIN') {
+      redirect('/maintenance');
+    }
+  }
+
   const categories = await getCategoryTree();
 
   return (
