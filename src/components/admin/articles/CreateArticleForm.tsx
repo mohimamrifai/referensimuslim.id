@@ -2,42 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import RichTextEditor from '../ui/RichTextEditor';
-import ImageUploader from '../ui/ImageUploader';
-import SearchableSelect from '../ui/SearchableSelect';
-import { Loader2, Save } from 'lucide-react';
-
-interface Category {
-  id: string;
-  name: string;
-  children: Category[];
-}
-
-interface Author {
-  id: string;
-  name: string;
-}
-
-interface Reference {
-  id: string;
-  name: string;
-}
-
-interface ArticleData {
-  id?: string;
-  title?: string;
-  slug?: string;
-  excerpt?: string | null;
-  content?: string;
-  image?: string | null;
-  categoryId?: string;
-  subcategoryId?: string | null;
-  authorId?: string;
-  referenceId?: string | null;
-  status?: string;
-  readTime?: string | null;
-  tags?: string[];
-}
+import { Loader2 } from 'lucide-react';
+import ArticleMainContent from './ArticleMainContent';
+import ArticleSidebar from './ArticleSidebar';
+import { Category, Author, Reference, ArticleData, ArticleFormData } from './types';
 
 export default function CreateArticleForm({ initialData }: { initialData?: ArticleData }) {
   const router = useRouter();
@@ -50,7 +18,7 @@ export default function CreateArticleForm({ initialData }: { initialData?: Artic
   
   const [tagInput, setTagInput] = useState('');
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ArticleFormData>({
     title: '',
     slug: '',
     excerpt: '',
@@ -62,7 +30,7 @@ export default function CreateArticleForm({ initialData }: { initialData?: Artic
     referenceId: '',
     status: 'DRAFT',
     readTime: '',
-    tags: [] as string[], // Array of tag names
+    tags: [], // Array of tag names
   });
 
   useEffect(() => {
@@ -182,10 +150,6 @@ export default function CreateArticleForm({ initialData }: { initialData?: Artic
 
   if (initialLoading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin" /></div>;
 
-  // Filter subcategories based on selected category
-  const selectedCategory = categories.find(c => c.id === formData.categoryId);
-  const subcategories = selectedCategory?.children || [];
-
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
@@ -222,203 +186,22 @@ export default function CreateArticleForm({ initialData }: { initialData?: Artic
       </div>
 
       {/* Left Column - Main Content */}
-      <div className="lg:col-span-2 space-y-6">
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul Artikel</label>
-              <input
-                type="text"
-                required
-                placeholder="Masukkan judul artikel yang menarik..."
-                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400"
-                value={formData.title}
-                onChange={e => setFormData({ ...formData, title: e.target.value })}
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Excerpt (Ringkasan)</label>
-              <textarea
-                rows={3}
-                placeholder="Ringkasan singkat artikel..."
-                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400 resize-none"
-                value={formData.excerpt}
-                onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Konten Artikel</label>
-              <div className="min-h-[400px]">
-                <RichTextEditor 
-                  content={formData.content} 
-                  onChange={(content) => setFormData({ ...formData, content })} 
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ArticleMainContent formData={formData} setFormData={setFormData} />
 
       {/* Right Column - Sidebar */}
-      <div className="space-y-6">
-        {/* Publishing Status */}
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Publishing</h3>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
-            <select
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none"
-              value={formData.status}
-              onChange={e => setFormData({ ...formData, status: e.target.value })}
-            >
-              <option value="DRAFT">Draft</option>
-              <option value="PUBLISHED">Published</option>
-              <option value="ARCHIVED">Archived</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Waktu Baca</label>
-            <input
-              type="text"
-              placeholder="Contoh: 5 menit"
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none"
-              value={formData.readTime}
-              onChange={e => setFormData({ ...formData, readTime: e.target.value })}
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 disabled:opacity-50"
-          >
-            {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
-            {initialData ? 'Simpan Perubahan' : 'Simpan Artikel'}
-          </button>
-        </div>
-
-        {/* Categories & Tags */}
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Kategori & Tags</h3>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Kategori Utama</label>
-            <SearchableSelect
-              required
-              value={formData.categoryId}
-              onChange={(val) => setFormData({ ...formData, categoryId: val, subcategoryId: '' })}
-              options={categories}
-              placeholder="Pilih Kategori"
-            />
-          </div>
-
-          {subcategories.length > 0 && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Sub Kategori</label>
-              <SearchableSelect
-                value={formData.subcategoryId}
-                onChange={(val) => setFormData({ ...formData, subcategoryId: val })}
-                options={subcategories}
-                placeholder="Pilih Sub Kategori"
-              />
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Tags</label>
-            <input
-              type="text"
-              placeholder="Ketik & Enter..."
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none mb-2"
-              value={tagInput}
-              onChange={e => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
-            />
-            <div className="flex flex-wrap gap-2">
-              {formData.tags.map(tag => (
-                <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => removeTag(tag)}
-                    className="ml-1.5 text-gray-500 hover:text-red-500"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Metadata */}
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Atribut</h3>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Penulis</label>
-            <SearchableSelect
-              required
-              value={formData.authorId}
-              onChange={(val) => setFormData({ ...formData, authorId: val })}
-              options={authors}
-              placeholder="Pilih Penulis"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Referensi (Opsional)</label>
-            <SearchableSelect
-              value={formData.referenceId}
-              onChange={(val) => setFormData({ ...formData, referenceId: val })}
-              options={references}
-              placeholder="Pilih Referensi"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Gambar Unggulan</label>
-            <ImageUploader
-              value={formData.image}
-              onChange={(url) => {
-                // If there's an existing image and it's different from the new one (and not empty), 
-                // we should delete the old one.
-                // However, the onChange here gives us the NEW url. 
-                // We need to know the OLD url before state update.
-                // Actually, ImageUploader might handle upload, but cleanup is tricky.
-                // Let's rely on the fact that if we change the image, the old one is abandoned.
-                // BUT the user specifically asked: "pastikan gambar sebelumnya di hapus ketika gambar baru di tambahkan"
-                // So we need to call delete API for the old image if it exists.
-                
-                const oldImage = formData.image;
-                if (oldImage && oldImage !== url && !oldImage.startsWith('/')) { 
-                   // Assuming local uploads don't start with / (or they do? need to check ImageUploader)
-                   // Usually uploads are like /uploads/filename.ext or http...
-                   // Let's assume we have an API to delete.
-                   // We don't have a delete API exposed yet? 
-                   // Let's check api/upload or similar.
-                   // Wait, I should verify if I have a delete endpoint.
-                   // If not, I should create one or just ignore for now if too complex, 
-                   // BUT user explicitly asked for it.
-                   
-                   // Let's implement a simple delete call if the endpoint exists.
-                   // I'll search for delete endpoint first.
-                   fetch('/api/upload', {
-                      method: 'DELETE',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ url: oldImage }),
-                   }).catch(err => console.error("Failed to delete old image", err));
-                }
-                setFormData({ ...formData, image: url })
-              }}
-            />
-          </div>
-        </div>
-      </div>
+      <ArticleSidebar
+        formData={formData}
+        setFormData={setFormData}
+        loading={loading}
+        categories={categories}
+        authors={authors}
+        references={references}
+        initialData={initialData}
+        tagInput={tagInput}
+        setTagInput={setTagInput}
+        handleTagKeyDown={handleTagKeyDown}
+        removeTag={removeTag}
+      />
     </form>
   );
 }

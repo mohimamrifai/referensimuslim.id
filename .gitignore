@@ -44,3 +44,5 @@ next-env.d.ts
 
 # assets (uploads and other static files ignored by request)
 /src/assets
+
+.trae/

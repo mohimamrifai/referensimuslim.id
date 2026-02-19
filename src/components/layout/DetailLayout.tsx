@@ -1,58 +1,13 @@
 'use client';
 
-import { useState, useEffect, ReactNode } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { 
-  Calendar, 
-  Clock, 
-  Eye, 
-  Share2, 
-  Quote, 
-  Printer, 
-  CheckCircle, 
-  ChevronRight, 
-  BookOpen,
-  Download
-} from 'lucide-react';
-
+import { useState, useEffect } from 'react';
 import { incrementView } from '@/app/actions/content';
+import DetailMainContent from './DetailMainContent';
+import DetailSidebar from './DetailSidebar';
+import { ContentType, ContentData, DetailLayoutProps } from './detail-types';
 
-export type ContentType = 'artikel' | 'video' | 'podcast';
-
-export interface ContentData {
-  slug: string;
-  title: string;
-  category: string;
-  subcategory?: string;
-  image?: string;
-  excerpt?: string;
-  author: {
-    name: string;
-    role: string;
-    image: string;
-  };
-  publishedAt: string;
-  readTime?: string;
-  duration?: string;
-  views: string;
-  videoUrl?: string;
-  audioUrl?: string;
-  content: string; // HTML string
-  reference: {
-    name: string;
-    role: string;
-    image: string;
-    institution: string;
-    verified: boolean;
-  };
-}
-
-interface DetailLayoutProps {
-  type: ContentType;
-  data: ContentData;
-  children?: ReactNode; // For additional content like video player
-}
+// Re-export types for backward compatibility if needed
+export type { ContentType, ContentData };
 
 export default function DetailLayout({ type, data, children }: DetailLayoutProps) {
   const [readingProgress, setReadingProgress] = useState(0);
@@ -185,181 +140,20 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
       <div className="flex flex-col lg:flex-row gap-12">
         
         {/* Main Content Area (Center) */}
-        <div id="printable-content" className="flex-1 min-w-0">
-          
-          {/* Breadcrumb */}
-          <nav className="flex items-center text-sm text-gray-500 mb-6 overflow-x-auto whitespace-nowrap pb-2">
-            <Link href="/" className="hover:text-orange-600 transition-colors">Beranda</Link>
-            <ChevronRight className="w-4 h-4 mx-2 shrink-0" />
-            <span className="capitalize text-gray-500">{type}</span>
-            <ChevronRight className="w-4 h-4 mx-2 shrink-0" />
-            <span className="text-gray-900 font-medium truncate max-w-50 sm:max-w-xs">
-              {data.title}
-            </span>
-          </nav>
-
-          {/* Category Badge */}
-          <span className="inline-block bg-orange-100 text-orange-700 text-[10px] font-bold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
-            {data.subcategory ?? data.category}
-          </span>
-
-          {/* Title */}
-          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-6 leading-tight">
-            {data.title}
-          </h1>
-
-          {/* Author Info */}
-          <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 border border-gray-200 no-print">
-              <Image 
-                src={data.author.image}
-                alt={data.author.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <h4 className="font-bold text-gray-900 text-sm">{data.author.name}</h4>
-              <p className="text-xs text-gray-500">{data.author.role}</p>
-            </div>
-          </div>
-
-          {/* Meta Info */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-8">
-            <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
-              <span className='text-[12px]'>{data.publishedAt}</span>
-            </div>
-            <div className="flex items-center gap-1 no-print">
-              <Clock className="w-4 h-4" />
-              <span className='text-[12px]'>{type === 'video' || type === 'podcast' ? data.duration : data.readTime}</span>
-            </div>
-            <div className="flex items-center gap-1 no-print">
-              <Eye className="w-4 h-4" /> 
-              <span className='text-[12px]'>{data.views} views</span>
-            </div>
-          </div>
-
-          {/* Custom Content (e.g. Player) */}
+        <DetailMainContent type={type} data={data}>
           {children}
-
-          {/* Full Content Text */}
-          <article 
-            className="prose prose-lg prose-orange max-w-none text-gray-700 leading-relaxed mb-12"
-            dangerouslySetInnerHTML={{ __html: data.content }}
-          />
-
-          {/* References / Narasumber Section */}
-          <div className="bg-white border border-gray-200 rounded-md p-6 shadow-sm">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-orange-600" />
-              Referensi / Narasumber
-            </h3>
-            <div className="flex items-start gap-4">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 shrink-0 border border-gray-200 no-print">
-                <Image 
-                  src={data.reference.image}
-                  alt={data.reference.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-1">
-                  <h4 className="font-bold text-gray-900 text-lg leading-tight">
-                    {data.reference.name}
-                  </h4>
-                  {data.reference.verified && (
-                    <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-100 no-print">
-                      <CheckCircle className="w-3 h-3" /> VERIFIED
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600 mb-1">{data.reference.role}</p>
-                <p className="text-xs text-gray-500">{data.reference.institution}</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
+        </DetailMainContent>
 
         {/* Right Sticky Panel */}
-        <div className="hidden lg:block w-80 shrink-0">
-          <div className="sticky top-24 space-y-4">
-            
-            {/* Reading Progress */}
-            {type === 'artikel' && (
-              <div className="bg-white border border-gray-200 rounded-md p-6 shadow-sm">
-                <h3 className="font-bold text-gray-900 mb-2 text-sm uppercase tracking-wider">Progress Baca</h3>
-                <div className="flex items-end gap-2 mb-2">
-                  <span className="text-xl font-bold text-orange-600">{Math.round(readingProgress)}%</span>
-                  <span className="text-sm text-gray-500 mb-1">selesai</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
-                  <div 
-                    className="bg-orange-600 h-full rounded-full transition-all duration-300 ease-out"
-                    style={{ width: `${readingProgress}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Actions */}
-            <div className="space-y-2">
-              <button 
-                onClick={handleShare}
-                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
-                  <Share2 className="w-4 h-4" />
-                </div>
-                <span className="font-medium text-sm">Bagikan Konten</span>
-              </button>
-
-              <button 
-                onClick={handleQuote}
-                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
-                  <Quote className="w-4 h-4" />
-                </div>
-                <span className="font-medium text-sm">Kutip Konten</span>
-              </button>
-
-              {quoteResult && (
-                <div className="p-3 bg-green-50 rounded-md border border-green-100 text-xs animate-in fade-in slide-in-from-top-2">
-                  <p className="font-bold text-green-700 mb-1 flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3" />
-                    Disalin!
-                  </p>
-                  <p className="text-gray-600 italic leading-relaxed">{quoteResult}</p>
-                </div>
-              )}
-
-              {type === 'artikel' && (
-                <button 
-                  onClick={handleDownloadPdf}
-                  className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
-                >
-                  <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
-                    <Download className="w-4 h-4" />
-                  </div>
-                  <span className="font-medium text-sm">Download PDF</span>
-                </button>
-              )}
-
-              <button 
-                onClick={handlePrint}
-                className="w-full flex items-center gap-3 p-3 rounded-md bg-gray-50 hover:bg-orange-50 text-gray-700 hover:text-orange-700 transition-colors border border-gray-100 hover:border-orange-100 group cursor-pointer"
-              >
-                <div className="w-8 h-8 rounded-full group-hover:bg-orange-100 flex items-center justify-center transition-colors border border-gray-200 group-hover:border-transparent">
-                  <Printer className="w-4 h-4" />
-                </div>
-                <span className="font-medium text-sm">Cetak Halaman</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        <DetailSidebar 
+          type={type}
+          readingProgress={readingProgress}
+          quoteResult={quoteResult}
+          onShare={handleShare}
+          onQuote={handleQuote}
+          onPrint={handlePrint}
+          onDownloadPdf={handleDownloadPdf}
+        />
 
       </div>
 
@@ -391,6 +185,7 @@ export default function DetailLayout({ type, data, children }: DetailLayoutProps
             color: #000 !important;
             box-shadow: none !important;
             border: none !important;
+            border-radius: 0 !important;
           }
           #printable-content img {
             border: none !important;

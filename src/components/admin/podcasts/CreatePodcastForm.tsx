@@ -2,43 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import RichTextEditor from '../ui/RichTextEditor';
-import ImageUploader from '../ui/ImageUploader';
-import SearchableSelect from '../ui/SearchableSelect';
-import { Loader2, Save, Wand2 } from 'lucide-react';
-
-interface Category {
-  id: string;
-  name: string;
-  children: Category[];
-}
-
-interface Author {
-  id: string;
-  name: string;
-}
-
-interface Reference {
-  id: string;
-  name: string;
-}
-
-interface PodcastData {
-  id?: string;
-  title?: string;
-  slug?: string;
-  excerpt?: string | null;
-  content?: string;
-  image?: string | null;
-  categoryId?: string;
-  subcategoryId?: string | null;
-  authorId?: string;
-  referenceId?: string | null;
-  status?: string;
-  videoUrl?: string | null;
-  duration?: string | null;
-  tags?: string[];
-}
+import { Loader2, Wand2 } from 'lucide-react';
+import PodcastMainContent from './PodcastMainContent';
+import PodcastSidebar from './PodcastSidebar';
+import { PodcastData, PodcastFormData, Category, Author, Reference } from './types';
 
 export default function CreatePodcastForm({ initialData }: { initialData?: PodcastData }) {
   const router = useRouter();
@@ -51,7 +18,7 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
   
   const [tagInput, setTagInput] = useState('');
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PodcastFormData>({
     title: '',
     slug: '',
     excerpt: '',
@@ -64,7 +31,7 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
     status: 'DRAFT',
     videoUrl: '',
     duration: '',
-    tags: [] as string[],
+    tags: [],
   });
 
   useEffect(() => {
@@ -168,9 +135,6 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
 
   if (initialLoading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin" /></div>;
 
-  const selectedCategory = categories.find(c => c.id === formData.categoryId);
-  const subcategories = selectedCategory?.children || [];
-
   const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
@@ -207,186 +171,22 @@ export default function CreatePodcastForm({ initialData }: { initialData?: Podca
       </div>
 
       {/* Left Column - Main Content */}
-      <div className="lg:col-span-2 space-y-6">
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Judul Podcast</label>
-              <input
-                type="text"
-                required
-                placeholder="Masukkan judul podcast..."
-                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400"
-                value={formData.title}
-                onChange={e => setFormData({ ...formData, title: e.target.value })}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">URL Video (YouTube)</label>
-              <input
-                type="url"
-                required
-                placeholder="https://youtube.com/watch?v=..."
-                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400"
-                value={formData.videoUrl}
-                onChange={e => setFormData({ ...formData, videoUrl: e.target.value })}
-              />
-              <p className="text-xs text-gray-500 mt-1">Masukkan URL YouTube untuk podcast ini.</p>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Excerpt (Ringkasan)</label>
-              <textarea
-                rows={3}
-                placeholder="Ringkasan singkat podcast..."
-                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none text-gray-900 placeholder:text-gray-400 resize-none"
-                value={formData.excerpt}
-                onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Deskripsi Podcast</label>
-              <div className="min-h-[400px]">
-                <RichTextEditor 
-                  content={formData.content} 
-                  onChange={(content) => setFormData({ ...formData, content })} 
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PodcastMainContent formData={formData} setFormData={setFormData} />
 
       {/* Right Column - Sidebar */}
-      <div className="space-y-6">
-        {/* Publishing Status */}
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Status Publikasi</h3>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
-            <select
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none"
-              value={formData.status}
-              onChange={e => setFormData({ ...formData, status: e.target.value })}
-            >
-              <option value="DRAFT">Draft</option>
-              <option value="PUBLISHED">Published</option>
-              <option value="ARCHIVED">Archived</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Durasi</label>
-            <input
-              type="text"
-              placeholder="Contoh: 15:30"
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none"
-              value={formData.duration}
-              onChange={e => setFormData({ ...formData, duration: e.target.value })}
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2 disabled:opacity-50"
-          >
-            {loading ? <Loader2 className="animate-spin w-4 h-4" /> : <Save className="w-4 h-4" />}
-            {initialData ? 'Simpan Perubahan' : 'Simpan Podcast'}
-          </button>
-        </div>
-
-        {/* Categories & Tags */}
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Kategori & Tags</h3>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Kategori Utama</label>
-            <SearchableSelect
-              required
-              value={formData.categoryId}
-              onChange={(val) => setFormData({ ...formData, categoryId: val, subcategoryId: '' })}
-              options={categories}
-              placeholder="Pilih Kategori"
-            />
-          </div>
-
-          {subcategories.length > 0 && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Sub Kategori</label>
-              <SearchableSelect
-                value={formData.subcategoryId}
-                onChange={(val) => setFormData({ ...formData, subcategoryId: val })}
-                options={subcategories}
-                placeholder="Pilih Sub Kategori"
-              />
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Tags</label>
-            <input
-              type="text"
-              placeholder="Ketik tag lalu tekan Enter..."
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all outline-none mb-2"
-              value={tagInput}
-              onChange={e => setTagInput(e.target.value)}
-              onKeyDown={handleTagKeyDown}
-            />
-            <div className="flex flex-wrap gap-2">
-              {formData.tags.map(tag => (
-                <span key={tag} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => removeTag(tag)}
-                    className="ml-1.5 text-gray-500 hover:text-red-500"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Atribut (Metadata) */}
-        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
-          <h3 className="font-semibold text-gray-900 border-b pb-2">Atribut</h3>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Pemateri / Penulis</label>
-            <SearchableSelect
-              required
-              value={formData.authorId}
-              onChange={(val) => setFormData({ ...formData, authorId: val })}
-              options={authors}
-              placeholder="Pilih Pemateri"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Referensi (Opsional)</label>
-            <SearchableSelect
-              value={formData.referenceId}
-              onChange={(val) => setFormData({ ...formData, referenceId: val })}
-              options={references}
-              placeholder="Pilih Referensi"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Thumbnail Podcast</label>
-            <ImageUploader
-              value={formData.image}
-              onChange={(url) => setFormData({ ...formData, image: url })}
-            />
-          </div>
-        </div>
-      </div>
+      <PodcastSidebar
+        formData={formData}
+        setFormData={setFormData}
+        loading={loading}
+        categories={categories}
+        authors={authors}
+        references={references}
+        initialData={initialData}
+        tagInput={tagInput}
+        setTagInput={setTagInput}
+        handleTagKeyDown={handleTagKeyDown}
+        removeTag={removeTag}
+      />
     </form>
   );
 }
