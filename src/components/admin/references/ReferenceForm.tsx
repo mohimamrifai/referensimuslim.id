@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ImageUploader from '../ui/ImageUploader';
+import { createReference, updateReference } from '@/app/actions/references';
+import toast from 'react-hot-toast';
 
 interface ReferenceFormProps {
   initialData?: {
@@ -34,25 +36,18 @@ export default function ReferenceForm({ initialData }: ReferenceFormProps) {
     setError(null);
 
     try {
-      const url = initialData 
-        ? `/api/admin/references/${initialData.id}`
-        : '/api/admin/references';
-      
-      const method = initialData ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Something went wrong');
+      let result;
+      if (initialData) {
+        result = await updateReference(initialData.id, formData);
+      } else {
+        result = await createReference(formData);
       }
 
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+
+      toast.success(initialData ? 'Referensi berhasil diperbarui' : 'Referensi berhasil ditambahkan');
       router.push('/dashboard/references');
       router.refresh();
     } catch (err: unknown) {

@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Pencil, Trash2, Eye } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import ConfirmDialog from '../ui/ConfirmDialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { deleteNgaji } from '@/app/actions/ngaji';
 
 interface NgajiActionMenuProps {
   id: string;
@@ -67,14 +68,10 @@ export default function NgajiActionMenu({ id, name }: NgajiActionMenuProps) {
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/admin/ngaji/${id}`, {
-        method: 'DELETE',
-      });
+      const result = await deleteNgaji(id);
       
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to delete');
+      if (!result.success) {
+        throw new Error(result.error);
       }
       
       toast.success('Data berhasil dihapus');

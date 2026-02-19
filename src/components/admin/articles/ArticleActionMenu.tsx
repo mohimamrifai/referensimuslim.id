@@ -5,7 +5,10 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Eye, Pencil, Trash2 } from 'lucide-react';
-import ConfirmDialog from '../ui/ConfirmDialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { deleteArticle } from '@/app/actions/articles';
+import { deleteVideo } from '@/app/actions/videos';
+import { deletePodcast } from '@/app/actions/podcasts';
 
 interface ArticleActionMenuProps {
   articleId: string;
@@ -21,18 +24,6 @@ export default function ArticleActionMenu({ articleId, slug, baseUrl = '/dashboa
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
-
-  // Determine API endpoint based on baseUrl
-  // if baseUrl is /dashboard/post -> api is /api/admin/articles
-  // if baseUrl is /dashboard/videos -> api is /api/admin/videos
-  // if baseUrl is /dashboard/podcasts -> api is /api/admin/podcasts
-  let apiEndpoint = `/api/admin/articles/${articleId}`;
-  
-  if (baseUrl === '/dashboard/videos') {
-    apiEndpoint = `/api/admin/videos/${articleId}`;
-  } else if (baseUrl === '/dashboard/podcasts') {
-    apiEndpoint = `/api/admin/podcasts/${articleId}`;
-  }
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -79,11 +70,16 @@ export default function ArticleActionMenu({ articleId, slug, baseUrl = '/dashboa
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(apiEndpoint, {
-        method: 'DELETE',
-      });
-      
-      if (!res.ok) throw new Error('Failed to delete');
+      let result;
+      if (baseUrl === '/dashboard/videos') {
+        result = await deleteVideo(articleId);
+      } else if (baseUrl === '/dashboard/podcasts') {
+        result = await deletePodcast(articleId);
+      } else {
+        result = await deleteArticle(articleId);
+      }
+
+      if (result?.error) throw new Error(result.error);
       
       setShowDeleteDialog(false);
       router.refresh();

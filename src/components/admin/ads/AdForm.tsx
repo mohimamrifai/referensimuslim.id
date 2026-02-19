@@ -39,10 +39,15 @@ export default function AdForm({ initialData, isEdit = false }: AdFormProps) {
       data.append("position", formData.position);
       data.append("isActive", String(formData.isActive));
 
+      let result;
       if (isEdit && initialData?.id) {
-        await updateAdvertisement(initialData.id, data);
+        result = await updateAdvertisement(initialData.id, data);
       } else {
-        await createAdvertisement(data);
+        result = await createAdvertisement(data);
+      }
+
+      if (result && !result.success) {
+        throw new Error(result.error);
       }
 
       router.push("/dashboard/ads");

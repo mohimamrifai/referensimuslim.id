@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ImageUploader from '../ui/ImageUploader';
+import { createAuthor, updateAuthor } from '@/app/actions/authors';
 
 interface AuthorFormProps {
   initialData?: {
@@ -32,28 +33,21 @@ export default function AuthorForm({ initialData, isEditing = false }: AuthorFor
     setLoading(true);
 
     try {
-      const url = isEditing && initialData?.id 
-        ? `/api/admin/authors/${initialData.id}` 
-        : '/api/admin/authors';
-      
-      const method = isEditing ? 'PUT' : 'POST';
+      let result;
+      if (isEditing && initialData?.id) {
+        result = await updateAuthor(initialData.id, formData);
+      } else {
+        result = await createAuthor(formData);
+      }
 
-      const res = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) throw new Error('Failed to save author');
+      if (!result.success) throw new Error(result.error);
 
       toast.success(isEditing ? 'Penulis berhasil diperbarui' : 'Penulis berhasil ditambahkan');
       router.push('/dashboard/authors');
       router.refresh();
     } catch (error) {
       console.error(error);
-      toast.error('Gagal menyimpan penulis');
+      toast.error(error instanceof Error ? error.message : 'Gagal menyimpan penulis');
     } finally {
       setLoading(false);
     }

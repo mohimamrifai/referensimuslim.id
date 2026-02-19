@@ -2,9 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Loader2, Plus } from 'lucide-react';
+import { Loader2, Plus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { createTag } from '@/app/actions/tag';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 
 interface CreateTagModalProps {
   isOpen: boolean;
@@ -61,71 +64,67 @@ export default function CreateTagModal({ isOpen, onClose }: CreateTagModalProps)
     }
   };
 
-  if (!isOpen) return null;
+  const footer = (
+    <>
+      <Button
+        variant="outline"
+        onClick={onClose}
+        disabled={isLoading}
+      >
+        Batal
+      </Button>
+      <Button
+        onClick={handleSubmit}
+        disabled={isLoading}
+        className="bg-emerald-600 hover:bg-emerald-700 text-white"
+      >
+        {isLoading ? (
+          <Loader2 className="w-4 h-4 animate-spin mr-2" />
+        ) : (
+          <Plus className="w-4 h-4 mr-2" />
+        )}
+        Buat Tag
+      </Button>
+    </>
+  );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900">Buat Tag Baru</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-            <X className="w-5 h-5" />
-          </button>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Buat Tag Baru"
+      footer={footer}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+            {error}
+          </div>
+        )}
+
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Nama Tag</label>
+          <Input
+            type="text"
+            required
+            value={formData.name}
+            onChange={handleNameChange}
+            placeholder="Contoh: Fiqih, Sejarah, Tafsir"
+            className="focus:ring-emerald-500/20 focus:border-emerald-500"
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
-          {error && (
-            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
-              {error}
-            </div>
-          )}
-
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Nama Tag</label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={handleNameChange}
-              placeholder="Contoh: Fiqih, Sejarah, Tafsir"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Slug</label>
-            <input
-              type="text"
-              required
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-mono text-sm"
-            />
-          </div>
-
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Plus className="w-4 h-4" />
-              )}
-              Buat Tag
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Slug</label>
+          <Input
+            type="text"
+            required
+            value={formData.slug}
+            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+            className="bg-gray-50 font-mono text-sm focus:ring-emerald-500/20 focus:border-emerald-500"
+          />
+        </div>
+      </form>
+    </Modal>
   );
 }

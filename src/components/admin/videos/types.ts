@@ -1,18 +1,6 @@
-export interface Category {
-  id: string;
-  name: string;
-  children: Category[];
-}
+import { Category, Author, Reference } from '@/types';
 
-export interface Author {
-  id: string;
-  name: string;
-}
-
-export interface Reference {
-  id: string;
-  name: string;
-}
+export type { Category, Author, Reference };
 
 export interface VideoData {
   id?: string;

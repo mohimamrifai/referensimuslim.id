@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import CreateTagModal from './CreateTagModal';
 
 export default function CreateTagButton() {
@@ -9,13 +10,13 @@ export default function CreateTagButton() {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => setIsModalOpen(true)}
-        className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm w-max"
+        className="w-max gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
       >
         <Plus className="w-4 h-4" />
         Tambah Tag
-      </button>
+      </Button>
 
       <CreateTagModal
         isOpen={isModalOpen}

@@ -3,7 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import ConfirmDialog from '../ui/ConfirmDialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { deleteReference } from '@/app/actions/references';
+import toast from 'react-hot-toast';
 
 interface ReferenceActionMenuProps {
   referenceId: string;
@@ -63,20 +65,18 @@ export default function ReferenceActionMenu({ referenceId, name, hasContents }: 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/admin/references/${referenceId}`, {
-        method: 'DELETE',
-      });
-      
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Failed to delete');
+      const result = await deleteReference(referenceId);
+
+      if (!result.success) {
+        throw new Error(result.error);
       }
       
       setShowDeleteDialog(false);
+      toast.success('Referensi berhasil dihapus');
       router.refresh();
     } catch (error) {
       console.error('Delete error:', error);
-      alert('Gagal menghapus referensi');
+      toast.error('Gagal menghapus referensi');
     } finally {
       setIsDeleting(false);
     }

@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronDown, Search, X } from 'lucide-react';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
 
 interface Option {
   id: string;
@@ -91,15 +93,17 @@ export default function SearchableSelect({
         
         <div className="flex items-center gap-2">
           {selectedOption && !required && !disabled && (
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={handleClear}
-              className="text-gray-400 hover:text-gray-600 p-0.5"
+              className="h-6 w-6 text-gray-400 hover:text-gray-600 p-0.5"
             >
-              <X className="w-4 h-4" />
-            </button>
+              <X className="w-3 h-3" />
+            </Button>
           )}
-          <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
         </div>
       </div>
 
@@ -107,11 +111,11 @@ export default function SearchableSelect({
         <div className="absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-lg shadow-lg overflow-hidden animate-in fade-in zoom-in-95 duration-100">
           <div className="p-2 border-b border-gray-50">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10" />
+              <Input
                 ref={searchInputRef}
                 type="text"
-                className="w-full pl-9 pr-3 py-1.5 text-sm bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:border-emerald-500 focus:bg-white transition-colors"
+                className="pl-9 pr-3 py-1.5 h-auto text-sm bg-gray-50 border-gray-200 focus-visible:ring-emerald-500"
                 placeholder="Cari..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

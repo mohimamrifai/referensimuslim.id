@@ -2,6 +2,16 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+import { auth } from '@/auth';
+
+// Schema Validation
+const categorySchema = z.object({
+  name: z.string().min(1, 'Nama wajib diisi'),
+  slug: z.string().min(1, 'Slug wajib diisi'),
+  description: z.string().optional(),
+  parentId: z.string().optional().nullable(),
+});
 
 export type CategoryTreeItem = {
   id: string;
@@ -60,21 +70,21 @@ export async function getCategories() {
   });
 }
 
-export async function createCategory(data: {
-  name: string;
-  slug: string;
-  description?: string;
-  parentId?: string;
-}) {
-  try {
-    // Validate required fields
-    if (!data.name || !data.slug) {
-      return { success: false, error: 'Nama dan Slug wajib diisi' };
-    }
+export async function createCategory(data: z.infer<typeof categorySchema>) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
 
+  const result = categorySchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0].message };
+  }
+
+  try {
     // Check if slug exists
     const existing = await prisma.category.findUnique({
-      where: { slug: data.slug }
+      where: { slug: result.data.slug }
     });
 
     if (existing) {
@@ -83,10 +93,10 @@ export async function createCategory(data: {
 
     await prisma.category.create({
       data: {
-        name: data.name,
-        slug: data.slug,
-        description: data.description,
-        parentId: data.parentId || null,
+        name: result.data.name,
+        slug: result.data.slug,
+        description: result.data.description,
+        parentId: result.data.parentId || null,
       }
     });
 
@@ -98,17 +108,22 @@ export async function createCategory(data: {
   }
 }
 
-export async function updateCategory(id: string, data: {
-  name: string;
-  slug: string;
-  description?: string;
-  parentId?: string;
-}) {
+export async function updateCategory(id: string, data: z.infer<typeof categorySchema>) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const result = categorySchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0].message };
+  }
+
   try {
-    // Check if slug exists (exclude current)
+    // Check if slug exists in OTHER categories
     const existing = await prisma.category.findFirst({
       where: { 
-        slug: data.slug,
+        slug: result.data.slug,
         NOT: { id }
       }
     });
@@ -120,10 +135,10 @@ export async function updateCategory(id: string, data: {
     await prisma.category.update({
       where: { id },
       data: {
-        name: data.name,
-        slug: data.slug,
-        description: data.description,
-        parentId: data.parentId || null,
+        name: result.data.name,
+        slug: result.data.slug,
+        description: result.data.description,
+        parentId: result.data.parentId || null,
       }
     });
 
@@ -136,29 +151,32 @@ export async function updateCategory(id: string, data: {
 }
 
 export async function deleteCategory(id: string) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
   try {
-    // Check if category has contents
+    // Check if category has children or content
     const category = await prisma.category.findUnique({
       where: { id },
       include: {
-        _count: {
-          select: { 
-            contents: true,
-            subContents: true,
-            children: true
-          }
-        }
+        children: true,
+        contents: true,
+        subContents: true
       }
     });
 
-    if (!category) return { success: false, error: 'Kategori tidak ditemukan' };
-
-    if (category._count.contents > 0 || category._count.subContents > 0) {
-      return { success: false, error: 'Tidak dapat menghapus kategori yang memiliki konten' };
+    if (!category) {
+      return { success: false, error: 'Kategori tidak ditemukan' };
     }
 
-    if (category._count.children > 0) {
-      return { success: false, error: 'Tidak dapat menghapus kategori yang memiliki subkategori' };
+    if (category.children.length > 0) {
+      return { success: false, error: 'Hapus subkategori terlebih dahulu' };
+    }
+
+    if (category.contents.length > 0 || category.subContents.length > 0) {
+      return { success: false, error: 'Kategori masih memiliki konten' };
     }
 
     await prisma.category.delete({

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { createNgaji, updateNgaji } from '@/app/actions/ngaji';
 
 interface NgajiFormProps {
   initialData?: {
@@ -42,26 +43,23 @@ export default function NgajiForm({ initialData, isEditing = false }: NgajiFormP
     setLoading(true);
 
     try {
-      const url = isEditing && initialData?.id 
-        ? `/api/admin/ngaji/${initialData.id}` 
-        : '/api/admin/ngaji';
-      
-      const method = isEditing ? 'PUT' : 'POST';
+      // Need to cast gender to match Zod schema enum
+      const payload = {
+        ...formData,
+        gender: formData.gender as 'Laki-laki' | 'Perempuan',
+        birthDate: new Date(formData.birthDate).toISOString(),
+        age: Number(formData.age),
+      };
 
-      const res = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          birthDate: new Date(formData.birthDate).toISOString(),
-        }),
-      });
+      let result;
+      if (isEditing && initialData?.id) {
+        result = await updateNgaji(initialData.id, payload);
+      } else {
+        result = await createNgaji(payload);
+      }
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Failed to save data');
+      if (!result.success) {
+        throw new Error(result.error);
       }
 
       toast.success(isEditing ? 'Data berhasil diperbarui' : 'Data berhasil ditambahkan');

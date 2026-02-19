@@ -2,6 +2,13 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+import { auth } from '@/auth';
+
+const tagSchema = z.object({
+  name: z.string().min(1, 'Nama tag wajib diisi'),
+  slug: z.string().min(1, 'Slug tag wajib diisi'),
+});
 
 export async function getTags() {
   return await prisma.tag.findMany({
@@ -14,19 +21,20 @@ export async function getTags() {
   });
 }
 
-export async function createTag(data: {
-  name: string;
-  slug: string;
-}) {
-  try {
-    // Validate required fields
-    if (!data.name || !data.slug) {
-      return { success: false, error: 'Nama dan Slug wajib diisi' };
-    }
+export async function createTag(data: z.infer<typeof tagSchema>) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
 
-    // Check if slug exists
+  const result = tagSchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0].message };
+  }
+
+  try {
     const existing = await prisma.tag.findUnique({
-      where: { slug: data.slug }
+      where: { slug: result.data.slug }
     });
 
     if (existing) {
@@ -35,8 +43,8 @@ export async function createTag(data: {
 
     await prisma.tag.create({
       data: {
-        name: data.name,
-        slug: data.slug,
+        name: result.data.name,
+        slug: result.data.slug,
       }
     });
 
@@ -48,15 +56,21 @@ export async function createTag(data: {
   }
 }
 
-export async function updateTag(id: string, data: {
-  name: string;
-  slug: string;
-}) {
+export async function updateTag(id: string, data: z.infer<typeof tagSchema>) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const result = tagSchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0].message };
+  }
+
   try {
-    // Check if slug exists (exclude current)
     const existing = await prisma.tag.findFirst({
       where: { 
-        slug: data.slug,
+        slug: result.data.slug,
         NOT: { id }
       }
     });
@@ -68,8 +82,8 @@ export async function updateTag(id: string, data: {
     await prisma.tag.update({
       where: { id },
       data: {
-        name: data.name,
-        slug: data.slug,
+        name: result.data.name,
+        slug: result.data.slug,
       }
     });
 
@@ -82,6 +96,11 @@ export async function updateTag(id: string, data: {
 }
 
 export async function deleteTag(id: string) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
   try {
     await prisma.tag.delete({
       where: { id }

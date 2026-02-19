@@ -2,11 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Category } from '@prisma/client';
 import { updateCategory, getCategories } from '@/app/actions/category';
-import SearchableSelect from '../ui/SearchableSelect';
+import SearchableSelect from '@/components/ui/SearchableSelect';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
 
 interface EditCategoryModalProps {
   category: Category;
@@ -84,85 +88,81 @@ export default function EditCategoryModal({ category, isOpen, onClose }: EditCat
     }
   };
 
-  if (!isOpen) return null;
+  const footer = (
+    <>
+      <Button
+        variant="outline"
+        onClick={onClose}
+        disabled={isLoading}
+      >
+        Batal
+      </Button>
+      <Button
+        onClick={handleSubmit}
+        disabled={isLoading}
+        className="bg-emerald-600 hover:bg-emerald-700 text-white"
+      >
+        {isLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+        Simpan Perubahan
+      </Button>
+    </>
+  );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <h2 className="text-lg font-semibold text-gray-900">Edit Kategori</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-            <X className="w-5 h-5" />
-          </button>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Edit Kategori"
+      footer={footer}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
+          <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
+            {error}
+          </div>
+        )}
+
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Nama Kategori</label>
+          <Input
+            type="text"
+            required
+            value={formData.name}
+            onChange={handleNameChange}
+            className="focus:ring-emerald-500/20 focus:border-emerald-500"
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="p-4 space-y-4">
-          {error && (
-            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100">
-              {error}
-            </div>
-          )}
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Slug</label>
+          <Input
+            type="text"
+            required
+            value={formData.slug}
+            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+            className="bg-gray-50 font-mono text-sm focus:ring-emerald-500/20 focus:border-emerald-500"
+          />
+        </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Nama Kategori</label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={handleNameChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
-            />
-          </div>
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
+          <Textarea
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            className="resize-none h-20 focus:ring-emerald-500/20 focus:border-emerald-500"
+          />
+        </div>
 
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Slug</label>
-            <input
-              type="text"
-              required
-              value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-mono text-sm"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all resize-none h-20"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-sm font-medium text-gray-700">Parent Kategori</label>
-            <SearchableSelect
-              value={formData.parentId}
-              onChange={(val) => setFormData({ ...formData, parentId: val })}
-              options={parents}
-              placeholder="-- Tidak ada (Root Category) --"
-            />
-          </div>
-
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-              Simpan Perubahan
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-700">Parent Kategori</label>
+          <SearchableSelect
+            value={formData.parentId}
+            onChange={(val) => setFormData({ ...formData, parentId: val })}
+            options={parents}
+            placeholder="-- Tidak ada (Root Category) --"
+          />
+        </div>
+      </form>
+    </Modal>
   );
 }

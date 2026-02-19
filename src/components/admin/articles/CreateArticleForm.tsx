@@ -1,105 +1,57 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+import { useCallback, useEffect } from 'react';
+import { Loader2, Wand2 } from 'lucide-react';
 import ArticleMainContent from './ArticleMainContent';
 import ArticleSidebar from './ArticleSidebar';
-import { Category, Author, Reference, ArticleData, ArticleFormData } from './types';
+import { ArticleData, ArticleFormData } from './types';
+import { useContentForm } from '@/hooks/useContentForm';
+import { Button } from '@/components/ui/Button';
+import { createArticle, updateArticle } from '@/app/actions/articles';
+
+const initialFormData: ArticleFormData = {
+  title: '',
+  slug: '',
+  excerpt: '',
+  content: '',
+  image: '',
+  categoryId: '',
+  subcategoryId: '',
+  authorId: '',
+  referenceId: '',
+  status: 'DRAFT',
+  readTime: '',
+  tags: [],
+};
 
 export default function CreateArticleForm({ initialData }: { initialData?: ArticleData }) {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-  
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [authors, setAuthors] = useState<Author[]>([]);
-  const [references, setReferences] = useState<Reference[]>([]);
-  
-  const [tagInput, setTagInput] = useState('');
-
-  const [formData, setFormData] = useState<ArticleFormData>({
-    title: '',
-    slug: '',
-    excerpt: '',
-    content: '',
-    image: '',
-    categoryId: '',
-    subcategoryId: '',
-    authorId: '',
-    referenceId: '',
-    status: 'DRAFT',
-    readTime: '',
-    tags: [], // Array of tag names
+  const {
+    formData,
+    setFormData,
+    categories,
+    authors,
+    references,
+    loading,
+    initialLoading,
+    tagInput,
+    setTagInput,
+    handleTagKeyDown,
+    removeTag,
+    handleSubmit
+  } = useContentForm<ArticleFormData>({
+    initialData,
+    initialFormData,
+    apiEndpoint: '/api/admin/articles',
+    redirectPath: '/dashboard/post',
+    resourceName: 'article',
+    createAction: createArticle,
+    updateAction: updateArticle,
   });
-
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        title: initialData.title || '',
-        slug: initialData.slug || '',
-        excerpt: initialData.excerpt || '',
-        content: initialData.content || '',
-        image: initialData.image || '',
-        categoryId: initialData.categoryId || '',
-        subcategoryId: initialData.subcategoryId || '',
-        authorId: initialData.authorId || '',
-        referenceId: initialData.referenceId || '',
-        status: initialData.status || 'DRAFT',
-        readTime: initialData.readTime || '',
-        tags: initialData.tags || [],
-      });
-    }
-  }, [initialData]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch('/api/admin/data');
-        if (res.ok) {
-          const data = await res.json();
-          setCategories(data.categories);
-          setAuthors(data.authors);
-          setReferences(data.references);
-        }
-      } catch (error) {
-        console.error('Failed to fetch data', error);
-      } finally {
-        setInitialLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const url = initialData ? `/api/admin/articles/${initialData.id}` : '/api/admin/articles';
-      const method = initialData ? 'PUT' : 'POST';
-
-      const res = await fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) throw new Error(initialData ? 'Failed to update article' : 'Failed to create article');
-
-      router.push('/dashboard/post'); // Redirect to article list
-      router.refresh();
-    } catch {
-      alert(initialData ? 'Error updating article' : 'Error creating article');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const fillDummyData = useCallback(() => {
     const randomNum = Math.floor(Math.random() * 10000);
     const randomCat = categories.length > 0 ? categories[Math.floor(Math.random() * categories.length)] : null;
-    const randomSub = randomCat && randomCat.children.length > 0 
+    const randomSub = randomCat && randomCat.children && randomCat.children.length > 0 
       ? randomCat.children[Math.floor(Math.random() * randomCat.children.length)] 
       : null;
     const randomAuthor = authors.length > 0 ? authors[Math.floor(Math.random() * authors.length)] : null;
@@ -129,7 +81,7 @@ export default function CreateArticleForm({ initialData }: { initialData?: Artic
       readTime: `${Math.floor(Math.random() * 15) + 3} menit`,
       tags: ['Testing', 'Dummy Data', `Auto-${randomNum}`]
     }));
-  }, [categories, authors, references]);
+  }, [categories, authors, references, setFormData]);
 
   // Auto-fill dummy data on load if requested via URL param or default for dev
   useEffect(() => {
@@ -150,24 +102,6 @@ export default function CreateArticleForm({ initialData }: { initialData?: Artic
 
   if (initialLoading) return <div className="p-8 flex justify-center"><Loader2 className="animate-spin" /></div>;
 
-  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault();
-      const newTag = tagInput.trim();
-      if (newTag && !formData.tags.includes(newTag)) {
-        setFormData({ ...formData, tags: [...formData.tags, newTag] });
-      }
-      setTagInput('');
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setFormData({
-      ...formData,
-      tags: formData.tags.filter(tag => tag !== tagToRemove)
-    });
-  };
-
   return (
     <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
       {/* Header with Fill Dummy Button */}
@@ -175,14 +109,14 @@ export default function CreateArticleForm({ initialData }: { initialData?: Artic
         <div className="text-sm text-blue-800">
           <span className="font-semibold">Mode Testing:</span> Gunakan tombol di kanan untuk mengisi data dummy otomatis.
         </div>
-        <button
+        <Button
           type="button"
           onClick={fillDummyData}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm flex items-center gap-2"
+          className="bg-blue-600 hover:bg-blue-700 text-white"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wand-2"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></svg>
+          <Wand2 className="w-4 h-4 mr-2" />
           Isi Data Dummy
-        </button>
+        </Button>
       </div>
 
       {/* Left Column - Main Content */}

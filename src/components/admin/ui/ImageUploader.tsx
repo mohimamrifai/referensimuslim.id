@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Upload, X, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { Button } from '@/components/ui/Button';
+import { uploadImage } from '@/lib/api';
 
 interface ImageUploaderProps {
   value?: string;
@@ -29,21 +31,9 @@ export default function ImageUploader({
     setLoading(true);
     setError(null);
 
-    const formData = new FormData();
-    formData.append('file', file);
-    if (folder) formData.append('folder', folder);
-
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      const data = await res.json();
-      
-      if (!res.ok) throw new Error(data.message || 'Upload failed');
-      
-      onChange(data.url);
+      const url = await uploadImage(file, folder);
+      onChange(url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error occurred');
     } finally {
@@ -72,13 +62,15 @@ export default function ImageUploader({
             className="object-cover" 
             unoptimized={value.startsWith('/uploads') || value.startsWith('/api/view-image')}
           />
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={handleRemove}
-            className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-red-50 text-red-600 z-10"
+            className="absolute top-2 right-2 bg-white rounded-full shadow hover:bg-red-50 text-red-600 z-10 w-6 h-6 p-1"
           >
             <X className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       ) : (
         <div className={`flex items-center justify-center w-full ${

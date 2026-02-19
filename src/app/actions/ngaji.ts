@@ -2,6 +2,8 @@
 
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { auth } from '@/auth';
+import { revalidatePath } from 'next/cache';
 
 const RegistrationSchema = z.object({
   fullName: z.string().min(1, 'Nama lengkap wajib diisi'),
@@ -62,5 +64,79 @@ export async function registerNgaji(_prevState: unknown, formData: FormData): Pr
       return { success: false, errors: error.flatten().fieldErrors };
     }
     return { success: false, message: 'Terjadi kesalahan saat mengirim pendaftaran.' };
+  }
+}
+
+export async function createNgaji(data: z.infer<typeof RegistrationSchema>) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const result = RegistrationSchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0].message };
+  }
+
+  try {
+    const registration = await prisma.ngajiRegistration.create({
+      data: {
+        ...result.data,
+        birthDate: new Date(result.data.birthDate),
+      },
+    });
+
+    revalidatePath('/dashboard/ngaji');
+    return { success: true, data: registration };
+  } catch (error) {
+    console.error('Error creating ngaji registration:', error);
+    return { success: false, error: 'Failed to create registration' };
+  }
+}
+
+export async function updateNgaji(id: string, data: z.infer<typeof RegistrationSchema>) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const result = RegistrationSchema.safeParse(data);
+  if (!result.success) {
+    return { success: false, error: result.error.issues[0].message };
+  }
+
+  try {
+    const registration = await prisma.ngajiRegistration.update({
+      where: { id },
+      data: {
+        ...result.data,
+        birthDate: new Date(result.data.birthDate),
+      },
+    });
+
+    revalidatePath('/dashboard/ngaji');
+    return { success: true, data: registration };
+  } catch (error) {
+    console.error('Error updating ngaji registration:', error);
+    return { success: false, error: 'Failed to update registration' };
+  }
+}
+
+export async function deleteNgaji(id: string) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    await prisma.ngajiRegistration.delete({
+      where: { id },
+    });
+
+    revalidatePath('/dashboard/ngaji');
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting ngaji registration:', error);
+    return { success: false, error: 'Failed to delete registration' };
   }
 }

@@ -3,7 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
-import ConfirmDialog from '../ui/ConfirmDialog';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { deleteAuthor } from '@/app/actions/authors';
+import toast from 'react-hot-toast';
 
 interface AuthorActionMenuProps {
   authorId: string;
@@ -63,21 +65,18 @@ export default function AuthorActionMenu({ authorId, name, hasContents }: Author
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/admin/authors/${authorId}`, {
-        method: 'DELETE',
-      });
-      
-      const data = await res.json();
+      const result = await deleteAuthor(authorId);
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to delete');
+      if (!result.success) {
+        throw new Error(result.error);
       }
       
       setShowDeleteDialog(false);
+      toast.success('Penulis berhasil dihapus');
       router.refresh();
     } catch (error) {
       console.error('Delete error:', error);
-      alert(error instanceof Error ? error.message : 'Gagal menghapus item');
+      toast.error(error instanceof Error ? error.message : 'Gagal menghapus penulis');
     } finally {
       setIsDeleting(false);
     }

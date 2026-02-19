@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Plus, Search, Eye, EyeOff, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toggleAdvertisementStatus, deleteAdvertisement } from "@/app/actions/ads";
-import ConfirmDialog from "@/components/admin/ui/ConfirmDialog";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { Advertisement } from "@prisma/client";
 
 interface AdListProps {
@@ -25,7 +25,11 @@ export default function AdList({ ads }: AdListProps) {
 
   const handleToggleStatus = async (id: string, currentStatus: boolean) => {
     try {
-      await toggleAdvertisementStatus(id, !currentStatus);
+      const result = await toggleAdvertisementStatus(id, !currentStatus);
+      if (!result.success) {
+        console.error("Failed to toggle status:", result.error);
+        return;
+      }
       router.refresh();
     } catch (error) {
       console.error("Failed to toggle status", error);
@@ -36,7 +40,11 @@ export default function AdList({ ads }: AdListProps) {
     if (!deleteId) return;
     setIsDeleting(true);
     try {
-      await deleteAdvertisement(deleteId);
+      const result = await deleteAdvertisement(deleteId);
+      if (!result.success) {
+        console.error("Failed to delete ad:", result.error);
+        return;
+      }
       setDeleteId(null);
       router.refresh();
     } catch (error) {

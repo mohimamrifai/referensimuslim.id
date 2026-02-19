@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, Video, Mic, Info, Search, SearchIcon, BookOpen, UserPlus } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
+import { NAVIGATION_ITEMS } from '@/config/navigation';
 
 function NavbarContent() {
   const pathname = usePathname();
@@ -20,15 +21,6 @@ function NavbarContent() {
       setIsMobileSearchOpen(false);
     }
   };
-
-  const menuItems = [
-    { name: 'Beranda', icon: Home, href: '/', type: null },
-    { name: 'Artikel', icon: BookOpen, href: '/search?q=&type=artikel', type: 'artikel' },
-    { name: 'Video', icon: Video, href: '/search?q=&type=video', type: 'video' },
-    { name: 'Podcast', icon: Mic, href: '/search?q=&type=podcast', type: 'podcast' },
-    { name: 'Tentang Kami', icon: Info, href: '/about', type: null },
-    { name: 'Daftar Ngaji', icon: UserPlus, href: '/daftar-ngaji', type: null },
-  ];
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
@@ -52,7 +44,7 @@ function NavbarContent() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
-            {menuItems.map((item) => {
+            {NAVIGATION_ITEMS.map((item) => {
               const Icon = item.icon;
               let isActive = false;
 
@@ -98,47 +90,46 @@ function NavbarContent() {
           <div className="flex items-center md:hidden gap-3">
             <Link
               href="/daftar-ngaji"
-              className="px-3 py-1.5 bg-orange-600 text-white text-xs font-semibold rounded-full hover:bg-orange-700 transition-colors"
+              className="px-3 py-1.5 bg-orange-600 text-white text-xs font-semibold rounded-full shadow-sm hover:bg-orange-700 transition-colors"
             >
               Daftar Ngaji
             </Link>
-            <button 
+            <button
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
-              className="p-2 text-gray-600 hover:text-orange-600 focus:outline-none"
+              className="p-2 text-gray-600 hover:text-orange-600 transition-colors"
+              aria-label="Search"
             >
-              {isMobileSearchOpen ? <SearchIcon className="w-6 h-6 text-orange-600" /> : <SearchIcon className="w-6 h-6" />}
+              <Search className="w-6 h-6" />
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Search Input */}
-      {isMobileSearchOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-gray-50 px-4 py-3 animate-in slide-in-from-top-2">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Cari artikel, video atau podcast.."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleSearch}
-              autoFocus
-              className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 shadow-sm"
-            />
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
-          </div>
-        </div>
-      )}
+        {/* Mobile Search Input (Toggled) */}
+        {isMobileSearchOpen && (
+           <div className="md:hidden pb-4 px-1 animate-in slide-in-from-top-2 duration-200">
+             <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Cari artikel, video atau podcast.."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch}
+                  autoFocus
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all placeholder:text-gray-400 shadow-sm"
+                />
+                <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" />
+             </div>
+           </div>
+        )}
+      </div>
     </nav>
   );
 }
 
-const Navbar = () => {
+export default function Navbar() {
   return (
-    <Suspense fallback={<div className="h-16 bg-white border-b border-gray-100" />}>
+    <Suspense fallback={<nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm h-16" />}>
       <NavbarContent />
     </Suspense>
   );
-};
-
-export default Navbar;
+}
