@@ -1,8 +1,8 @@
-import { PrismaClient, ContentType, ContentStatus, UserRole } from '@prisma/client';
+import { PrismaClient, UserRole } from '@prisma/client';
 import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as bcrypt from 'bcryptjs';
-import { MOCK_DB } from './data';
+// import { MOCK_DB } from './data';
 
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({ connectionString });
@@ -10,9 +10,9 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 // Helper to convert Title Case to slug-case
-function toSlug(str: string): string {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-}
+// function toSlug(str: string): string {
+//   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+// }
 
 type CategorySeedNode = {
   name: string;

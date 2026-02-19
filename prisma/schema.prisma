@@ -188,3 +188,22 @@ model SystemSetting {
 
   @@map("system_settings")
 }
+
+model NgajiRegistration {
+  id          String   @id @default(uuid())
+  fullName    String
+  gender      String   // Laki-laki, Perempuan
+  birthPlace  String
+  birthDate   DateTime
+  age         Int
+  address     String   // Domisili
+  whatsapp    String
+  education   String
+  occupation  String
+  motivation  String   @db.Text
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("ngaji_registrations")
+}

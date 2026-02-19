@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, Video, Mic, Info, Search, SearchIcon, BookOpen } from 'lucide-react';
+import { Home, Video, Mic, Info, Search, SearchIcon, BookOpen, UserPlus } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
 
@@ -27,6 +27,7 @@ function NavbarContent() {
     { name: 'Video', icon: Video, href: '/search?q=&type=video', type: 'video' },
     { name: 'Podcast', icon: Mic, href: '/search?q=&type=podcast', type: 'podcast' },
     { name: 'Tentang Kami', icon: Info, href: '/about', type: null },
+    { name: 'Daftar Ngaji', icon: UserPlus, href: '/daftar-ngaji', type: null },
   ];
 
   return (
@@ -59,6 +60,8 @@ function NavbarContent() {
                 isActive = pathname === '/';
               } else if (item.href === '/about') {
                 isActive = pathname === '/about';
+              } else if (item.href === '/daftar-ngaji') {
+                isActive = pathname === '/daftar-ngaji';
               } else if (item.type) {
                 isActive = pathname === '/search' && currentType === item.type;
               }
@@ -92,7 +95,13 @@ function NavbarContent() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden gap-4">
+          <div className="flex items-center md:hidden gap-3">
+            <Link
+              href="/daftar-ngaji"
+              className="px-3 py-1.5 bg-orange-600 text-white text-xs font-semibold rounded-full hover:bg-orange-700 transition-colors"
+            >
+              Daftar Ngaji
+            </Link>
             <button 
               onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
               className="p-2 text-gray-600 hover:text-orange-600 focus:outline-none"

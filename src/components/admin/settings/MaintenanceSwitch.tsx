@@ -27,7 +27,7 @@ export default function MaintenanceSwitch({ initialStatus }: MaintenanceSwitchPr
           setIsMaintenance(!newState);
           toast.error('Gagal mengubah status');
         }
-      } catch (_error) {
+      } catch {
         setIsMaintenance(!newState);
         toast.error('Terjadi kesalahan saat mengubah status');
       }

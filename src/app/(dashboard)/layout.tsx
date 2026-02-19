@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { LayoutDashboard, BookOpen, Video, Mic, Tags, Menu, LogOut, Settings, FolderTree, Users as UsersIcon, BookMarked, MonitorPlay } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, Mic, Tags, Menu, LogOut, Settings, FolderTree, Users as UsersIcon, BookMarked, MonitorPlay, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
 
@@ -22,6 +22,7 @@ export default function DashboardLayout({
     { title: "Manajemen Tags", href: "/dashboard/tags", icon: Tags },
     { title: "Penulis", href: "/dashboard/authors", icon: UsersIcon },
     { title: "Referensi", href: "/dashboard/references", icon: BookMarked },
+    { title: "Daftar Ngaji", href: "/dashboard/ngaji", icon: UserPlus },
     { title: "Iklan", href: "/dashboard/ads", icon: MonitorPlay },
     { title: "Pengaturan", href: "/dashboard/settings", icon: Settings },
   ];
