@@ -4,9 +4,25 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
-import { useEffect } from 'react';
-import { Bold, Italic, List, ListOrdered, Link as LinkIcon, Image as ImageIcon, Heading2, Quote } from 'lucide-react';
+import { TextAlign } from '@tiptap/extension-text-align';
+import LineHeight from 'tiptap-extension-line-height';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { FontFamily } from '@tiptap/extension-font-family';
+import { useEffect, useState } from 'react';
+import {
+  Bold, Italic, List, ListOrdered, Link as LinkIcon,
+  Image as ImageIcon, Heading2, Quote,
+  AlignLeft, AlignCenter, AlignRight, AlignJustify,
+  ArrowUpDown, Languages,
+  Loader2
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 interface RichTextEditorProps {
   content: string;
@@ -14,6 +30,16 @@ interface RichTextEditorProps {
 }
 
 export default function RichTextEditor({ content, onChange }: RichTextEditorProps) {
+  // State untuk Popover Link & Image
+  const [isLinkOpen, setIsLinkOpen] = useState(false);
+  const [linkUrl, setLinkUrl] = useState('');
+  
+  const [isImageOpen, setIsImageOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [imageInputMode, setImageInputMode] = useState<'url' | 'upload'>('url');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -21,7 +47,18 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
       Link.configure({
         openOnClick: false,
       }),
-      Image,
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
+      TextStyle,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      LineHeight.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      FontFamily,
     ],
     content: content,
     onUpdate: ({ editor }) => {
@@ -34,23 +71,13 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     },
   });
 
-  // Effect to update editor content if prop changes externally (e.g. dummy data fill)
   useEffect(() => {
     if (editor && content && editor.getHTML() !== content) {
-       // Only update if content is significantly different to avoid cursor jumps or loops
-       // Simple check: if editor is empty or content changed drastically
-       // For dummy data fill, editor is likely empty or user wants to overwrite.
-       // However, to be safe, we only overwrite if editor content is empty OR if we force it.
-       // Since this is specifically for "Fill Dummy", we can assume if the prop updates drastically, we sync.
-       // A safer approach for controlled inputs in Tiptap is tricky. 
-       // But for the purpose of "Fill Dummy", usually the form is empty.
-       
-       // Let's try to set content if it differs.
-       if (editor.getText().trim() === '' && content.trim() !== '') {
-          editor.commands.setContent(content);
-       } else if (content.includes('Test judul')) { // Specific check for our dummy data generator
-          editor.commands.setContent(content);
-       }
+      if (editor.getText().trim() === '' && content.trim() !== '') {
+        editor.commands.setContent(content);
+      } else if (content.includes('Test judul')) {
+        editor.commands.setContent(content);
+      }
     }
   }, [content, editor]);
 
@@ -58,30 +85,64 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     return null;
   }
 
-  const addImage = () => {
-    const url = window.prompt('URL Gambar:');
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+  // --- Handlers untuk Link ---
+  const handleLinkOpenChange = (open: boolean) => {
+    setIsLinkOpen(open);
+    if (open) {
+      // Ambil URL yang sudah ada jika teks yang di-block sudah berupa link
+      const previousUrl = editor.getAttributes('link').href;
+      setLinkUrl(previousUrl || '');
     }
   };
 
-  const setLink = () => {
-    const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('URL:', previousUrl);
-
-    // cancelled
-    if (url === null) {
-      return;
+  const submitLink = () => {
+    editor.chain().focus();
+    if (linkUrl === '') {
+      editor.chain().extendMarkRange('link').unsetLink().run();
+    } else {
+      editor.chain().extendMarkRange('link').setLink({ href: linkUrl }).run();
     }
+    setIsLinkOpen(false);
+    setLinkUrl('');
+  };
 
-    // empty
-    if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
-      return;
+  // --- Handlers untuk Image ---
+  const submitImage = () => {
+    if (imageUrl) {
+      editor.chain().focus().setImage({ src: imageUrl }).run();
     }
+    setIsImageOpen(false);
+    setImageUrl('');
+  };
 
-    // update link
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  const handleImageUpload = async () => {
+    if (!selectedFile) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Gagal mengunggah gambar');
+      }
+
+      const data = await response.json();
+      editor.chain().focus().setImage({ src: data.url }).run();
+      setIsImageOpen(false);
+      setSelectedFile(null);
+      setImageInputMode('url'); // Reset to URL mode after upload
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Gagal mengunggah gambar.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -146,20 +207,180 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
           type="button"
           variant="ghost"
           size="sm"
-          onClick={setLink}
-          className={`h-8 w-8 p-0 ${editor.isActive('link') ? 'bg-gray-200' : ''}`}
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          className={`h-8 w-8 p-0 ${editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''}`}
         >
-          <LinkIcon className="w-4 h-4" />
+          <AlignLeft className="w-4 h-4" />
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={addImage}
-          className="h-8 w-8 p-0"
+          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          className={`h-8 w-8 p-0 ${editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''}`}
         >
-          <ImageIcon className="w-4 h-4" />
+          <AlignCenter className="w-4 h-4" />
         </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          className={`h-8 w-8 p-0 ${editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''}`}
+        >
+          <AlignRight className="w-4 h-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+          className={`h-8 w-8 p-0 ${editor.isActive({ textAlign: 'justify' }) ? 'bg-gray-200' : ''}`}
+        >
+          <AlignJustify className="w-4 h-4" />
+        </Button>
+        <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            if (editor.isActive('textStyle', { fontFamily: 'KFGQPC HAFS Uthmanic Script Regular' })) {
+              editor.chain().focus().unsetFontFamily().run();
+            } else {
+              editor.chain().focus().setFontFamily('KFGQPC HAFS Uthmanic Script Regular').run();
+            }
+          }}
+          className={`h-8 px-2 flex items-center gap-1 text-[10px] font-semibold ${editor.isActive('textStyle', { fontFamily: 'KFGQPC HAFS Uthmanic Script Regular' }) ? 'bg-gray-200' : ''}`}
+          title="Arabic Font"
+        >
+          <Languages className="w-4 h-4" />
+          <span>Arab</span>
+        </Button>
+        <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+        <div className="flex items-center gap-1 group relative">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 px-2 flex items-center gap-1 text-xs"
+            onClick={() => {
+              const current = editor.getAttributes('paragraph').lineHeight || '1.5';
+              const next = current === '1.5' ? '2.0' : current === '2.0' ? '1.0' : '1.5';
+              editor.chain().focus().setLineHeight(next).run();
+            }}
+          >
+            <ArrowUpDown className="w-4 h-4" />
+            <span className="font-mono text-[10px]">{editor.getAttributes('paragraph').lineHeight || '1.5'}</span>
+          </Button>
+        </div>
+        <div className="w-px h-6 bg-gray-300 mx-1 self-center" />
+
+        {/* POPOVER UNTUK LINK */}
+        <Popover open={isLinkOpen} onOpenChange={handleLinkOpenChange}>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className={`h-8 w-8 p-0 ${editor.isActive('link') ? 'bg-gray-200' : ''}`}
+            >
+              <LinkIcon className="w-4 h-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 p-3" align="start">
+            <div className="flex gap-2">
+              <Input
+                type="url"
+                placeholder="Masukkan URL (https://...)"
+                value={linkUrl}
+                onChange={(e) => setLinkUrl(e.target.value)}
+                className="h-8 text-sm flex-1"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitLink();
+                  }
+                }}
+              />
+              <Button type="button" size="sm" className="h-8" onClick={submitLink}>
+                Save
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* POPOVER UNTUK IMAGE */}
+        <Popover open={isImageOpen} onOpenChange={setIsImageOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0"
+            >
+              <ImageIcon className="w-4 h-4" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80 p-3" align="start">
+            <div className="flex border-b mb-3">
+              <button
+                type="button"
+                className={`flex-1 py-2 text-sm font-medium ${imageInputMode === 'url' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                onClick={() => setImageInputMode('url')}
+              >
+                Link URL
+              </button>
+              <button
+                type="button"
+                className={`flex-1 py-2 text-sm font-medium ${imageInputMode === 'upload' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
+                onClick={() => setImageInputMode('upload')}
+              >
+                Unggah Media
+              </button>
+            </div>
+            {imageInputMode === 'url' ? (
+              <div className="flex gap-2">
+                <Input
+                  type="url"
+                  placeholder="URL Gambar (https://...)"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  className="h-8 text-sm flex-1"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      submitImage();
+                    }
+                  }}
+                />
+                <Button type="button" size="sm" className="h-8" onClick={submitImage}>
+                  Insert
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setSelectedFile(e.target.files ? e.target.files[0] : null)}
+                  className="flex h-9 w-full rounded-md border border-gray-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+                <Button type="button" size="sm" className="h-8" onClick={handleImageUpload} disabled={!selectedFile || isUploading}>
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Mengunggah...
+                    </>
+                  ) : (
+                    'Unggah'
+                  )}
+                </Button>
+              </div>
+            )}
+          </PopoverContent>
+        </Popover>
+
       </div>
       <EditorContent editor={editor} className="bg-white" />
     </div>
