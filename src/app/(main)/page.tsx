@@ -1,19 +1,18 @@
-import HeroCarousel from "@/components/home/HeroCarousel";
 import MobileCategoryGrid from "@/components/content/MobileCategoryGrid";
 import StatsSection from "@/components/home/StatsSection";
 import TrustBadgeSection from "@/components/home/TrustBadgeSection";
 import { prisma } from "@/lib/prisma";
 import { ContentStatus } from "@prisma/client";
 import { getCategoryTree } from "@/app/actions/category";
-import AdSpace from "@/components/content/AdSpace";
 import { getHeroArticles, getLatestArticles, getFeaturedVideos, getLatestPodcasts } from "@/components/home/data-fetching";
 import ContentSection from "@/components/home/ContentSection";
+import HeroGrid from "@/components/home/HeroGrid"; // Import the new HeroGrid component
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [heroSlides, latestArticles, featuredVideos, latestPodcasts, categories, stats] = await Promise.all([
-    getHeroArticles(),
+  const [heroArticles, latestArticles, featuredVideos, latestPodcasts, categories, stats] = await Promise.all([
+    getHeroArticles(4), // Fetch 4 articles for the new hero section
     getLatestArticles(),
     getFeaturedVideos(),
     getLatestPodcasts(),
@@ -25,13 +24,12 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-4 lg:px-6 pt-6 pb-0">
-      <div className="space-y-6">
-        <HeroCarousel slides={heroSlides} />
-        <AdSpace position="HOME_TOP" />
+    <div className="pb-0">
+      <HeroGrid articles={heroArticles} />
+      <div className="px-4 pt-6 space-y-6 max-w-8xl mx-auto">
         <MobileCategoryGrid categories={categories} />
         
-        <div className="space-y-6">
+        <div className="space-y-6 md:px-4">
           {/* Artikel Terbaru */}
           <ContentSection 
             title="Artikel Terbaru" 
@@ -39,8 +37,6 @@ export default async function Home() {
             items={latestArticles} 
             viewAllLink="/search?q=&type=artikel" 
           />
-
-          <AdSpace position="HOME_MIDDLE" />
 
           {/* Video Pilihan */}
           <ContentSection 

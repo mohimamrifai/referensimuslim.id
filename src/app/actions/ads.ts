@@ -25,6 +25,15 @@ export async function getAdvertisement(id: string) {
   });
 }
 
+export async function getAdSpace(position: string) {
+  return await prisma.advertisement.findFirst({
+    where: {
+      position: position,
+      isActive: true,
+    },
+  });
+}
+
 export async function createAdvertisement(formData: FormData) {
   const session = await auth();
   if (!session || (session.user as { role?: string }).role !== 'ADMIN') {

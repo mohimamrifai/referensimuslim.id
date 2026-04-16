@@ -1,55 +1,37 @@
-import React from 'react';
-import { prisma } from '@/lib/prisma';
+// src/components/content/AdSpace.tsx
 import Image from 'next/image';
+import Link from 'next/link';
+import { Advertisement } from '@prisma/client';
 
 interface AdSpaceProps {
-  position: string;
-  className?: string;
+  ad: Advertisement | null;
 }
 
-export default async function AdSpace({ position, className = '' }: AdSpaceProps) {
-  const ad = await prisma.advertisement.findFirst({
-    where: {
-      position,
-      isActive: true,
-    },
-  });
-
-  if (!ad) {
-    return null;
+export default function AdSpace({ ad }: AdSpaceProps) {
+  if (!ad || !ad.imageUrl) {
+    return (
+      <div className="w-full flex justify-center py-2">
+        <div className="w-full max-w-[728px] h-[90px] bg-gray-100 rounded-lg flex items-center justify-center border border-dashed border-gray-200">
+          <span className="text-gray-400 text-xs font-medium uppercase tracking-wider">Ruang Iklan</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className={`w-full max-w-5xl mx-auto my-8 ${className}`}>
-      <div className="text-center text-[10px] text-gray-400 tracking-widest mb-2 uppercase font-medium">
-        Advertisement
-      </div>
-      {ad.targetUrl ? (
-        <a 
-          href={ad.targetUrl} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="block w-full h-[150px] md:h-[250px] relative rounded-sm overflow-hidden"
-        >
+    <div className="w-full flex justify-center py-2">
+      <Link href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer" className="block max-w-full">
+        <div className="relative w-[728px] h-[90px] bg-gray-100 rounded-lg overflow-hidden">
           <Image
             src={ad.imageUrl}
             alt={ad.title}
             fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 970px"
-          />
-        </a>
-      ) : (
-        <div className="w-full h-[150px] md:h-[250px] relative rounded-sm overflow-hidden">
-          <Image
-            src={ad.imageUrl}
-            alt={ad.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 970px"
+            sizes="728px"
+            className="object-contain"
+            unoptimized={ad.imageUrl.startsWith('/uploads') || ad.imageUrl.startsWith('/api/view-image')}
           />
         </div>
-      )}
+      </Link>
     </div>
   );
 }

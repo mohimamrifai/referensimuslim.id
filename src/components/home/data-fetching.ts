@@ -3,14 +3,14 @@ import { ContentType, ContentStatus } from "@prisma/client";
 import { HeroSlide } from "@/components/home/HeroCarousel";
 import { ContentItem } from "@/components/content/ContentCard";
 
-export async function getHeroArticles(): Promise<HeroSlide[]> {
+export async function getHeroArticles(limit: number = 4): Promise<HeroSlide[]> {
   try {
     const articles = await prisma.content.findMany({
       where: {
         type: ContentType.ARTIKEL,
         status: ContentStatus.PUBLISHED,
       },
-      take: 5,
+      take: limit,
       orderBy: {
         createdAt: "desc",
       },
