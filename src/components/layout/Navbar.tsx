@@ -114,7 +114,7 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
         <div className="flex justify-between items-center min-h-[3.5rem] py-2 gap-y-2 w-full">
           <div className="flex items-center gap-3 lg:gap-6 w-full md:w-auto min-w-0">
             {/* Individual Category Dropdowns for large screens */}
-            <div className="hidden lg:block flex-1 min-w-0">
+            <div className="hidden lg:block flex-1 min-w-0 group/category-scroll">
               <ScrollArea className="w-full whitespace-nowrap" type="always">
                 <div className="flex w-max space-x-4 lg:space-x-6 pb-3 pt-1">
                   {categories.map((category) => (
@@ -123,7 +123,10 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
                     </div>
                   ))}
                 </div>
-                <ScrollBar orientation="horizontal" className="h-3" />
+                <ScrollBar
+                  orientation="horizontal"
+                  className="h-3 opacity-0 transition-opacity duration-200 group-hover/category-scroll:opacity-100 group-focus-within/category-scroll:opacity-100"
+                />
               </ScrollArea>
             </div>
 
