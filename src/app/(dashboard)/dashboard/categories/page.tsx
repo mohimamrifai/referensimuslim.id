@@ -17,15 +17,13 @@ export default async function CategoriesPage() {
             select: { contents: true, subContents: true },
           },
         },
-        orderBy: { name: 'asc' },
+        orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
       },
       _count: {
         select: { contents: true, subContents: true },
       },
     },
-    orderBy: {
-      name: 'asc',
-    },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
   });
 
   return (

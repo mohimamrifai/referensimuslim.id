@@ -37,13 +37,13 @@ export async function getCategoryTree(): Promise<CategoryTreeItem[]> {
               select: { subContents: true }
             }
           },
-          orderBy: { name: 'asc' }
+          orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
         },
         _count: {
           select: { contents: true }
         }
       },
-      orderBy: { name: 'asc' }
+      orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
     });
 
     return categories.map(cat => ({
@@ -66,8 +66,31 @@ export async function getCategoryTree(): Promise<CategoryTreeItem[]> {
 
 export async function getCategories() {
   return await prisma.category.findMany({
-    orderBy: { name: 'asc' }
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }]
   });
+}
+
+export async function updateCategoryOrder(items: { id: string, order: number }[]) {
+  const session = await auth();
+  if (!session || (session.user as { role?: string }).role !== 'ADMIN') {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    const transactions = items.map((item) =>
+      prisma.category.update({
+        where: { id: item.id },
+        data: { order: item.order },
+      })
+    );
+    await prisma.$transaction(transactions);
+
+    revalidatePath('/dashboard/categories');
+    return { success: true };
+  } catch (error) {
+    console.error('Update category order error:', error);
+    return { success: false, error: 'Gagal mengubah urutan kategori' };
+  }
 }
 
 export async function createCategory(data: z.infer<typeof categorySchema>) {
@@ -91,12 +114,18 @@ export async function createCategory(data: z.infer<typeof categorySchema>) {
       return { success: false, error: 'Slug sudah digunakan' };
     }
 
+    const maxSiblingOrder = await prisma.category.aggregate({
+      where: { parentId: result.data.parentId || null },
+      _max: { order: true },
+    });
+
     await prisma.category.create({
       data: {
         name: result.data.name,
         slug: result.data.slug,
         description: result.data.description,
         parentId: result.data.parentId || null,
+        order: (maxSiblingOrder._max.order ?? -1) + 1,
       }
     });
 

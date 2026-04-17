@@ -59,6 +59,7 @@ model Category {
   name        String
   slug        String     @unique
   description String?
+  order       Int        @default(0) // Tambahan untuk fitur drag and drop
   
   // Hierarchy: Self-relation for Parent/Child categories
   parentId    String?
