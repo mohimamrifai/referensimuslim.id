@@ -10,6 +10,7 @@ import { NAVIGATION_ITEMS } from '@/config/navigation';
 import CategoryDropdown from './CategoryDropdown';
 import CategoriesMegaMenu from './CategoriesMegaMenu';
 import { getCategoryTree } from '@/app/actions/category';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 type Category = Awaited<ReturnType<typeof getCategoryTree>>[0];
 
@@ -110,22 +111,29 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
         </div>
 
         {/* Bottom Row: Categories | Search */}
-        <div className="flex justify-between items-center min-h-[3.5rem] py-2 gap-y-2 flex-wrap">
-          <div className="flex items-center gap-3 lg:gap-6 flex-wrap w-full md:w-auto">
+        <div className="flex justify-between items-center min-h-[3.5rem] py-2 gap-y-2 w-full">
+          <div className="flex items-center gap-3 lg:gap-6 w-full md:w-auto min-w-0">
             {/* Individual Category Dropdowns for large screens */}
-            <div className="hidden lg:flex items-center gap-4 lg:gap-6 flex-wrap">
-              {categories.map((category) => (
-                <CategoryDropdown key={category.id} category={category} />
-              ))}
+            <div className="hidden lg:block flex-1 min-w-0">
+              <ScrollArea className="w-full whitespace-nowrap" type="always">
+                <div className="flex w-max space-x-4 lg:space-x-6 pb-3 pt-1">
+                  {categories.map((category) => (
+                    <div key={category.id} className="flex-shrink-0 group relative z-10">
+                      <CategoryDropdown category={category} />
+                    </div>
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" className="h-3" />
+              </ScrollArea>
             </div>
 
             {/* Mega Menu for medium screens */}
-            <div className="hidden md:block lg:hidden flex-shrink">
+            <div className="hidden md:block lg:hidden flex-shrink-0">
               <CategoriesMegaMenu categories={categories} />
             </div>
           </div>
 
-          <div className="flex items-center gap-3 ml-auto relative">
+          <div className="flex items-center gap-3 ml-auto relative flex-shrink-0 pl-4 z-20">
             <Link
               href="/daftar-ngaji"
               className="md:hidden px-3 py-1.5 bg-orange-600 text-white text-xs font-semibold rounded-full shadow-sm hover:bg-orange-700 transition-colors"
