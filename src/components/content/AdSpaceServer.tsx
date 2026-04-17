@@ -8,5 +8,5 @@ interface AdSpaceServerProps {
 
 export default async function AdSpaceServer({ position }: AdSpaceServerProps) {
   const ad = await getAdSpace(position);
-  return <AdSpace ad={ad} />;
+  return <AdSpace ad={ad} position={position} />;
 }

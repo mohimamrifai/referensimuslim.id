@@ -41,7 +41,7 @@ export default function StatsSection({
   ];
 
   return (
-    <div className="py-8 bg-gray-50 rounded-xl px-6">
+    <div className="py-8 bg-gray-50 rounded-xl px-2 md:px-6 md:mt-4">
       <div className="text-center mb-8 px-4">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
           Pusat Referensi Islam Terpercaya

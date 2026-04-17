@@ -29,13 +29,13 @@ export default function HeroGrid({ articles }: HeroGridProps) {
 
   return (
     <div className="px-2 md:px-4 lg:px-8 pt-4">
-      <div className="flex flex-col md:flex-row w-full h-[75vh] min-h-[450px] overflow-hidden">
+      <div className="flex flex-col md:flex-row w-full h-[120vh] md:h-[75vh] min-h-[800px] md:min-h-[450px] overflow-hidden rounded-xl">
         {articles.slice(0, 4).map((article, index) => (
           <Link
             key={article.id}
             href={article.href}
             className={`relative block overflow-hidden group transition-all duration-700 ease-out
-              ${hoveredIndex === index ? 'flex-[3]' : 'flex-1'}
+              ${hoveredIndex === index ? 'md:flex-[3] flex-1' : 'flex-1'}
             `}
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}

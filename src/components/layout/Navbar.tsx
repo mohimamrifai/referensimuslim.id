@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, ChevronRight } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, Suspense, useEffect } from 'react';
 import { NAVIGATION_ITEMS } from '@/config/navigation';
@@ -20,7 +20,9 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [openMobileCategories, setOpenMobileCategories] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     async function fetchCategories() {
@@ -29,6 +31,13 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
     }
     fetchCategories();
   }, []);
+
+  const toggleMobileCategory = (categoryId: string) => {
+    setOpenMobileCategories((prev) => ({
+      ...prev,
+      [categoryId]: !prev[categoryId],
+    }));
+  };
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && searchQuery.trim()) {
@@ -41,7 +50,7 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-8xl mx-auto px-4 md:px-10">
         {/* Top Row: Logo | Navigation | Ad Slot */}
-        <div className="flex justify-between items-center h-28 border-b border-gray-50 py-3">
+        <div className="flex justify-between items-center h-16 md:h-28 border-b border-gray-50 py-3">
           <div className="shrink-0 flex items-center gap-6 lg:gap-10">
             <Link href="/" className="flex items-center gap-2 group">
               <div className="relative w-16 h-16 md:w-20 md:h-20 overflow-hidden">
@@ -86,9 +95,18 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
           </div>
 
           {/* Ad Space with reduced max-width */}
-          <div className="flex-1 max-w-[468px] ml-4 flex justify-end">
+          <div className="hidden md:flex flex-1 max-w-[468px] ml-4 justify-end">
             {adSlot}
           </div>
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="md:hidden p-2 text-gray-600 hover:text-orange-600 transition-colors"
+            aria-label="Menu"
+          >
+            <Menu className="w-7 h-7" />
+          </button>
         </div>
 
         {/* Bottom Row: Categories | Search */}
@@ -162,6 +180,75 @@ function NavbarContent({ adSlot }: { adSlot?: React.ReactNode }) {
           </div>
         )}
       </div>
+
+      {/* Mobile Fullscreen Menu */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[100] bg-white flex flex-col md:hidden animate-in slide-in-from-right-full duration-300">
+          <div className="flex justify-between items-center p-4 border-b border-gray-100">
+            <span className="font-bold text-lg text-gray-800">Menu</span>
+            <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-gray-600 hover:text-orange-600 bg-gray-50 rounded-full">
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          <div className="overflow-y-auto flex-1 p-4">
+            <div className="space-y-6">
+              {/* Categories Only */}
+              <div>
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Kategori</h3>
+                <div className="space-y-3">
+                  {categories.map((category) => {
+                    const hasChildren = category.children && category.children.length > 0;
+                    const isOpen = openMobileCategories[category.id];
+
+                    return (
+                      <div key={category.id} className="border-b border-gray-50 pb-2 last:border-0">
+                        <div className="flex items-center justify-between">
+                          <Link
+                            href={`/search?category=${category.id}`}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="font-bold text-gray-800 hover:text-orange-600 block py-2 flex-1"
+                          >
+                            {category.name}
+                          </Link>
+                          {hasChildren && (
+                            <button
+                              onClick={() => toggleMobileCategory(category.id)}
+                              className="p-2 text-gray-500 hover:bg-gray-100 rounded-md transition-colors"
+                              aria-label="Toggle sub-kategori"
+                            >
+                              {isOpen ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                            </button>
+                          )}
+                        </div>
+                        
+                        {/* Sub-categories Dropdown */}
+                        {hasChildren && (
+                          <div
+                            className={`ml-4 space-y-1 border-l-2 border-orange-100 pl-4 overflow-hidden transition-all duration-300 ease-in-out ${
+                              isOpen ? 'max-h-[500px] opacity-100 mt-2 mb-2' : 'max-h-0 opacity-0'
+                            }`}
+                          >
+                            {category.children.map((sub) => (
+                              <Link
+                                key={sub.id}
+                                href={`/search?category=${sub.id}`}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="block text-sm font-medium text-gray-600 hover:text-orange-600 py-1.5"
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
