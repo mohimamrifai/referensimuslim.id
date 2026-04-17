@@ -43,6 +43,6 @@ next-env.d.ts
 /src/generated/prisma
 
 # assets (uploads and other static files ignored by request)
-/src/assets
+/src/assets/uploads
 
 .trae/
